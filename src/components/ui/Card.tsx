@@ -1,11 +1,25 @@
 import { type HTMLAttributes } from "react";
 
+type CardAccent = "editorial" | "data" | "success" | "muted" | "none";
+
 interface CardProps extends HTMLAttributes<HTMLDivElement> {
   onClick?: () => void;
+  accent?: CardAccent;
+  compact?: boolean;
 }
+
+const accentClasses: Record<CardAccent, string> = {
+  editorial: "border-l-4 border-l-editorial",
+  data: "border-l-4 border-l-data",
+  success: "border-l-4 border-l-success",
+  muted: "border-l-4 border-l-secondary",
+  none: "",
+};
 
 export function Card({
   onClick,
+  accent = "none",
+  compact = false,
   className = "",
   children,
   ...props
@@ -27,9 +41,9 @@ export function Card({
             }
           : undefined
       }
-      className={`animate-fade-in rounded-2xl bg-cream-50 border border-cream-200 shadow-sm border-l-[4px] border-l-cream-300 p-5 transition-all duration-250 ease-out ${
+      className={`bg-card border-2 border-border ${compact ? "p-4" : "p-6"} ${accentClasses[accent]} transition-all duration-200 ease-out ${
         interactive
-          ? "cursor-pointer hover:shadow-xl hover:border-l-sienna-400 hover:-translate-y-[2px] hover:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-sienna-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-100 active:translate-y-0 active:shadow-md"
+          ? "cursor-pointer hover:bg-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           : ""
       } ${className}`}
       {...props}

@@ -147,9 +147,9 @@ export default function Setups() {
       <div className="flex items-center justify-center p-12 animate-fade-in">
         <div className="text-center space-y-4">
           <div className="animate-float">
-            <Bookmark size={48} strokeWidth={1.2} className="text-espresso-300 mx-auto" />
+            <Bookmark size={48} strokeWidth={1.2} className="text-muted-foreground mx-auto" />
           </div>
-          <p className="font-display italic text-espresso-400 text-lg">Loading your setups...</p>
+          <p className="font-mono text-muted-foreground text-sm uppercase tracking-widest">Loading your setups...</p>
         </div>
       </div>
     )
@@ -159,92 +159,92 @@ export default function Setups() {
     <div className="p-6 space-y-8 max-w-5xl mx-auto animate-fade-in">
       <div className="flex items-end justify-between gap-4">
         <div className="space-y-1">
-          <h1 className="text-4xl md:text-5xl font-display italic text-espresso-900 tracking-tight leading-[0.95]">
+          <p className="kicker">Configurations</p>
+          <h1 className="text-4xl md:text-5xl font-display text-foreground tracking-tight leading-[0.95]">
             Saved Setups
           </h1>
-          <p className="text-espresso-500 text-sm">
+          <p className="text-muted-foreground text-sm">
             Quick-start brew configurations
           </p>
         </div>
         <Button
           onClick={openAddDialog}
-          className="bg-sienna-600 hover:bg-sienna-700 text-white"
         >
           + Add Setup
         </Button>
       </div>
 
       {savedSetups.length === 0 ? (
-        <div className="text-center py-16 paper-texture rounded-2xl border border-cream-200 bg-cream-50 space-y-4 animate-fade-in">
-          <div className="text-espresso-200 animate-float">
+        <Card className="text-center py-16 space-y-4 animate-fade-in">
+          <div className="text-muted-foreground animate-float">
             <svg width="100" height="90" viewBox="0 0 100 90" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="mx-auto">
               {/* Bookmark shape */}
-              <path d="M30 10 h40 v65 l-20 -15 l-20 15 Z" className="fill-cream-300/30" />
+              <path d="M30 10 h40 v65 l-20 -15 l-20 15 Z" className="fill-muted-foreground/10" />
               {/* Star inside */}
-              <path d="M50 28 l4 8 9 1 -6.5 6.5 1.5 9 -8 -4 -8 4 1.5 -9 -6.5 -6.5 9 -1 Z" className="opacity-20 fill-sienna-400/20" />
+              <path d="M50 28 l4 8 9 1 -6.5 6.5 1.5 9 -8 -4 -8 4 1.5 -9 -6.5 -6.5 9 -1 Z" className="opacity-20 fill-accent/20" />
               {/* Small lightning bolt */}
               <path d="M55 52 l-3 8 5 -2 -3 8" className="opacity-30" strokeWidth="1.5" />
             </svg>
           </div>
-          <p className="text-espresso-400 font-display italic text-lg">
+          <p className="text-muted-foreground font-display text-lg">
             No saved setups yet
           </p>
-          <p className="text-sm text-espresso-400 max-w-sm mx-auto leading-relaxed">
+          <p className="text-sm text-muted-foreground max-w-sm mx-auto leading-relaxed">
             Save your go-to equipment and parameters for one-tap brew sessions.
           </p>
           <Button
             onClick={openAddDialog}
-            className="bg-sienna-600 hover:bg-sienna-700 text-white mt-2"
+            className="mt-2"
           >
             Create Your First Setup
           </Button>
-        </div>
+        </Card>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 stagger-children">
           {savedSetups.map((setup) => (
             <Card
               key={setup.id}
-              className="group space-y-4 border border-cream-200 bg-white rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-250 hover:-translate-y-0.5"
+              accent="editorial"
+              className="group space-y-4 overflow-hidden !p-0"
             >
               {/* Setup header — dark strip */}
-              <div className="bg-gradient-to-r from-espresso-800 to-espresso-900 px-5 py-4 relative overflow-hidden">
-                <div className="absolute -right-6 -top-6 w-24 h-24 rounded-full bg-sienna-500/10 blur-2xl" />
+              <div className="bg-muted px-6 py-4 relative overflow-hidden">
                 <div className="relative flex items-center justify-between">
-                  <h3 className="font-display text-cream-50 truncate text-xl tracking-tight">
+                  <h3 className="font-display text-foreground truncate text-xl tracking-tight">
                     {setup.name}
                   </h3>
                   {setup.isDefault && (
-                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-sienna-500/20 text-sienna-300 border border-sienna-500/20 uppercase tracking-widest">
+                    <span className="inline-flex items-center px-2 py-0.5 text-[10px] font-semibold bg-inverted text-inverted-foreground border-2 border-border uppercase tracking-widest">
                       Default
                     </span>
                   )}
                 </div>
               </div>
 
-              <div className="px-5 space-y-3">
-                <div className="space-y-1.5 text-sm text-espresso-600">
+              <div className="px-6 space-y-3">
+                <div className="space-y-1.5 text-sm text-secondary-foreground">
                   <p>
-                    <span className="text-espresso-400 text-xs">Grinder:</span>{' '}
+                    <span className="text-muted-foreground text-xs">Grinder:</span>{' '}
                     {getEquipmentName(setup.grinderId)}
                   </p>
                   <p>
-                    <span className="text-espresso-400 text-xs">Device:</span>{' '}
+                    <span className="text-muted-foreground text-xs">Device:</span>{' '}
                     {getEquipmentName(setup.brewDeviceId)}
                   </p>
                   {(setup.defaultCoffeeDose || setup.defaultTotalWater || setup.defaultWaterTemp) && (
                     <div className="flex flex-wrap gap-1.5 pt-1">
                       {setup.defaultCoffeeDose && (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-cream-200 text-espresso-600 text-xs">
+                        <span className="inline-flex items-center px-2 py-0.5 bg-muted text-secondary-foreground text-xs">
                           {setup.defaultCoffeeDose}g dose
                         </span>
                       )}
                       {setup.defaultTotalWater && (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-cream-200 text-espresso-600 text-xs">
+                        <span className="inline-flex items-center px-2 py-0.5 bg-muted text-secondary-foreground text-xs">
                           {setup.defaultTotalWater}g water
                         </span>
                       )}
                       {setup.defaultWaterTemp && (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-cream-200 text-espresso-600 text-xs">
+                        <span className="inline-flex items-center px-2 py-0.5 bg-muted text-secondary-foreground text-xs">
                           {setup.defaultWaterTemp}&deg;C
                         </span>
                       )}
@@ -252,11 +252,11 @@ export default function Setups() {
                   )}
                 </div>
 
-                <div className="flex items-center gap-2 pt-3 pb-5 border-t border-cream-200">
+                <div className="flex items-center gap-2 pt-3 pb-6 border-t border-secondary">
                   <Button
                     size="sm"
                     onClick={() => navigate(`/brew/new?setup=${setup.id}`)}
-                    className="bg-sienna-600 hover:bg-sienna-700 text-white warm-glow font-display"
+                    className="font-display"
                   >
                     Brew with this
                   </Button>
@@ -264,7 +264,6 @@ export default function Setups() {
                     size="sm"
                     variant="ghost"
                     onClick={() => openEditDialog(setup)}
-                    className="text-espresso-600 hover:text-espresso-800 hover:bg-cream-100"
                   >
                     Edit
                   </Button>
@@ -272,7 +271,7 @@ export default function Setups() {
                     size="sm"
                     variant="ghost"
                     onClick={() => setDeleteConfirmId(setup.id)}
-                    className="text-rose-500 hover:text-rose-700 hover:bg-rose-100 ml-auto"
+                    className="text-destructive hover:text-destructive hover:bg-destructive/10 ml-auto"
                   >
                     Delete
                   </Button>
@@ -289,7 +288,7 @@ export default function Setups() {
         onClose={() => setDialogOpen(false)}
         title={editingId ? 'Edit Setup' : 'New Setup'}
       >
-        <form onSubmit={handleSubmit} className="space-y-4 paper-texture">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <Input
             label="Name"
             value={form.name}
@@ -380,24 +379,22 @@ export default function Setups() {
               type="checkbox"
               checked={form.isDefault}
               onChange={(e) => updateField('isDefault', e.target.checked)}
-              className="rounded border-cream-300 text-sienna-600 focus:ring-sienna-500 accent-sienna-600"
+              className="border-input accent-primary"
             />
-            <span className="text-sm text-espresso-700">Set as default setup</span>
+            <span className="text-sm text-secondary-foreground">Set as default setup</span>
           </label>
 
-          <div className="flex justify-end gap-3 pt-3 border-t border-cream-200">
+          <div className="flex justify-end gap-3 pt-3 border-t border-border">
             <Button
               type="button"
               variant="secondary"
               onClick={() => setDialogOpen(false)}
-              className="text-espresso-600 hover:bg-cream-100"
             >
               Cancel
             </Button>
             <Button
               type="submit"
               disabled={createSetup.isPending || updateSetup.isPending}
-              className="bg-sienna-600 hover:bg-sienna-700 text-white"
             >
               {createSetup.isPending || updateSetup.isPending
                 ? 'Saving...'
@@ -415,14 +412,13 @@ export default function Setups() {
         onClose={() => setDeleteConfirmId(null)}
         title="Delete Setup"
       >
-        <p className="text-espresso-500 mb-6 text-sm">
+        <p className="text-muted-foreground mb-6 text-sm">
           Are you sure you want to delete this setup? This action cannot be undone.
         </p>
-        <div className="flex justify-end gap-3 pt-2 border-t border-cream-200">
+        <div className="flex justify-end gap-3 pt-2 border-t border-border">
           <Button
             variant="secondary"
             onClick={() => setDeleteConfirmId(null)}
-            className="text-espresso-600 hover:bg-cream-100"
           >
             Cancel
           </Button>
@@ -430,7 +426,7 @@ export default function Setups() {
             variant="ghost"
             onClick={() => deleteConfirmId && handleDelete(deleteConfirmId)}
             disabled={deleteSetup.isPending}
-            className="bg-rose-500 hover:bg-rose-600 text-white"
+            className="bg-destructive hover:bg-destructive/80 text-primary-foreground"
           >
             {deleteSetup.isPending ? 'Deleting...' : 'Delete'}
           </Button>

@@ -1,5 +1,6 @@
 import { useReducer, useMemo, useEffect, useState, useCallback, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { Card } from "../components/ui/Card";
 import { Input } from "../components/ui/Input";
 import { useBeans } from "../hooks/use-beans";
 import { useEquipment } from "../hooks/use-equipment";
@@ -223,10 +224,10 @@ function StepIndicator({ currentStep }: { currentStep: number }) {
     <nav aria-label="Brew wizard progress" className="mb-10">
       <div className="flex items-center justify-between relative">
         {/* Background connector line */}
-        <div className="absolute top-3 left-0 right-0 h-px bg-cream-200" aria-hidden="true" />
+        <div className="absolute top-3 left-0 right-0 h-px bg-muted" aria-hidden="true" />
         {/* Filled progress line */}
         <div
-          className="absolute top-3 left-0 h-px bg-sienna-400 transition-all duration-500 ease-out"
+          className="absolute top-3 left-0 h-px bg-primary transition-all duration-500 ease-out"
           style={{ width: `${((currentStep - 1) / (STEP_LABELS.length - 1)) * 100}%` }}
           aria-hidden="true"
         />
@@ -241,24 +242,24 @@ function StepIndicator({ currentStep }: { currentStep: number }) {
               <span
                 className={cn(
                   "flex items-center justify-center w-6 h-6 rounded-full transition-all duration-300",
-                  isActive && "bg-sienna-500 shadow-md shadow-sienna-200",
-                  isComplete && "bg-sienna-400",
-                  !isActive && !isComplete && "bg-cream-300 border border-cream-200"
+                  isActive && "bg-primary",
+                  isComplete && "bg-primary",
+                  !isActive && !isComplete && "bg-secondary border border-border"
                 )}
               >
                 {isComplete ? (
-                  <Check size={12} strokeWidth={3} className="text-white" />
+                  <Check size={12} strokeWidth={3} className="text-primary-foreground" />
                 ) : isActive ? (
-                  <span className="w-2 h-2 rounded-full bg-white" />
+                  <span className="w-2 h-2 rounded-full bg-card" />
                 ) : null}
               </span>
               {/* Label */}
               <span
                 className={cn(
                   "mt-2.5 text-xs font-medium tracking-wide transition-colors",
-                  isActive && "font-display text-sm text-espresso-800",
-                  isComplete && "text-sienna-600",
-                  !isActive && !isComplete && "text-cream-400"
+                  isActive && "font-display text-sm text-foreground",
+                  isComplete && "text-editorial",
+                  !isActive && !isComplete && "text-muted-foreground"
                 )}
               >
                 {label}
@@ -307,10 +308,10 @@ function StepSelectBean({
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
-        <h2 className="font-display text-2xl text-espresso-900 tracking-tight">
+        <h2 className="font-display text-2xl text-foreground tracking-tight">
           Select a Bean
         </h2>
-        <p className="text-sm text-espresso-500 mt-1.5 font-body">
+        <p className="text-sm text-muted-foreground mt-1.5 font-body">
           Choose the coffee bean you are brewing today.
         </p>
       </div>
@@ -322,12 +323,12 @@ function StepSelectBean({
           placeholder="Search by name, roaster, or origin..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full bg-transparent border-0 border-b-2 border-cream-300 px-1 py-2.5 text-sm text-espresso-900 placeholder:text-espresso-400 focus:outline-none focus:border-sienna-400 transition-colors font-body"
+          className="w-full bg-transparent border-0 border-b-2 border-input px-1 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-ring transition-colors font-body"
         />
       </div>
 
       {filtered.length === 0 && (
-        <p className="text-espresso-400 text-center py-14 font-body italic">
+        <p className="text-muted-foreground text-center py-14 font-body">
           {activeBeans.length === 0
             ? "No active beans in your library. Add one first."
             : "No beans match your search."}
@@ -344,32 +345,31 @@ function StepSelectBean({
               type="button"
               onClick={() => onSelect(bean.id)}
               className={cn(
-                "relative text-left p-4 rounded-lg border-2 bg-white transition-all duration-200 paper-texture",
-                "hover:shadow-md hover:-translate-y-0.5",
-                isSelected
-                  ? "border-sienna-500 bg-cream-50 shadow-md shadow-sienna-100"
+                "relative text-left p-4 border-2 bg-card transition-all duration-200 ",
+                                isSelected
+                  ? "border-border bg-accent"
                   : isLastUsed
-                    ? "border-amber-300 hover:border-sienna-300"
-                    : "border-cream-200 hover:border-cream-300"
+                    ? "border-border hover:bg-muted"
+                    : "border-border hover:bg-muted"
               )}
             >
               {isLastUsed && !isSelected && (
-                <span className="absolute top-3 right-3 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider bg-amber-100 text-amber-700 border border-amber-200">
+                <span className="absolute top-3 right-3 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider bg-muted text-muted-foreground border border-border">
                   Last used
                 </span>
               )}
               {isSelected && (
-                <span className="absolute top-3 right-3 flex items-center justify-center w-6 h-6 rounded-full bg-sienna-500 text-white">
+                <span className="absolute top-3 right-3 flex items-center justify-center w-6 h-6 rounded-full bg-primary text-primary-foreground">
                   <Check size={14} strokeWidth={3} />
                 </span>
               )}
-              <h3 className="font-display text-base text-espresso-900 pr-14 leading-snug">
+              <h3 className="font-display text-base text-foreground pr-14 leading-snug">
                 {bean.name}
               </h3>
-              <p className="text-sm text-espresso-500 mt-1 italic font-body">
+              <p className="text-sm text-muted-foreground mt-1 font-body">
                 {bean.roaster}
               </p>
-              <span className="inline-block mt-2.5 px-2 py-0.5 rounded text-[11px] font-medium uppercase tracking-wider bg-sage-100 text-sage-700 border border-sage-200">
+              <span className="inline-block mt-2.5 px-2 py-0.5 rounded text-[11px] font-medium uppercase tracking-wider bg-muted text-secondary-foreground border border-border">
                 {bean.originCountry}
               </span>
             </button>
@@ -410,10 +410,10 @@ function EquipmentGroup({
   if (items.length === 0) {
     return (
       <div className="space-y-2">
-        <h3 className="font-display text-sm text-espresso-700 tracking-wide">
-          {label} {required && <span className="text-sienna-500">*</span>}
+        <h3 className="font-display text-sm text-secondary-foreground tracking-wide">
+          {label} {required && <span className="text-editorial">*</span>}
         </h3>
-        <p className="text-sm text-espresso-400 italic font-body">
+        <p className="text-sm text-muted-foreground font-body">
           No {label.toLowerCase()} found. Add one in Equipment settings.
         </p>
       </div>
@@ -422,8 +422,8 @@ function EquipmentGroup({
 
   return (
     <div className="space-y-3">
-      <h3 className="font-display text-sm text-espresso-700 tracking-wide">
-        {label} {required && <span className="text-sienna-500">*</span>}
+      <h3 className="font-display text-sm text-secondary-foreground tracking-wide">
+        {label} {required && <span className="text-editorial">*</span>}
       </h3>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
         {items.map((eq) => {
@@ -434,10 +434,10 @@ function EquipmentGroup({
               type="button"
               onClick={() => onSelect(field, isSelected && !required ? null : eq.id)}
               className={cn(
-                "text-left p-3 rounded-lg border transition-all duration-200",
+                "text-left p-3 border transition-all duration-200",
                 isSelected
-                  ? "border-l-4 border-sienna-400 bg-cream-50 shadow-sm"
-                  : "border border-cream-200 hover:border-cream-300 hover:bg-cream-50/50"
+                  ? "border-l-4 border-border bg-accent"
+                  : "border-2 border-border hover:bg-muted"
               )}
             >
               <div className="flex items-start justify-between gap-1">
@@ -446,27 +446,27 @@ function EquipmentGroup({
                     const Icon = getEquipmentIcon(type, eq.name);
                     return <Icon size={14} className={cn(
                       "shrink-0",
-                      isSelected ? "text-sienna-500" : "text-espresso-400"
+                      isSelected ? "text-editorial" : "text-muted-foreground"
                     )} />;
                   })()}
                   <p className={cn(
                     "text-sm font-medium leading-snug",
-                    isSelected ? "text-espresso-900" : "text-espresso-700"
+                    isSelected ? "text-foreground" : "text-secondary-foreground"
                   )}>
                     {eq.name}
                   </p>
                 </div>
                 {isSelected && (
-                  <span className="flex items-center justify-center w-5 h-5 rounded-full bg-sienna-400 text-white shrink-0">
+                  <span className="flex items-center justify-center w-5 h-5 rounded-full bg-primary text-primary-foreground shrink-0">
                     <Check size={12} strokeWidth={3} />
                   </span>
                 )}
               </div>
               {eq.brand && (
-                <p className="text-xs text-espresso-400 mt-0.5 font-body">{eq.brand}</p>
+                <p className="text-xs text-muted-foreground mt-0.5 font-body">{eq.brand}</p>
               )}
               {eq.isDefault && (
-                <span className="inline-block mt-1.5 px-1.5 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider bg-cream-100 text-espresso-500 border border-cream-200">
+                <span className="inline-block mt-1.5 px-1.5 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider bg-muted text-muted-foreground border border-border">
                   Default
                 </span>
               )}
@@ -509,10 +509,10 @@ function StepSelectEquipment({
   return (
     <div className="space-y-8 animate-fade-in">
       <div>
-        <h2 className="font-display text-2xl text-espresso-900 tracking-tight">
+        <h2 className="font-display text-2xl text-foreground tracking-tight">
           Select Equipment
         </h2>
-        <p className="text-sm text-espresso-500 mt-1.5 font-body">
+        <p className="text-sm text-muted-foreground mt-1.5 font-body">
           Choose the gear for this brew. Defaults are pre-selected.
         </p>
       </div>
@@ -520,7 +520,7 @@ function StepSelectEquipment({
       {/* Saved Setups quick-select */}
       {savedSetups.length > 0 && (
         <div className="space-y-3">
-          <h3 className="font-display text-sm text-espresso-700 tracking-wide">
+          <h3 className="font-display text-sm text-secondary-foreground tracking-wide">
             Quick Setup
           </h3>
           <div className="flex flex-wrap gap-2">
@@ -532,8 +532,8 @@ function StepSelectEquipment({
                 className={cn(
                   "px-4 py-2 rounded-full text-sm font-medium border-2 transition-all duration-200",
                   selectedSetupId === setup.id
-                    ? "bg-sienna-500 text-white border-sienna-500 shadow-sm"
-                    : "border-sienna-300 text-sienna-600 hover:bg-sienna-50 hover:border-sienna-400"
+                    ? "bg-primary text-primary-foreground border-primary"
+                    : "border-border text-secondary-foreground hover:bg-muted hover:border-border"
                 )}
               >
                 {setup.name}
@@ -615,14 +615,14 @@ function NumberStepper({
 
   return (
     <div className="flex flex-col items-center gap-1.5">
-      <span className="text-xs font-display uppercase tracking-widest text-espresso-400">
+      <span className="data-label">
         {label}
       </span>
       <div className="flex items-center gap-2">
         <button
           type="button"
           onClick={decrement}
-          className="flex items-center justify-center w-9 h-9 rounded-full border-2 border-cream-300 text-espresso-500 hover:border-sienna-400 hover:text-sienna-600 transition-colors active:scale-95"
+          className="flex items-center justify-center w-9 h-9 rounded-full border-2 border-border text-muted-foreground hover:border-border hover:text-foreground hover:bg-muted transition-colors active:scale-95"
         >
           <Minus size={16} strokeWidth={2.5} />
         </button>
@@ -635,10 +635,10 @@ function NumberStepper({
             min={min}
             max={max}
             step={step}
-            className="w-24 text-center font-display text-2xl text-espresso-900 bg-transparent border-0 border-b-2 border-cream-300 focus:border-sienna-400 focus:outline-none transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+            className="w-24 text-center font-display text-2xl text-foreground bg-transparent border-0 border-b-2 border-input focus:border-ring focus:outline-none transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
           />
           {unit && (
-            <span className="absolute right-0 bottom-1 text-xs text-espresso-400 font-medium">
+            <span className="absolute right-0 bottom-1 text-xs text-muted-foreground font-medium">
               {unit}
             </span>
           )}
@@ -646,7 +646,7 @@ function NumberStepper({
         <button
           type="button"
           onClick={increment}
-          className="flex items-center justify-center w-9 h-9 rounded-full border-2 border-cream-300 text-espresso-500 hover:border-sienna-400 hover:text-sienna-600 transition-colors active:scale-95"
+          className="flex items-center justify-center w-9 h-9 rounded-full border-2 border-border text-muted-foreground hover:border-border hover:text-foreground hover:bg-muted transition-colors active:scale-95"
         >
           <Plus size={16} strokeWidth={2.5} />
         </button>
@@ -665,12 +665,12 @@ function ParamCard({
   className?: string;
 }) {
   return (
-    <div className={cn("rounded-xl border border-cream-200 bg-white p-5", className)}>
-      <p className="font-display text-xs uppercase tracking-widest text-espresso-400 mb-4">
+    <Card compact className={className}>
+      <p className="data-label mb-4">
         {label}
       </p>
       {children}
-    </div>
+    </Card>
   );
 }
 
@@ -685,7 +685,7 @@ function ToggleSwitch({
 }) {
   return (
     <label className="flex items-center justify-between gap-3 py-2 cursor-pointer">
-      <span className="text-sm font-medium text-espresso-700">{label}</span>
+      <span className="text-sm font-medium text-secondary-foreground">{label}</span>
       <button
         type="button"
         role="switch"
@@ -693,12 +693,12 @@ function ToggleSwitch({
         onClick={() => onChange(!checked)}
         className={cn(
           "relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200",
-          checked ? "bg-sienna-500" : "bg-cream-300"
+          checked ? "bg-primary" : "bg-secondary"
         )}
       >
         <span
           className={cn(
-            "inline-block h-4 w-4 rounded-full bg-white transition-transform duration-200 shadow-sm",
+            "inline-block h-4 w-4 rounded-full bg-card transition-transform duration-200",
             checked ? "translate-x-6" : "translate-x-1"
           )}
         />
@@ -748,23 +748,23 @@ function StepBrewParams({
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
-        <h2 className="font-display text-2xl text-espresso-900 tracking-tight">
+        <h2 className="font-display text-2xl text-foreground tracking-tight">
           Brew Parameters
         </h2>
-        <p className="text-sm text-espresso-500 mt-1.5 font-body">
+        <p className="text-sm text-muted-foreground mt-1.5 font-body">
           Dial in the details of your brew.
         </p>
       </div>
 
       {/* Days off roast info */}
       {roastDateDays != null && roastDateDays >= 0 && (
-        <div className="flex items-center gap-3 px-5 py-3.5 rounded-lg bg-amber-100/60 border border-amber-200">
-          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-amber-200/70">
-            <Sun size={16} strokeWidth={2} className="text-amber-600" />
+        <div className="flex items-center gap-3 px-5 py-3.5 bg-accent border-2 border-border">
+          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-accent">
+            <Sun size={16} strokeWidth={2} className="text-editorial" />
           </div>
           <div>
-            <span className="text-sm text-amber-900 font-body">
-              <span className="font-display text-lg font-semibold text-amber-800">{roastDateDays}</span>{" "}
+            <span className="text-sm text-foreground font-body">
+              <span className="font-display text-lg font-semibold text-editorial">{roastDateDays}</span>{" "}
               days off roast
             </span>
           </div>
@@ -773,7 +773,7 @@ function StepBrewParams({
 
       {/* A) Brew Type Selector */}
       <div className="space-y-3">
-        <p className="font-display text-xs uppercase tracking-widest text-espresso-400">
+        <p className="data-label">
           Brew Type
         </p>
         <div className="overflow-x-auto -mx-2 px-2 pb-2">
@@ -789,16 +789,16 @@ function StepBrewParams({
                     type="button"
                     onClick={() => onSelectBrewType(bt.id)}
                     className={cn(
-                      "flex flex-col items-center gap-1.5 px-4 py-3 rounded-xl border-2 transition-all duration-200 shrink-0",
+                      "flex flex-col items-center gap-1.5 px-4 py-3 border-2 transition-all duration-200 shrink-0",
                       isSelected
-                        ? "border-sienna-500 bg-sienna-50 shadow-sm shadow-sienna-100"
-                        : "border-cream-200 bg-white hover:border-cream-300 hover:shadow-sm"
+                        ? "border-border bg-accent"
+                        : "border-border bg-card hover:bg-muted"
                     )}
                   >
                     <span className="text-xl">{bt.icon}</span>
                     <span className={cn(
                       "text-xs font-medium whitespace-nowrap",
-                      isSelected ? "text-sienna-700" : "text-espresso-600"
+                      isSelected ? "text-editorial" : "text-secondary-foreground"
                     )}>
                       {bt.name}
                     </span>
@@ -813,8 +813,8 @@ function StepBrewParams({
       {/* Brew Method (existing, kept for backward compat) */}
       {brewMethods.length > 0 && (
         <div className="flex flex-col gap-2">
-          <label className="font-display text-xs uppercase tracking-widest text-espresso-400">
-            Brew Method <span className="text-sienna-500">*</span>
+          <label className="data-label">
+            Brew Method <span className="text-editorial">*</span>
           </label>
           <div className="flex flex-wrap gap-2">
             {brewMethods.map((m) => (
@@ -825,8 +825,8 @@ function StepBrewParams({
                 className={cn(
                   "px-4 py-2 rounded-full text-sm font-medium border-2 transition-all duration-200",
                   params.brewMethodId === m.id
-                    ? "bg-sienna-500 text-white border-sienna-500 shadow-sm"
-                    : "border-sienna-300 text-sienna-600 hover:bg-sienna-50 hover:border-sienna-400"
+                    ? "bg-primary text-primary-foreground border-primary"
+                    : "border-border text-secondary-foreground hover:bg-muted hover:border-border"
                 )}
               >
                 {m.name}
@@ -871,9 +871,9 @@ function StepBrewParams({
             {/* Ratio Display */}
             {dose > 0 && water > 0 && (
               <div className="mt-5 flex justify-center">
-                <div className="px-6 py-3 rounded-xl bg-gradient-to-br from-sienna-50 to-cream-50 border border-sienna-200">
-                  <p className="text-xs uppercase tracking-widest text-sienna-500 font-medium mb-1 text-center">Brew Ratio</p>
-                  <p className="font-display text-3xl text-sienna-700 tracking-tight text-center">
+                <div className="px-6 py-3 bg-inverted border-2 border-border">
+                  <p className="text-xs uppercase tracking-widest text-inverted-muted font-medium mb-1 text-center">Brew Ratio</p>
+                  <p className="font-display text-3xl text-inverted-foreground tracking-tight text-center">
                     1:{ratio}
                   </p>
                 </div>
@@ -899,7 +899,7 @@ function StepBrewParams({
             )}
             {sf?.grindSetting !== false && (
               <div className="flex flex-col items-center gap-1.5">
-                <span className="text-xs font-display uppercase tracking-widest text-espresso-400">
+                <span className="data-label">
                   Grind Setting
                 </span>
                 <input
@@ -907,7 +907,7 @@ function StepBrewParams({
                   value={params.grindSetting}
                   onChange={(e) => onChange({ grindSetting: e.target.value })}
                   placeholder={selectedGrinder?.grindUnitLabel ? `e.g. 24 ${selectedGrinder.grindUnitLabel}` : "e.g. 24 clicks"}
-                  className="w-36 text-center font-display text-lg text-espresso-900 bg-transparent border-0 border-b-2 border-cream-300 focus:border-sienna-400 focus:outline-none transition-colors py-1"
+                  className="w-36 text-center font-display text-lg text-foreground bg-transparent border-0 border-b-2 border-input focus:border-ring focus:outline-none transition-colors py-1"
                 />
               </div>
             )}
@@ -962,7 +962,7 @@ function StepBrewParams({
             )}
             {sf?.totalBrewTime !== false && (
               <div className="flex flex-col items-center gap-1.5">
-                <span className="text-xs font-display uppercase tracking-widest text-espresso-400">
+                <span className="data-label">
                   Total Brew Time
                 </span>
                 <input
@@ -970,7 +970,7 @@ function StepBrewParams({
                   value={params.totalBrewTime}
                   onChange={(e) => onChange({ totalBrewTime: e.target.value })}
                   placeholder="mm:ss"
-                  className="w-28 text-center font-display text-2xl text-espresso-900 bg-transparent border-0 border-b-2 border-cream-300 focus:border-sienna-400 focus:outline-none transition-colors"
+                  className="w-28 text-center font-display text-2xl text-foreground bg-transparent border-0 border-b-2 border-input focus:border-ring focus:outline-none transition-colors"
                 />
               </div>
             )}
@@ -978,7 +978,7 @@ function StepBrewParams({
 
           {/* Type-specific time fields */}
           {brewType && brewType.extraFields.filter((f) => f.type === "number").length > 0 && (
-            <div className="flex flex-wrap justify-center gap-8 mt-6 pt-4 border-t border-cream-100">
+            <div className="flex flex-wrap justify-center gap-8 mt-6 pt-4 border-t border-border">
               {brewType.extraFields
                 .filter((f) => f.type === "number")
                 .map((field) => (
@@ -1024,7 +1024,7 @@ function StepBrewParams({
               value={params.techniqueNotes}
               onChange={(e) => onChange({ techniqueNotes: e.target.value })}
               placeholder="Describe your pour pattern, agitation, etc."
-              className="w-full rounded-lg border-2 border-cream-200 bg-cream-50/50 px-4 py-3 text-sm text-espresso-900 placeholder:text-espresso-300 transition-colors focus:outline-none focus:border-sienna-400 focus:bg-white font-body"
+              className="w-full border-2 border-border bg-background px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground transition-colors focus:outline-none focus:border-ring focus:bg-card font-body"
             />
           </ParamCard>
         )}
@@ -1040,9 +1040,9 @@ function StepBrewParams({
 function ReviewRow({ label, value }: { label: string; value: React.ReactNode }) {
   if (!value) return null;
   return (
-    <div className="flex justify-between items-start py-2.5 border-b border-cream-100 last:border-0">
-      <span className="text-sm text-espresso-400 shrink-0 mr-4 font-body">{label}</span>
-      <span className="text-sm font-medium text-espresso-900 text-right font-body">{value}</span>
+    <div className="flex justify-between items-start py-2.5 border-b border-border last:border-0">
+      <span className="text-sm text-muted-foreground shrink-0 mr-4 font-body">{label}</span>
+      <span className="text-sm font-medium text-foreground text-right font-body">{value}</span>
     </div>
   );
 }
@@ -1091,31 +1091,31 @@ function StepReview({
   return (
     <div className="space-y-6 animate-fade-in">
       <div className="text-center">
-        <h2 className="font-display text-2xl text-espresso-900 tracking-tight">
+        <h2 className="font-display text-2xl text-foreground tracking-tight">
           Review Your Brew
         </h2>
-        <p className="text-sm text-espresso-500 mt-1.5 font-body">
+        <p className="text-sm text-muted-foreground mt-1.5 font-body">
           Double-check everything before logging.
         </p>
       </div>
 
       {/* Tasting card container */}
-      <div className="rounded-2xl border-2 border-cream-200 bg-white paper-texture overflow-hidden shadow-sm">
+      <Card className="!p-0 overflow-hidden">
         {/* Card header */}
-        <div className="px-6 py-4 bg-gradient-to-r from-cream-50 to-cream-100 border-b border-cream-200 text-center">
-          <p className="font-display text-lg text-espresso-900">
+        <div className="px-6 py-4 bg-muted border-b-2 border-border text-center">
+          <p className="font-display text-lg text-foreground">
             {bean?.name ?? "Unknown Bean"}
           </p>
-          <p className="text-xs text-espresso-400 mt-0.5 font-body italic">
+          <p className="text-xs text-muted-foreground mt-0.5 font-body">
             {bean?.roaster}
           </p>
         </div>
 
         {/* Bean section */}
-        <div className="border-b border-cream-100">
-          <div className="flex items-center gap-2 px-6 py-3 bg-cream-50/50">
-            <div className="w-1 h-4 rounded-full bg-sienna-400" />
-            <h3 className="font-display text-xs uppercase tracking-widest text-espresso-600">
+        <div className="border-b border-border">
+          <div className="flex items-center gap-2 px-6 py-3 bg-muted">
+            <div className="w-1 h-4 rounded-full bg-primary" />
+            <h3 className="data-label">
               Bean
             </h3>
           </div>
@@ -1130,10 +1130,10 @@ function StepReview({
         </div>
 
         {/* Equipment section */}
-        <div className="border-b border-cream-100">
-          <div className="flex items-center gap-2 px-6 py-3 bg-cream-50/50">
-            <div className="w-1 h-4 rounded-full bg-sage-500" />
-            <h3 className="font-display text-xs uppercase tracking-widest text-espresso-600">
+        <div className="border-b border-border">
+          <div className="flex items-center gap-2 px-6 py-3 bg-muted">
+            <div className="w-1 h-4 rounded-full bg-success" />
+            <h3 className="data-label">
               Equipment
             </h3>
           </div>
@@ -1148,9 +1148,9 @@ function StepReview({
 
         {/* Parameters section */}
         <div>
-          <div className="flex items-center gap-2 px-6 py-3 bg-cream-50/50">
-            <div className="w-1 h-4 rounded-full bg-amber-500" />
-            <h3 className="font-display text-xs uppercase tracking-widest text-espresso-600">
+          <div className="flex items-center gap-2 px-6 py-3 bg-muted">
+            <div className="w-1 h-4 rounded-full bg-primary" />
+            <h3 className="data-label">
               Parameters
             </h3>
           </div>
@@ -1193,7 +1193,7 @@ function StepReview({
             )}
           </div>
         </div>
-      </div>
+      </Card>
 
       {/* Log button */}
       <button
@@ -1201,11 +1201,11 @@ function StepReview({
         onClick={onSubmit}
         disabled={isSubmitting}
         className={cn(
-          "w-full py-4 rounded-xl text-base font-display font-semibold tracking-wide transition-all duration-300",
-          "bg-sienna-500 text-white shadow-lg shadow-sienna-200",
-          "hover:bg-sienna-600 hover:shadow-xl hover:shadow-sienna-300 hover:-translate-y-0.5",
-          "active:translate-y-0 active:shadow-md",
-          "disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-lg"
+          "w-full py-4 text-base font-display font-semibold tracking-wide transition-all duration-300",
+          "bg-primary text-primary-foreground",
+          "hover:bg-primary",
+          "active:translate-y-0",
+          "disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
         )}
       >
         {isSubmitting
@@ -1462,10 +1462,10 @@ export default function NewBrew() {
 
   if (isLoading) {
     return (
-      <div className="p-6 paper-texture min-h-screen">
+      <div className="p-6  min-h-screen">
         <div className="flex flex-col items-center justify-center py-24">
-          <div className="w-8 h-8 border-2 border-cream-300 border-t-sienna-500 rounded-full animate-spin" />
-          <p className="mt-4 text-espresso-400 text-sm font-body">Preparing your brew station...</p>
+          <div className="w-8 h-8 border-2 border-input border-t-primary rounded-full animate-spin" />
+          <p className="mt-4 text-muted-foreground text-sm font-body">Preparing your brew station...</p>
         </div>
       </div>
     );
@@ -1474,19 +1474,19 @@ export default function NewBrew() {
   // Success celebration screen
   if (showSuccess) {
     return (
-      <div className="min-h-screen paper-texture flex items-center justify-center">
+      <div className="min-h-screen  flex items-center justify-center">
         <div className="text-center space-y-6">
           <div className="relative inline-flex items-center justify-center">
             {/* Expanding ring */}
-            <div className="absolute w-20 h-20 rounded-full border-2 border-sienna-400 animate-success-ring" />
+            <div className="absolute w-20 h-20 rounded-full border-2 border-editorial animate-success-ring" />
             {/* Check circle */}
-            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-sage-500 to-sage-600 flex items-center justify-center shadow-lg animate-check-circle">
-              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <div className="w-20 h-20 rounded-full bg-success flex items-center justify-center animate-check-circle">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-success-foreground">
                 <path d="M5 13l4 4L19 7" className="animate-check-draw" />
               </svg>
             </div>
           </div>
-          <p className="font-display text-2xl text-espresso-800 tracking-tight animate-fade-in" style={{ animationDelay: '400ms' }}>
+          <p className="font-display text-2xl text-foreground tracking-tight animate-fade-in" style={{ animationDelay: '400ms' }}>
             Brew logged
           </p>
         </div>
@@ -1495,14 +1495,14 @@ export default function NewBrew() {
   }
 
   return (
-    <div className="min-h-screen paper-texture">
+    <div className="min-h-screen ">
       <div className="p-6 pb-12 max-w-3xl mx-auto">
         {/* Header */}
         <div className="mb-8 text-center animate-fade-in">
-          <h1 className="font-display text-3xl text-espresso-900 tracking-tight">
+          <h1 className="font-display text-3xl text-foreground tracking-tight">
             {isEditMode ? "Edit Brew" : "New Brew"}
           </h1>
-          <p className="text-espresso-400 mt-2 text-sm font-body italic">
+          <p className="text-muted-foreground mt-2 text-sm font-body">
             {isEditMode ? "Update the details of your brew." : "Log every detail of your pour."}
           </p>
         </div>
@@ -1563,13 +1563,13 @@ export default function NewBrew() {
         </div>
 
         {/* Navigation buttons */}
-        <div className="flex items-center justify-between mt-10 pt-6 border-t border-cream-200">
+        <div className="flex items-center justify-between mt-10 pt-6 border-t border-border">
           <div>
             {state.step > 1 && (
               <button
                 type="button"
                 onClick={() => dispatch({ type: "PREV_STEP" })}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium text-espresso-600 hover:text-espresso-900 hover:bg-cream-100 transition-all duration-200"
+                className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium text-secondary-foreground hover:text-foreground hover:bg-muted transition-all duration-200"
               >
                 <ChevronLeft size={16} strokeWidth={2} />
                 Back
@@ -1583,10 +1583,10 @@ export default function NewBrew() {
                 onClick={() => dispatch({ type: "NEXT_STEP" })}
                 disabled={!canAdvance}
                 className={cn(
-                  "inline-flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200",
+                  "inline-flex items-center gap-2 px-6 py-2.5 text-sm font-semibold transition-all duration-200",
                   canAdvance
-                    ? "bg-sienna-500 text-white shadow-md shadow-sienna-200 hover:bg-sienna-600 hover:shadow-lg hover:-translate-y-0.5"
-                    : "bg-cream-200 text-cream-400 cursor-not-allowed"
+                    ? "bg-primary text-primary-foreground hover:bg-primary"
+                    : "bg-muted text-muted-foreground cursor-not-allowed"
                 )}
               >
                 Next
@@ -1598,8 +1598,8 @@ export default function NewBrew() {
 
         {/* Submission error */}
         {(createBrewLog.isError || updateBrewLog.isError) && (
-          <div className="mt-6 p-4 rounded-lg bg-red-50 border border-red-200">
-            <p className="text-sm text-red-700 font-body">
+          <div className="mt-6 p-4 bg-destructive/10 border border-destructive/20">
+            <p className="text-sm text-destructive font-body">
               {isEditMode ? "Failed to save changes. Please try again." : "Failed to log brew. Please try again."}
             </p>
           </div>

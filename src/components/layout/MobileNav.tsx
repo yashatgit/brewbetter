@@ -41,24 +41,20 @@ function TabItem({ to, label, icon: Icon, end }: TabItemProps) {
       end={end}
       className={({ isActive }) =>
         [
-          'flex flex-1 flex-col items-center justify-center gap-0.5 py-2.5 text-[11px] font-semibold tracking-wide transition-all duration-250',
+          'flex flex-1 flex-col items-center justify-center gap-0.5 py-2.5 text-[10px] font-bold uppercase tracking-widest transition-all duration-250',
           isActive
-            ? 'text-sienna-600'
-            : 'text-espresso-400 hover:text-espresso-600',
+            ? 'text-editorial'
+            : 'text-inverted-muted hover:text-inverted-foreground',
         ].join(' ')
       }
     >
       {({ isActive }) => (
         <>
-          <Icon size={22} strokeWidth={1.8} />
+          <Icon size={20} strokeWidth={1.8} />
           <span>{label}</span>
-          {/* Active dot indicator */}
-          <span
-            className={[
-              'h-1.5 w-1.5 rounded-full transition-all duration-250',
-              isActive ? 'bg-sienna-500 shadow-sm shadow-sienna-500/50' : 'bg-transparent',
-            ].join(' ')}
-          />
+          {isActive && (
+            <span className="h-[2px] w-4 bg-editorial mt-0.5" />
+          )}
         </>
       )}
     </NavLink>
@@ -100,19 +96,19 @@ export function MobileNav() {
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 md:hidden">
-      <div className="relative bg-cream-50/95 backdrop-blur-lg border-t-2 border-cream-200 shadow-[0_-4px_20px_rgba(26,18,16,0.08)]">
+      <div className="relative bg-inverted border-t border-white/10">
         <div className="flex items-end justify-around px-1">
           <TabItem to="/" label="Home" icon={Home} end />
           <TabItem to="/inventory" label="Inventory" icon={Package} />
 
-          {/* ── Center hero button ── */}
+          {/* -- Center hero button -- */}
           <div className="flex flex-1 items-end justify-center">
             <NavLink
               to="/brew/new"
-              className="-mt-5 mb-2 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-sienna-500 to-sienna-700 text-white shadow-xl shadow-sienna-500/40 transition-all duration-250 ease-out hover:shadow-2xl hover:shadow-sienna-500/50 hover:scale-105 active:scale-95 ring-4 ring-cream-50 focus:outline-none focus-visible:ring-sienna-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50"
+              className="-mt-4 mb-2 flex h-14 w-14 items-center justify-center bg-primary text-primary-foreground transition-all duration-250 ease-out hover:bg-editorial active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-inverted"
               aria-label="New Brew"
             >
-              <Plus size={28} strokeWidth={2.5} />
+              <Plus size={24} strokeWidth={2.5} />
             </NavLink>
           </div>
 
@@ -124,27 +120,24 @@ export function MobileNav() {
               type="button"
               onClick={() => setMoreOpen((prev) => !prev)}
               className={[
-                'flex w-full flex-col items-center justify-center gap-0.5 py-2.5 text-[11px] font-semibold tracking-wide transition-all duration-250',
+                'flex w-full flex-col items-center justify-center gap-0.5 py-2.5 text-[10px] font-bold uppercase tracking-widest transition-all duration-250',
                 moreOpen || moreIsActive
-                  ? 'text-sienna-600'
-                  : 'text-espresso-400 hover:text-espresso-600',
+                  ? 'text-editorial'
+                  : 'text-inverted-muted hover:text-inverted-foreground',
               ].join(' ')}
               aria-expanded={moreOpen}
               aria-haspopup="true"
             >
-              <MoreHorizontal size={22} strokeWidth={1.8} />
+              <MoreHorizontal size={20} strokeWidth={1.8} />
               <span>More</span>
-              <span
-                className={[
-                  'h-1.5 w-1.5 rounded-full transition-all duration-250',
-                  moreOpen || moreIsActive ? 'bg-sienna-500 shadow-sm shadow-sienna-500/50' : 'bg-transparent',
-                ].join(' ')}
-              />
+              {(moreOpen || moreIsActive) && (
+                <span className="h-[2px] w-4 bg-editorial mt-0.5" />
+              )}
             </button>
 
             {/* Upward popover */}
             {moreOpen && (
-              <div role="menu" className="absolute bottom-full right-0 mb-3 w-56 animate-fade-in-scale rounded-2xl border-2 border-cream-200 bg-cream-50/95 backdrop-blur-lg py-2 shadow-2xl shadow-espresso-900/12">
+              <div role="menu" className="absolute bottom-full right-0 mb-3 w-56 animate-fade-in-scale border-2 border-border bg-card py-2">
                 {moreLinks.map((link) => (
                   <NavLink
                     key={link.to}
@@ -153,14 +146,14 @@ export function MobileNav() {
                     onClick={() => setMoreOpen(false)}
                     className={({ isActive }) =>
                       [
-                        'flex items-center gap-3.5 px-5 py-3 text-sm font-medium transition-all duration-200',
+                        'flex items-center gap-3.5 px-5 py-3 text-xs font-bold uppercase tracking-widest transition-all duration-200',
                         isActive
-                          ? 'bg-sienna-500/8 text-sienna-600'
-                          : 'text-espresso-600 hover:bg-cream-200/60 hover:text-espresso-900',
+                          ? 'bg-accent text-editorial'
+                          : 'text-secondary-foreground hover:bg-muted hover:text-foreground',
                       ].join(' ')
                     }
                   >
-                    <link.icon size={18} strokeWidth={1.8} />
+                    <link.icon size={16} strokeWidth={1.8} />
                     <span>{link.label}</span>
                   </NavLink>
                 ))}

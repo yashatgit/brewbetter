@@ -117,15 +117,15 @@ export default function EquipmentPage() {
   return (
     <div className="animate-fade-in space-y-6">
       {/* Tabs */}
-      <div className="mb-8 flex gap-1.5 rounded-xl bg-cream-100 border border-cream-200 p-1.5">
+      <div className="mb-8 flex gap-1.5 bg-background border-2 border-border p-1.5">
         {EQUIPMENT_SECTIONS.map((section) => (
           <button
             key={section.type}
             onClick={() => setActiveTab(section.type)}
-            className={`flex-1 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 ${
+            className={`flex-1 px-3 py-2.5 text-sm font-medium transition-all duration-200 ${
               activeTab === section.type
-                ? "bg-sienna-600 text-white shadow-sm"
-                : "bg-cream-200 text-espresso-600 hover:text-espresso-800 hover:bg-cream-300"
+                ? "bg-primary text-primary-foreground"
+                : "bg-muted text-secondary-foreground hover:text-foreground hover:bg-secondary"
             }`}
           >
             {section.label}
@@ -136,15 +136,15 @@ export default function EquipmentPage() {
       {/* Section header with add button */}
       <div className="mb-5 flex items-center justify-between gap-4">
         <div className="flex items-center gap-4 flex-1 min-w-0">
-          <h2 className="text-2xl font-display text-espresso-800 shrink-0">
+          <h2 className="text-2xl font-display text-foreground shrink-0">
             {activeSection.label}
           </h2>
-          <div className="flex-1 border-t border-cream-300" />
+          <div className="flex-1 border-t border-input" />
         </div>
         <Button
           size="sm"
           onClick={openAddDialog}
-          className="bg-sienna-600 hover:bg-sienna-700 text-white shrink-0"
+          className="shrink-0"
         >
           + Add {activeSection.singular}
         </Button>
@@ -157,87 +157,86 @@ export default function EquipmentPage() {
             <div className="animate-float">
               {(() => {
                 const Icon = getEquipmentIcon(activeTab, '');
-                return <Icon size={48} strokeWidth={1.2} className="text-espresso-300 mx-auto" />;
+                return <Icon size={48} strokeWidth={1.2} className="text-muted-foreground mx-auto" />;
               })()}
             </div>
-            <p className="font-display italic text-espresso-400 text-lg">Loading your gear...</p>
+            <p className="font-display text-muted-foreground text-lg">Loading your gear...</p>
           </div>
         </div>
       ) : equipment.length === 0 ? (
-        <div className="py-16 text-center paper-texture rounded-2xl border border-cream-200 bg-cream-50 animate-fade-in">
-          <div className="text-espresso-200 mb-4">
+        <Card className="py-16 text-center animate-fade-in">
+          <div className="text-muted-foreground mb-4">
             {(() => {
               const Icon = getEquipmentIcon(activeTab, '');
               return <Icon size={48} strokeWidth={1} className="mx-auto" />;
             })()}
           </div>
-          <p className="text-espresso-400 font-display italic text-lg mb-3">
+          <p className="text-muted-foreground font-display text-lg mb-3">
             No {activeSection.label.toLowerCase()} yet
           </p>
-          <p className="text-sm text-espresso-400 mb-5 max-w-sm mx-auto leading-relaxed">
+          <p className="text-sm text-muted-foreground mb-5 max-w-sm mx-auto leading-relaxed">
             Add your gear to quickly build brew setups.
           </p>
           <Button
             size="sm"
             onClick={openAddDialog}
-            className="bg-sienna-600 hover:bg-sienna-700 text-white"
           >
             + Add your first {activeSection.singular.toLowerCase()}
           </Button>
-        </div>
+        </Card>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 stagger-children">
           {equipment.map((item: Equipment) => (
             <Card
               key={item.id}
-              className="flex flex-col justify-between gap-3 border border-cream-200 bg-white rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-250 hover:-translate-y-0.5"
+              accent="editorial"
+              className="flex flex-col justify-between gap-3 overflow-hidden !p-0"
             >
-              <div className="p-5">
+              <div className="p-6">
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex items-center gap-3">
-                    <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-sienna-500/10 border border-sienna-500/15">
+                    <div className="flex items-center justify-center w-10 h-10 bg-accent border-2 border-border">
                       {(() => {
                         const Icon = getEquipmentIcon(item.type, item.name);
-                        return <Icon size={20} className="text-sienna-600" />;
+                        return <Icon size={20} className="text-editorial" />;
                       })()}
                     </div>
-                    <h3 className="font-display text-espresso-900 text-lg tracking-tight">
+                    <h3 className="font-display text-foreground text-lg tracking-tight">
                       {item.name}
                     </h3>
                   </div>
                   {item.isDefault && (
-                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-sage-200 text-sage-700 uppercase tracking-wider">
+                    <span className="inline-flex items-center px-2 py-0.5 text-[10px] font-bold bg-success/20 text-success uppercase tracking-wider">
                       Default
                     </span>
                   )}
                 </div>
 
                 {(item.brand || item.model) && (
-                  <p className="mt-2 ml-[52px] text-sm text-espresso-500 italic">
+                  <p className="mt-2 ml-[52px] text-sm text-muted-foreground">
                     {[item.brand, item.model].filter(Boolean).join(" \u00B7 ")}
                   </p>
                 )}
 
                 {activeTab === "grinder" && item.grindUnitLabel && (
-                  <p className="mt-2 ml-[52px] text-xs text-espresso-400">
+                  <p className="mt-2 ml-[52px] text-xs text-muted-foreground">
                     Grind unit: {item.grindUnitLabel}
                   </p>
                 )}
               </div>
 
-              <div className="flex gap-2 border-t border-cream-200 px-5 py-3">
+              <div className="flex gap-2 border-t border-secondary px-6 py-3">
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={() => openEditDialog(item)}
-                  className="text-espresso-600 hover:text-espresso-800 hover:bg-cream-100"
                 >
                   Edit
                 </Button>
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="text-rose-500 hover:bg-rose-100 hover:text-rose-700"
+                  className="text-destructive hover:bg-destructive/10 hover:text-destructive"
                   onClick={() => handleDelete(item.id)}
                   disabled={deleteMutation.isPending}
                 >
@@ -259,7 +258,7 @@ export default function EquipmentPage() {
             : `Add ${activeSection.singular}`
         }
       >
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4 paper-texture">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <Input
             label="Name"
             placeholder={`e.g. ${activeTab === "grinder" ? "Niche Zero" : activeTab === "brew_device" ? "V60" : activeTab === "filter" ? "Hario tabbed" : "Third Wave Water"}`}
@@ -303,26 +302,24 @@ export default function EquipmentPage() {
               onChange={(e) =>
                 setForm({ ...form, isDefault: e.target.checked })
               }
-              className="h-4 w-4 rounded border-cream-300 text-sienna-600 accent-sienna-600 focus:ring-sienna-500"
+              className="h-4 w-4 border-input text-primary accent-primary focus:ring-ring"
             />
-            <span className="text-sm font-medium text-espresso-700">
+            <span className="data-label">
               Set as default
             </span>
           </label>
 
-          <div className="mt-2 flex justify-end gap-3 pt-3 border-t border-cream-200">
+          <div className="mt-2 flex justify-end gap-3 pt-3 border-t border-border">
             <Button
               variant="secondary"
               type="button"
               onClick={closeDialog}
-              className="text-espresso-600 hover:bg-cream-100"
             >
               Cancel
             </Button>
             <Button
               type="submit"
               disabled={isSaving}
-              className="bg-sienna-600 hover:bg-sienna-700 text-white"
             >
               {isSaving
                 ? "Saving..."

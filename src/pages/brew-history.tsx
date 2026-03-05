@@ -6,6 +6,7 @@ import { StarRating } from "../components/ui/StarRating";
 import { Select } from "../components/ui/Select";
 import { Input } from "../components/ui/Input";
 import { Button } from "../components/ui/Button";
+import { Card } from "../components/ui/Card";
 import { formatDate, formatBrewTime, formatTime } from "../lib/utils";
 import { BookOpen, Search } from "lucide-react";
 import type { Bean, BrewLogWithRelations } from "../types/database";
@@ -128,15 +129,15 @@ export default function BrewHistory() {
   if (isLoading) {
     return (
       <div className="p-6 space-y-4 animate-fade-in">
-        <h1 className="text-4xl md:text-5xl font-display italic text-espresso-900 tracking-tight leading-[0.95]">
+        <h1 className="text-4xl md:text-5xl font-display text-foreground tracking-tight leading-[0.95]">
           Journal
         </h1>
         <div className="flex items-center justify-center py-20">
           <div className="text-center space-y-4">
             <div className="animate-float">
-              <BookOpen size={48} strokeWidth={1.2} className="text-espresso-300 mx-auto" />
+              <BookOpen size={48} strokeWidth={1.2} className="text-muted-foreground mx-auto" />
             </div>
-            <p className="font-display italic text-espresso-400 text-lg">Opening your journal...</p>
+            <p className="font-display text-muted-foreground text-lg">Opening your journal...</p>
           </div>
         </div>
       </div>
@@ -146,14 +147,14 @@ export default function BrewHistory() {
   if (!brews || brews.length === 0) {
     return (
       <div className="p-6 space-y-4 animate-fade-in">
-        <h1 className="text-4xl md:text-5xl font-display italic text-espresso-900 tracking-tight leading-[0.95]">
+        <h1 className="text-4xl md:text-5xl font-display text-foreground tracking-tight leading-[0.95]">
           Journal
         </h1>
-        <div className="flex flex-col items-center justify-center py-20 paper-texture rounded-2xl border border-cream-200 bg-cream-50">
-          <div className="text-espresso-200 animate-float mb-6">
+        <Card className="flex flex-col items-center justify-center py-20 paper-texture">
+          <div className="text-muted-foreground animate-float mb-6">
             <svg width="120" height="100" viewBox="0 0 120 100" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
               {/* Open book */}
-              <path d="M60 20 Q40 15 15 20 V80 Q40 75 60 80 Q80 75 105 80 V20 Q80 15 60 20 Z" className="fill-cream-300/30" />
+              <path d="M60 20 Q40 15 15 20 V80 Q40 75 60 80 Q80 75 105 80 V20 Q80 15 60 20 Z" className="fill-secondary/30" />
               <line x1="60" y1="20" x2="60" y2="80" />
               {/* Lines on left page */}
               <line x1="25" y1="35" x2="52" y2="35" className="opacity-30" />
@@ -161,54 +162,49 @@ export default function BrewHistory() {
               <line x1="25" y1="55" x2="50" y2="55" className="opacity-30" />
               {/* Pen */}
               <line x1="85" y1="10" x2="75" y2="65" className="opacity-40" strokeWidth="1.5" />
-              <circle cx="75" cy="65" r="1.5" className="fill-sienna-400/40 opacity-40" />
+              <circle cx="75" cy="65" r="1.5" className="fill-primary/40 opacity-40" />
             </svg>
           </div>
-          <h2 className="text-xl font-display italic text-espresso-700 mb-3">
+          <h2 className="text-xl font-display text-secondary-foreground mb-3">
             Your journal awaits its first entry
           </h2>
-          <p className="text-espresso-400 mb-8 max-w-sm text-center text-sm leading-relaxed">
+          <p className="text-muted-foreground mb-8 max-w-sm text-center text-sm leading-relaxed">
             Every brew tells a story. Start writing yours.
           </p>
           <Button
             onClick={() => navigate("/brew/new")}
-            className="bg-sienna-600 hover:bg-sienna-700 text-white"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground"
           >
             Log your first brew
           </Button>
-        </div>
+        </Card>
       </div>
     );
   }
 
   return (
     <div className="p-6 space-y-6 max-w-6xl mx-auto animate-fade-in">
-      {/* Header — dark editorial strip */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-espresso-800 via-espresso-900 to-espresso-950 px-7 py-8 md:px-10 md:py-10">
-        <div className="absolute inset-0 opacity-[0.03]" style={{
-          backgroundImage: 'radial-gradient(circle at 2px 2px, currentColor 1px, transparent 0)',
-          backgroundSize: '24px 24px',
-        }} />
-        <div className="absolute -right-12 -top-12 w-56 h-56 rounded-full bg-sienna-500/8 blur-3xl" />
+      {/* Header — flat panel with left accent border */}
+      <Card accent="data" className="relative overflow-hidden px-7 py-8 md:px-10 md:py-10">
         <div className="relative flex items-end justify-between gap-4">
           <div className="space-y-2">
-            <h1 className="text-4xl md:text-5xl font-display italic text-cream-50 tracking-tight leading-[0.95]">
+            <h1 className="text-4xl md:text-5xl font-display text-foreground tracking-tight leading-[0.95]">
               Journal
             </h1>
-            <p className="text-sm text-espresso-400 italic">
-              <span className="font-display text-cream-100 text-3xl md:text-4xl not-italic">{brews.length}</span>{" "}
+            <p className="text-sm text-muted-foreground">
+              <span className="font-mono text-foreground text-3xl md:text-4xl">{brews.length}</span>{" "}
               brew{brews.length !== 1 ? "s" : ""} logged
             </p>
           </div>
           <Button
             onClick={() => navigate("/brew/new")}
             size="sm"
-            className="bg-sienna-600 hover:bg-sienna-700 text-white relative"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground relative"
           >
             New Brew
           </Button>
         </div>
-      </div>
+      </Card>
 
       {/* Time presets */}
       <div className="flex gap-2 flex-wrap">
@@ -222,10 +218,10 @@ export default function BrewHistory() {
             key={preset.key}
             type="button"
             onClick={() => applyPreset(preset.key)}
-            className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-all duration-200 ${
+            className={`px-4 py-1.5 text-sm font-medium border-2 transition-all duration-200 ${
               activePreset === preset.key
-                ? "bg-sienna-600 text-white border-sienna-600"
-                : "bg-cream-50 text-espresso-600 border-cream-300 hover:border-sienna-300 hover:bg-cream-100"
+                ? "bg-primary text-primary-foreground border-primary"
+                : "bg-card text-muted-foreground border-border hover:border-border hover:bg-muted"
             }`}
           >
             {preset.label}
@@ -234,7 +230,7 @@ export default function BrewHistory() {
       </div>
 
       {/* Filters */}
-      <div className="rounded-xl bg-cream-50 border border-cream-200 p-5">
+      <Card compact>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <Select
             label="Bean"
@@ -262,91 +258,91 @@ export default function BrewHistory() {
           />
         </div>
         {hasActiveFilters && (
-          <div className="mt-4 flex items-center justify-between pt-3 border-t border-cream-200">
-            <p className="text-sm text-espresso-400 italic">
+          <div className="mt-4 flex items-center justify-between pt-3 border-t border-border">
+            <p className="text-sm text-muted-foreground font-mono">
               {filteredBrews.length} result{filteredBrews.length !== 1 ? "s" : ""}
             </p>
             <Button
               variant="ghost"
               size="sm"
               onClick={clearFilters}
-              className="text-sienna-600 hover:text-sienna-700 hover:bg-cream-100"
+              className="text-editorial hover:text-editorial/80 hover:bg-muted"
             >
               Clear filters
             </Button>
           </div>
         )}
-      </div>
+      </Card>
 
       {/* Results */}
       {filteredBrews.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-16 paper-texture rounded-2xl border border-cream-200 bg-cream-50 animate-fade-in">
-          <div className="text-espresso-200 mb-4">
+        <Card className="flex flex-col items-center justify-center py-16 paper-texture animate-fade-in">
+          <div className="text-muted-foreground mb-4">
             <Search size={40} strokeWidth={1.2} />
           </div>
-          <h3 className="text-lg font-display italic text-espresso-600 mb-2">
+          <h3 className="text-lg font-display text-secondary-foreground mb-2">
             No brews match your filters
           </h3>
-          <p className="text-espresso-400 mb-5 text-sm">
+          <p className="text-muted-foreground mb-5 text-sm">
             Try widening your search to uncover more brews.
           </p>
           <Button
             variant="secondary"
             size="sm"
             onClick={clearFilters}
-            className="text-espresso-600 hover:bg-cream-100"
+            className="text-muted-foreground hover:bg-muted"
           >
             Clear filters
           </Button>
-        </div>
+        </Card>
       ) : (
         <>
           {/* Table */}
-          <div className="rounded-xl border border-cream-200 bg-white overflow-hidden">
+          <div className="border-2 border-border bg-background overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-cream-200 bg-cream-50">
-                    <th className="text-left px-4 py-3 font-display text-xs text-espresso-500 uppercase tracking-wider">Date</th>
-                    <th className="text-left px-4 py-3 font-display text-xs text-espresso-500 uppercase tracking-wider">Time</th>
-                    <th className="text-left px-4 py-3 font-display text-xs text-espresso-500 uppercase tracking-wider">Bean</th>
-                    <th className="text-left px-4 py-3 font-display text-xs text-espresso-500 uppercase tracking-wider">Device</th>
-                    <th className="text-right px-4 py-3 font-display text-xs text-espresso-500 uppercase tracking-wider">Dose</th>
-                    <th className="text-right px-4 py-3 font-display text-xs text-espresso-500 uppercase tracking-wider">Water</th>
-                    <th className="text-right px-4 py-3 font-display text-xs text-espresso-500 uppercase tracking-wider">Ratio</th>
-                    <th className="text-right px-4 py-3 font-display text-xs text-espresso-500 uppercase tracking-wider">Brew Time</th>
-                    <th className="text-center px-4 py-3 font-display text-xs text-espresso-500 uppercase tracking-wider">Rating</th>
+                  <tr className="border-b border-border bg-muted">
+                    <th className="text-left px-4 py-3 font-display text-xs text-muted-foreground uppercase tracking-wider">Date</th>
+                    <th className="text-left px-4 py-3 font-display text-xs text-muted-foreground uppercase tracking-wider">Time</th>
+                    <th className="text-left px-4 py-3 font-display text-xs text-muted-foreground uppercase tracking-wider">Bean</th>
+                    <th className="text-left px-4 py-3 font-display text-xs text-muted-foreground uppercase tracking-wider">Device</th>
+                    <th className="text-right px-4 py-3 font-display text-xs text-muted-foreground uppercase tracking-wider">Dose</th>
+                    <th className="text-right px-4 py-3 font-display text-xs text-muted-foreground uppercase tracking-wider">Water</th>
+                    <th className="text-right px-4 py-3 font-display text-xs text-muted-foreground uppercase tracking-wider">Ratio</th>
+                    <th className="text-right px-4 py-3 font-display text-xs text-muted-foreground uppercase tracking-wider">Brew Time</th>
+                    <th className="text-center px-4 py-3 font-display text-xs text-muted-foreground uppercase tracking-wider">Rating</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-cream-100">
+                <tbody className="divide-y divide-muted">
                   {paginatedBrews.map((brew) => (
                     <tr
                       key={brew.id}
                       onClick={() => navigate(`/brew/${brew.id}`)}
-                      className="hover:bg-cream-50 cursor-pointer transition-all duration-200 border-l-[3px] border-l-transparent hover:border-l-sienna-400"
+                      className="hover:bg-muted cursor-pointer transition-all duration-200 border-l-[3px] border-l-transparent hover:border-l-data"
                     >
-                      <td className="px-4 py-3 text-espresso-700 whitespace-nowrap">
+                      <td className="px-4 py-3 text-secondary-foreground whitespace-nowrap font-mono">
                         {formatDate(brew.brewedAt)}
                       </td>
-                      <td className="px-4 py-3 text-espresso-400 whitespace-nowrap">
+                      <td className="px-4 py-3 text-muted-foreground whitespace-nowrap font-mono">
                         {formatTime(brew.brewedAt)}
                       </td>
-                      <td className="px-4 py-3 text-espresso-900 font-medium truncate max-w-[200px]">
+                      <td className="px-4 py-3 text-foreground font-medium truncate max-w-[200px]">
                         {brew.bean?.name ?? "Unknown"}
                       </td>
-                      <td className="px-4 py-3 text-espresso-500 whitespace-nowrap">
+                      <td className="px-4 py-3 text-muted-foreground whitespace-nowrap">
                         {brew.brewDevice?.name ?? "-"}
                       </td>
-                      <td className="px-4 py-3 text-espresso-700 text-right whitespace-nowrap">
+                      <td className="px-4 py-3 text-secondary-foreground text-right whitespace-nowrap font-mono">
                         {brew.coffeeDose}g
                       </td>
-                      <td className="px-4 py-3 text-espresso-700 text-right whitespace-nowrap">
+                      <td className="px-4 py-3 text-secondary-foreground text-right whitespace-nowrap font-mono">
                         {brew.totalWater}g
                       </td>
-                      <td className="px-4 py-3 text-espresso-700 text-right whitespace-nowrap">
+                      <td className="px-4 py-3 text-secondary-foreground text-right whitespace-nowrap font-mono">
                         1:{brew.ratio}
                       </td>
-                      <td className="px-4 py-3 text-espresso-700 text-right whitespace-nowrap">
+                      <td className="px-4 py-3 text-secondary-foreground text-right whitespace-nowrap font-mono">
                         {formatBrewTime(brew.totalBrewTime)}
                       </td>
                       <td className="px-4 py-3">
@@ -354,7 +350,7 @@ export default function BrewHistory() {
                           {brew.tasting ? (
                             <StarRating value={brew.tasting.overallEnjoyment} size="sm" />
                           ) : (
-                            <span className="text-xs text-espresso-300 italic">-</span>
+                            <span className="text-xs text-muted-foreground">-</span>
                           )}
                         </div>
                       </td>
@@ -368,7 +364,7 @@ export default function BrewHistory() {
           {/* Pagination */}
           {totalPages > 1 && (
             <div className="flex items-center justify-between">
-              <p className="text-sm text-espresso-400">
+              <p className="text-sm text-muted-foreground font-mono">
                 Showing {showingFrom}–{showingTo} of {filteredBrews.length}
               </p>
               <div className="flex gap-2">
@@ -377,7 +373,7 @@ export default function BrewHistory() {
                   size="sm"
                   disabled={page <= 1}
                   onClick={() => setPage((p) => p - 1)}
-                  className="text-espresso-600"
+                  className="text-muted-foreground"
                 >
                   Prev
                 </Button>
@@ -386,7 +382,7 @@ export default function BrewHistory() {
                   size="sm"
                   disabled={page >= totalPages}
                   onClick={() => setPage((p) => p + 1)}
-                  className="text-espresso-600"
+                  className="text-muted-foreground"
                 >
                   Next
                 </Button>

@@ -29,9 +29,7 @@ export function Select({
       {label && (
         <label
           htmlFor={selectId}
-          className={`text-sm font-medium transition-colors duration-150 ${
-            error ? "text-rose-600" : "text-espresso-600"
-          }`}
+          className={`data-label ${error ? "!text-destructive" : ""}`}
         >
           {label}
         </label>
@@ -39,10 +37,8 @@ export function Select({
       <div className="relative">
         <select
           id={selectId}
-          className={`w-full appearance-none bg-cream-50 border-t-0 border-x-0 border-b-2 border-l-2 border-l-transparent rounded-none pl-3 pr-8 py-2 text-sm text-espresso-800 transition-all duration-200 ease-out focus:outline-none focus:border-b-sienna-400 focus:border-l-sienna-400 focus:pl-4 ${
-            error
-              ? "border-b-rose-400 focus:border-b-rose-400"
-              : "border-b-espresso-200"
+          className={`w-full appearance-none bg-white border-2 border-border px-3 pr-8 py-2 text-sm text-foreground font-body transition-all duration-200 ease-out focus:outline-none focus:border-editorial focus:ring-1 focus:ring-editorial/30 ${
+            error ? "border-destructive focus:border-destructive" : ""
           } ${className}`}
           {...props}
         >
@@ -60,11 +56,11 @@ export function Select({
         <ChevronDown
           size={16}
           strokeWidth={2}
-          className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-espresso-400"
+          className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground"
           aria-hidden="true"
         />
       </div>
-      {error && <p className="text-sm text-rose-600">{error}</p>}
+      {error && <p className="text-sm text-destructive">{error}</p>}
     </div>
   );
 }

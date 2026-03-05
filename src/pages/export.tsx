@@ -3,6 +3,7 @@ import { useBrewLogs } from '../hooks/use-brew-logs'
 import { api } from '../lib/api'
 import { downloadJson, downloadCsv } from '../lib/export'
 import { Button } from '../components/ui/Button'
+import { Card } from '../components/ui/Card'
 import { Input } from '../components/ui/Input'
 import { Download } from 'lucide-react'
 import type { BrewLogWithRelations } from '../types/database'
@@ -56,20 +57,21 @@ export default function Export() {
   return (
     <div className="p-6 space-y-8 max-w-xl mx-auto animate-fade-in">
       <div className="space-y-1">
-        <h1 className="text-4xl md:text-5xl font-display italic text-espresso-900 tracking-tight leading-[0.95]">
+        <p className="kicker">Data Management</p>
+        <h1 className="text-4xl md:text-5xl font-display text-foreground tracking-tight leading-[0.95]">
           Export Data
         </h1>
-        <p className="text-espresso-500 text-sm">
+        <p className="text-muted-foreground text-sm">
           Download your brew logs for safekeeping
         </p>
       </div>
 
-      <div className="rounded-2xl border border-cream-200 bg-white paper-texture p-6 space-y-8">
+      <Card className="space-y-8">
         {/* Format Selection */}
         <fieldset className="space-y-3">
           <legend className="flex items-center gap-4 mb-1">
-            <span className="text-sm font-display text-espresso-800 shrink-0">Export Format</span>
-            <div className="flex-1 border-t border-cream-300" />
+            <span className="data-label shrink-0">Export Format</span>
+            <div className="flex-1 border-t border-input" />
           </legend>
           <div className="grid grid-cols-2 gap-3">
             {(['json', 'csv'] as const).map((fmt) => (
@@ -77,24 +79,20 @@ export default function Export() {
                 key={fmt}
                 type="button"
                 onClick={() => setFormat(fmt)}
-                className={`rounded-xl border-2 p-5 text-center transition-all duration-250 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-sienna-400 focus-visible:ring-offset-2 ${
+                className={`border-2 p-5 text-center transition-all duration-250 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
                   format === fmt
-                    ? 'border-sienna-500 bg-gradient-to-br from-espresso-800 to-espresso-900 shadow-lg scale-[1.02]'
-                    : 'border-cream-200 bg-cream-50 hover:border-cream-300 hover:bg-cream-100'
+                    ? 'border-border bg-accent'
+                    : 'border-border bg-card hover:bg-muted'
                 }`}
               >
                 <span
-                  className={`font-display text-lg font-bold tracking-tight ${
-                    format === fmt ? 'text-cream-50' : 'text-espresso-600'
+                  className={`font-mono font-bold text-lg tracking-tight ${
+                    format === fmt ? 'text-editorial' : 'text-secondary-foreground'
                   }`}
                 >
                   {fmt.toUpperCase()}
                 </span>
-                <p
-                  className={`text-xs mt-1.5 ${
-                    format === fmt ? 'text-cream-300' : 'text-espresso-400'
-                  }`}
-                >
+                <p className="text-xs mt-1.5 text-muted-foreground">
                   {fmt === 'json'
                     ? 'Structured data, great for backups'
                     : 'Spreadsheet-friendly format'}
@@ -121,17 +119,17 @@ export default function Export() {
         </div>
 
         {/* Preview Count */}
-        <div className="rounded-xl bg-cream-50 border border-cream-200 px-5 py-4">
+        <div className="bg-muted px-5 py-4 border-2 border-secondary">
           {isLoading ? (
-            <p className="text-sm text-espresso-400 italic">Counting records...</p>
+            <p className="text-sm text-muted-foreground">Counting records...</p>
           ) : (
-            <p className="text-sm text-espresso-600">
-              <span className="font-display text-espresso-800 text-3xl md:text-4xl">
+            <p className="text-sm text-secondary-foreground">
+              <span className="font-display text-foreground text-3xl md:text-4xl data-value">
                 {count}
               </span>{' '}
               brew log{count !== 1 ? 's' : ''} will be exported
               {(dateFrom || dateTo) && (
-                <span className="text-espresso-400 block text-xs mt-1">
+                <span className="text-muted-foreground block text-xs mt-1">
                   {dateFrom && `from ${dateFrom}`}
                   {dateFrom && dateTo && ' '}
                   {dateTo && `to ${dateTo}`}
@@ -146,7 +144,7 @@ export default function Export() {
           onClick={handleExport}
           disabled={isExporting || count === 0}
           size="lg"
-          className="w-full bg-gradient-to-r from-sienna-600 to-sienna-700 hover:from-sienna-700 hover:to-sienna-800 text-white font-display text-lg py-4 inline-flex items-center justify-center gap-2.5 warm-glow rounded-xl"
+          className="w-full font-display text-lg py-4 inline-flex items-center justify-center gap-2.5"
         >
           <Download size={18} strokeWidth={2} className={isExporting ? 'animate-bounce' : ''} />
           {isExporting
@@ -156,24 +154,24 @@ export default function Export() {
 
         {/* Error state */}
         {exportError && (
-          <div className="flex items-center justify-center gap-3 py-3 px-4 rounded-xl bg-rose-100 border border-rose-200 animate-fade-in-scale">
-            <p className="text-sm font-medium text-rose-600">{exportError}</p>
+          <div className="flex items-center justify-center gap-3 py-3 px-4 bg-destructive/10 border border-destructive/20 animate-fade-in-scale">
+            <p className="text-sm font-medium text-destructive">{exportError}</p>
           </div>
         )}
 
         {/* Success celebration */}
         {showSuccess && (
-          <div className="flex items-center justify-center gap-3 py-3 px-4 rounded-xl bg-sage-100 border border-sage-200 animate-fade-in-scale">
+          <div className="flex items-center justify-center gap-3 py-3 px-4 bg-success/10 border border-success/20 animate-fade-in-scale">
             <svg width="24" height="24" viewBox="0 0 24 24" className="animate-check-circle">
-              <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-sage-500" />
-              <path d="M8 12 L11 15 L16 9" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-sage-600 animate-check-draw" />
+              <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-success" />
+              <path d="M8 12 L11 15 L16 9" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-success animate-check-draw" />
             </svg>
-            <p className="text-sm font-medium text-sage-700">
+            <p className="text-sm font-medium text-success">
               Your data has been saved!
             </p>
           </div>
         )}
-      </div>
+      </Card>
     </div>
   )
 }

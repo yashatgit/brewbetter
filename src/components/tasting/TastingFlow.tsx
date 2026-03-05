@@ -57,13 +57,13 @@ const MINDFULNESS_OPTIONS: {
 
 function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
-    <h3 className="text-lg font-display text-espresso-900 mb-1">{children}</h3>
+    <h3 className="text-lg font-display text-foreground mb-1">{children}</h3>
   );
 }
 
 function SectionSubtitle({ children }: { children: React.ReactNode }) {
   return (
-    <p className="text-sm text-espresso-400 italic mb-4">{children}</p>
+    <p className="text-sm text-muted-foreground mb-4">{children}</p>
   );
 }
 
@@ -123,19 +123,19 @@ export function TastingFlow({
                 key={opt.value}
                 type="button"
                 onClick={() => update({ mindfulness: opt.value })}
-                className={`flex flex-col items-center justify-center gap-2 p-4 rounded-xl border-2 text-center transition-all duration-200 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-sienna-400 focus-visible:ring-offset-2 ${
+                className={`flex flex-col items-center justify-center gap-2 p-4 border-2 text-center transition-all duration-200 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
                   selected
-                    ? "border-sienna-500 bg-sienna-50 shadow-sm"
-                    : "border-cream-200 bg-cream-50 hover:border-cream-300 hover:bg-cream-100"
+                    ? "border-border bg-accent"
+                    : "border-border bg-card hover:bg-muted"
                 }`}
               >
                 <Icon
                   size={20}
-                  className={selected ? "text-sienna-600" : "text-espresso-400"}
+                  className={selected ? "text-editorial" : "text-muted-foreground"}
                 />
                 <span
                   className={`text-sm font-display ${
-                    selected ? "text-sienna-700" : "text-espresso-700"
+                    selected ? "text-editorial" : "text-secondary-foreground"
                   }`}
                 >
                   {opt.label}
@@ -146,7 +146,7 @@ export function TastingFlow({
         </div>
       </section>
 
-      <hr className="border-cream-200" />
+      <hr className="border-border" />
 
       {/* Feel - Acidity & Sweet/Bitter */}
       <section>
@@ -161,7 +161,7 @@ export function TastingFlow({
             onChange={(v) => update({ acidity: v })}
             minLabel="Smooth & mellow"
             maxLabel="Bright & sharp"
-            className="[&_input]:accent-sienna-500"
+            className="[&_input]:accent-primary"
           />
           <Slider
             label="Sweet / Bitter"
@@ -171,12 +171,12 @@ export function TastingFlow({
             onChange={(v) => update({ sweetBitter: v })}
             minLabel="Sweet"
             maxLabel="Bitter"
-            className="[&_input]:accent-sienna-500"
+            className="[&_input]:accent-primary"
           />
         </div>
       </section>
 
-      <hr className="border-cream-200" />
+      <hr className="border-border" />
 
       {/* Body */}
       <section>
@@ -190,22 +190,22 @@ export function TastingFlow({
                 key={opt.value}
                 type="button"
                 onClick={() => update({ body: opt.value })}
-                className={`flex flex-col items-center justify-center gap-2 p-4 rounded-xl border-2 text-center transition-all duration-200 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-sienna-400 focus-visible:ring-offset-2 ${
+                className={`flex flex-col items-center justify-center gap-2 p-4 border-2 text-center transition-all duration-200 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
                   selected
-                    ? "border-sienna-500 bg-sienna-50 shadow-sm"
-                    : "border-cream-200 bg-cream-50 hover:border-cream-300 hover:bg-cream-100"
+                    ? "border-border bg-accent"
+                    : "border-border bg-card hover:bg-muted"
                 }`}
               >
                 <span
                   className={`text-base font-display ${
-                    selected ? "text-sienna-700" : "text-espresso-700"
+                    selected ? "text-editorial" : "text-secondary-foreground"
                   }`}
                 >
                   {opt.label}
                 </span>
                 <span
                   className={`text-xs leading-tight ${
-                    selected ? "text-sienna-500" : "text-espresso-400"
+                    selected ? "text-editorial" : "text-muted-foreground"
                   }`}
                 >
                   {opt.description}
@@ -216,7 +216,7 @@ export function TastingFlow({
         </div>
       </section>
 
-      <hr className="border-cream-200" />
+      <hr className="border-border" />
 
       {/* Aftertaste */}
       <section>
@@ -230,10 +230,10 @@ export function TastingFlow({
                 <button
                   key={String(val)}
                   type="button"
-                  className={`min-w-[110px] rounded-xl border-2 px-6 py-3 text-sm font-medium transition-all duration-200 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-sienna-400 focus-visible:ring-offset-2 ${
+                  className={`min-w-[110px] border-2 px-6 py-3 text-sm font-medium transition-all duration-200 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
                     selected
-                      ? "border-sienna-500 bg-sienna-50 text-sienna-700 shadow-sm"
-                      : "border-cream-200 bg-cream-50 text-espresso-600 hover:border-cream-300"
+                      ? "border-border bg-accent text-editorial"
+                      : "border-border bg-card text-secondary-foreground hover:bg-muted"
                   }`}
                   onClick={() =>
                     update({
@@ -250,7 +250,7 @@ export function TastingFlow({
 
           {data.hasAftertaste && (
             <div className="space-y-3">
-              <p className="text-center text-sm font-display text-espresso-600">
+              <p className="text-center text-sm font-display text-secondary-foreground">
                 How was it?
               </p>
               <div className="flex justify-center gap-3">
@@ -260,10 +260,10 @@ export function TastingFlow({
                     <button
                       key={opt.value}
                       type="button"
-                      className={`rounded-xl border-2 px-5 py-2.5 text-sm font-medium transition-all duration-200 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-sienna-400 focus-visible:ring-offset-2 ${
+                      className={`border-2 px-5 py-2.5 text-sm font-medium transition-all duration-200 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
                         selected
-                          ? "border-sienna-500 bg-sienna-50 text-sienna-700 shadow-sm"
-                          : "border-cream-200 bg-cream-50 text-espresso-600 hover:border-cream-300"
+                          ? "border-border bg-accent text-editorial"
+                          : "border-border bg-card text-secondary-foreground hover:bg-muted"
                       }`}
                       onClick={() => update({ aftertasteQuality: opt.value })}
                     >
@@ -277,7 +277,7 @@ export function TastingFlow({
         </div>
       </section>
 
-      <hr className="border-cream-200" />
+      <hr className="border-border" />
 
       {/* Flavor & Rating */}
       <section>
@@ -291,7 +291,7 @@ export function TastingFlow({
             onChange={(e) => update({ flavorNotes: e.target.value })}
           />
           <div className="flex flex-col items-center gap-3 pt-2">
-            <span className="text-sm font-display text-espresso-700">
+            <span className="data-label">
               Overall enjoyment
             </span>
             <StarRating
@@ -303,7 +303,7 @@ export function TastingFlow({
         </div>
       </section>
 
-      <hr className="border-cream-200" />
+      <hr className="border-border" />
 
       {/* Notes */}
       <section>
@@ -314,23 +314,23 @@ export function TastingFlow({
           onChange={(e) => update({ personalNotes: e.target.value })}
           placeholder="Jot down any other thoughts, adjustments for next time..."
           rows={4}
-          className="w-full rounded-xl border border-cream-300 bg-cream-50 px-4 py-3 text-sm text-espresso-900 placeholder:text-espresso-400 transition-colors duration-200 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-sienna-400 focus-visible:border-sienna-400 resize-none"
+          className="w-full border-2 border-border bg-background px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground transition-colors duration-200 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:border-ring resize-none"
         />
       </section>
 
       {/* Actions */}
-      <div className="flex items-center justify-between pt-4 border-t border-cream-200">
+      <div className="flex items-center justify-between pt-4 border-t border-border">
         <button
           type="button"
           onClick={onSkip}
-          className="text-sm text-espresso-400 hover:text-espresso-600 transition-colors"
+          className="text-sm text-muted-foreground hover:text-secondary-foreground transition-colors"
         >
           Skip
         </button>
         <Button
           onClick={handleSave}
           disabled={createTasting.isPending}
-          className="bg-sienna-600 hover:bg-sienna-700 text-white px-8 py-2.5 font-display"
+          className="px-8 py-2.5"
         >
           {createTasting.isPending ? "Saving..." : "Save Tasting"}
         </Button>

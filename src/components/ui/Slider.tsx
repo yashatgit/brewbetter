@@ -29,10 +29,7 @@ export function Slider({
   return (
     <div className="flex flex-col gap-2">
       {label && (
-        <label
-          htmlFor={sliderId}
-          className="text-sm font-medium text-espresso-700"
-        >
+        <label htmlFor={sliderId} className="data-label">
           {label}
         </label>
       )}
@@ -40,7 +37,7 @@ export function Slider({
         {/* Value pill positioned above the thumb */}
         <span
           aria-hidden="true"
-          className="absolute -top-0 rounded-full bg-sienna-500 px-2 py-0.5 text-xs font-medium text-cream-50 shadow-sm transition-all duration-150 ease-out"
+          className="absolute -top-0 bg-editorial px-2 py-0.5 text-xs font-mono font-bold text-white transition-all duration-150 ease-out"
           style={{
             left: `${percentage}%`,
             transform: `translateX(-50%)`,
@@ -59,7 +56,7 @@ export function Slider({
           {...props}
         />
       </div>
-      <div className="flex justify-between text-xs text-espresso-400">
+      <div className="flex justify-between text-xs text-muted-foreground font-mono">
         <span>{minLabel ?? min}</span>
         <span>{maxLabel ?? max}</span>
       </div>

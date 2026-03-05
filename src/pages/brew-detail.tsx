@@ -7,6 +7,7 @@ import { Button } from "../components/ui/Button";
 import { Slider } from "../components/ui/Slider";
 import { Dialog } from "../components/ui/Dialog";
 import { TastingFlow } from "../components/tasting/TastingFlow";
+import { Card } from "../components/ui/Card";
 import { Eye, Coffee as CoffeeIcon, Zap, Sparkles, Bean } from "lucide-react";
 import { useBrewCommentary } from "../hooks/use-llm";
 import { formatDateTime, formatBrewTime, daysOffRoast } from "../lib/utils";
@@ -17,10 +18,10 @@ import type { BrewLogWithRelations, EquipmentType } from "../types/database";
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex items-center gap-4 mb-4">
-      <h3 className="text-base font-display text-espresso-800 tracking-wide shrink-0">
+      <h3 className="text-xs font-mono uppercase tracking-widest text-muted-foreground shrink-0">
         {children}
       </h3>
-      <div className="flex-1 border-t border-cream-300" />
+      <div className="flex-1 border-t border-input" />
     </div>
   );
 }
@@ -35,8 +36,8 @@ function DetailRow({
   if (value === null || value === undefined) return null;
   return (
     <div className="flex justify-between py-2">
-      <span className="text-sm text-espresso-400">{label}</span>
-      <span className="text-sm font-medium text-espresso-800">{value}</span>
+      <span className="text-sm text-muted-foreground">{label}</span>
+      <span className="text-sm font-mono text-data">{value}</span>
     </div>
   );
 }
@@ -76,44 +77,44 @@ function AiCommentarySection({
   };
 
   return (
-    <div className="rounded-2xl border border-cream-200 bg-cream-50 p-6">
+    <Card accent="data" className="bg-muted">
       <SectionLabel>AI Commentary</SectionLabel>
       {!hasContent && !isLoading && (
         <div className="text-center py-4">
           <Button
             onClick={() => handleGenerate()}
-            className="bg-sienna-600 hover:bg-sienna-700 text-white inline-flex items-center gap-2"
+            className="bg-primary hover:bg-accent-foreground text-primary-foreground inline-flex items-center gap-2"
           >
             <Sparkles size={16} />
             Get AI Commentary
           </Button>
           {error && (
-            <p className="mt-3 text-sm text-rose-500">{error}</p>
+            <p className="mt-3 text-sm text-destructive">{error}</p>
           )}
         </div>
       )}
       {isLoading && !hasContent && (
         <div className="flex items-center gap-2 py-4 justify-center">
-          <span className="inline-block w-2 h-2 rounded-full bg-sienna-400 animate-bounce" style={{ animationDelay: '0ms' }} />
-          <span className="inline-block w-2 h-2 rounded-full bg-sienna-400 animate-bounce" style={{ animationDelay: '150ms' }} />
-          <span className="inline-block w-2 h-2 rounded-full bg-sienna-400 animate-bounce" style={{ animationDelay: '300ms' }} />
+          <span className="inline-block w-2 h-2 bg-primary animate-bounce" />
+          <span className="inline-block w-2 h-2 bg-primary animate-bounce" style={{ animationDelay: '150ms' }} />
+          <span className="inline-block w-2 h-2 bg-primary animate-bounce" style={{ animationDelay: '300ms' }} />
         </div>
       )}
       {hasContent && (
         <div className="prose prose-sm max-w-none">
-          <p className="text-sm text-espresso-700 leading-relaxed whitespace-pre-wrap">
+          <p className="text-sm text-secondary-foreground leading-relaxed whitespace-pre-wrap">
             {text}
           </p>
           {isLoading && (
-            <span className="inline-block w-1.5 h-4 bg-sienna-400 animate-pulse ml-0.5 align-text-bottom" />
+            <span className="inline-block w-1.5 h-4 bg-primary animate-pulse ml-0.5 align-text-bottom" />
           )}
           {!isLoading && (
-            <div className="mt-4 pt-3 border-t border-cream-200">
+            <div className="mt-4 pt-3 border-t border-border">
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => handleGenerate(true)}
-                className="text-sienna-600 hover:text-sienna-700 hover:bg-cream-100 inline-flex items-center gap-1.5"
+                className="text-editorial hover:text-editorial hover:bg-muted inline-flex items-center gap-1.5"
               >
                 <Sparkles size={14} />
                 Regenerate
@@ -122,7 +123,7 @@ function AiCommentarySection({
           )}
         </div>
       )}
-    </div>
+    </Card>
   );
 }
 
@@ -142,16 +143,16 @@ export default function BrewDetail() {
           variant="ghost"
           size="sm"
           onClick={() => navigate("/brew/history")}
-          className="text-espresso-500 hover:text-espresso-700"
+          className="text-muted-foreground hover:text-secondary-foreground"
         >
           &larr; Back to journal
         </Button>
         <div className="flex items-center justify-center py-20">
           <div className="text-center space-y-4">
             <div className="animate-float">
-              <Bean size={48} strokeWidth={1.2} className="text-espresso-300 mx-auto" />
+              <Bean size={48} strokeWidth={1.2} className="text-muted-foreground mx-auto" />
             </div>
-            <p className="font-display italic text-espresso-400 text-lg">Retrieving your brew...</p>
+            <p className="font-display text-muted-foreground text-lg">Retrieving your brew...</p>
           </div>
         </div>
       </div>
@@ -165,24 +166,24 @@ export default function BrewDetail() {
           variant="ghost"
           size="sm"
           onClick={() => navigate("/brew/history")}
-          className="text-espresso-500 hover:text-espresso-700"
+          className="text-muted-foreground hover:text-secondary-foreground"
         >
           &larr; Back to journal
         </Button>
-        <div className="flex flex-col items-center justify-center py-16 paper-texture rounded-2xl border border-cream-200 bg-cream-50">
-          <div className="text-espresso-200 mb-4">
+        <Card className="flex flex-col items-center justify-center py-16">
+          <div className="text-muted-foreground mb-4">
             <svg width="64" height="64" viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="32" cy="32" r="24" className="opacity-30" />
               <path d="M26 26 L38 38 M38 26 L26 38" className="opacity-40" strokeWidth="1.5" />
             </svg>
           </div>
-          <h2 className="text-lg font-display italic text-espresso-700 mb-2">
+          <h2 className="text-lg font-display text-foreground mb-2">
             This brew has vanished
           </h2>
-          <p className="text-espresso-400 text-sm">
+          <p className="text-muted-foreground text-sm">
             It may have been deleted or the link is incorrect.
           </p>
-        </div>
+        </Card>
       </div>
     );
   }
@@ -214,7 +215,7 @@ export default function BrewDetail() {
             variant="ghost"
             size="sm"
             onClick={() => setShowTastingFlow(false)}
-            className="text-espresso-500 hover:text-espresso-700"
+            className="text-muted-foreground hover:text-secondary-foreground"
           >
             &larr; Back to brew
           </Button>
@@ -236,7 +237,7 @@ export default function BrewDetail() {
           variant="ghost"
           size="sm"
           onClick={() => navigate("/brew/history")}
-          className="text-espresso-500 hover:text-espresso-700"
+          className="text-muted-foreground hover:text-secondary-foreground"
         >
           &larr; Back to journal
         </Button>
@@ -245,7 +246,7 @@ export default function BrewDetail() {
             variant="ghost"
             size="sm"
             onClick={() => navigate(`/brew/new?edit=${b.id}`)}
-            className="text-espresso-600 hover:text-espresso-800 hover:bg-cream-100"
+            className="text-secondary-foreground hover:text-foreground hover:bg-muted"
           >
             Edit
           </Button>
@@ -253,27 +254,21 @@ export default function BrewDetail() {
             variant="ghost"
             size="sm"
             onClick={() => setShowDeleteDialog(true)}
-            className="text-rose-500 hover:text-rose-700 hover:bg-rose-100"
+            className="text-destructive hover:text-destructive hover:bg-destructive/10"
           >
             Delete
           </Button>
         </div>
       </div>
 
-      {/* Header - Tasting Card Feel */}
-      <div className="rounded-2xl border border-cream-200 bg-gradient-to-br from-espresso-800 via-espresso-900 to-espresso-950 p-7 md:p-8 space-y-3 relative overflow-hidden">
-        {/* Decorative grain */}
-        <div className="absolute inset-0 opacity-[0.03]" style={{
-          backgroundImage: 'radial-gradient(circle at 2px 2px, currentColor 1px, transparent 0)',
-          backgroundSize: '20px 20px',
-        }} />
-        <div className="absolute -right-10 -top-10 w-48 h-48 rounded-full bg-sienna-500/10 blur-3xl" />
-        <div className="relative flex items-start justify-between">
+      {/* Header */}
+      <Card accent="editorial" className="space-y-3">
+        <div className="flex items-start justify-between">
           <div>
-            <h1 className="text-3xl md:text-4xl font-display text-cream-50 tracking-tight leading-[0.95]">
+            <h1 className="text-3xl md:text-4xl font-display text-foreground tracking-tight leading-[0.95]">
               {b.bean?.name ?? "Unknown bean"}
             </h1>
-            <p className="text-sm text-espresso-400 mt-2">
+            <p className="text-sm text-muted-foreground mt-2">
               {formatDateTime(b.brewedAt)}
             </p>
           </div>
@@ -282,24 +277,24 @@ export default function BrewDetail() {
           )}
         </div>
         {b.bean?.roaster && (
-          <p className="text-sm text-espresso-400 italic">
+          <p className="text-sm text-muted-foreground">
             Roasted by {b.bean.roaster}
           </p>
         )}
-        <div className="flex gap-2 flex-wrap relative">
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-lg bg-espresso-700/50 text-cream-200 text-xs font-medium border border-espresso-600/30">
+        <div className="flex gap-2 flex-wrap">
+          <span className="inline-flex items-center px-2.5 py-0.5 bg-muted text-secondary-foreground text-xs font-medium border border-input">
             {computedDaysOffRoast} day{computedDaysOffRoast !== 1 ? "s" : ""} off roast
           </span>
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-lg bg-espresso-700/50 text-cream-200 text-xs font-medium border border-espresso-600/30">
+          <span className="inline-flex items-center px-2.5 py-0.5 bg-muted text-secondary-foreground text-xs font-medium border border-input">
             {b.timeOfDay}
           </span>
         </div>
-      </div>
+      </Card>
 
       {/* Equipment */}
-      <div className="rounded-2xl border border-cream-200 bg-cream-50 p-6 animate-slide-up" style={{ animationDelay: '100ms' }}>
+      <Card className="animate-slide-up" style={{ animationDelay: '100ms' }}>
         <SectionLabel>Equipment</SectionLabel>
-        <div className="divide-y divide-cream-200">
+        <div className="divide-y divide-border">
           {b.grinder && (
             <DetailRow
               label="Grinder"
@@ -307,7 +302,7 @@ export default function BrewDetail() {
                 <span className="inline-flex items-center gap-1.5">
                   {(() => {
                     const Icon = getEquipmentIcon('grinder' as EquipmentType, b.grinder!.name);
-                    return <Icon size={14} className="text-sienna-500" />;
+                    return <Icon size={14} className="text-data" />;
                   })()}
                   {b.grinder.name} @ {b.grinderSetting}
                 </span>
@@ -321,7 +316,7 @@ export default function BrewDetail() {
                 <span className="inline-flex items-center gap-1.5">
                   {(() => {
                     const Icon = getEquipmentIcon('brew_device' as EquipmentType, b.brewDevice!.name);
-                    return <Icon size={14} className="text-sienna-500" />;
+                    return <Icon size={14} className="text-data" />;
                   })()}
                   {b.brewDevice.name}
                 </span>
@@ -335,7 +330,7 @@ export default function BrewDetail() {
                 <span className="inline-flex items-center gap-1.5">
                   {(() => {
                     const Icon = getEquipmentIcon('filter' as EquipmentType, b.filter!.name);
-                    return <Icon size={14} className="text-sienna-500" />;
+                    return <Icon size={14} className="text-data" />;
                   })()}
                   {b.filter.name}
                 </span>
@@ -349,7 +344,7 @@ export default function BrewDetail() {
                 <span className="inline-flex items-center gap-1.5">
                   {(() => {
                     const Icon = getEquipmentIcon('water_type' as EquipmentType, b.waterType!.name);
-                    return <Icon size={14} className="text-sienna-500" />;
+                    return <Icon size={14} className="text-data" />;
                   })()}
                   {b.waterType.name}
                 </span>
@@ -360,29 +355,29 @@ export default function BrewDetail() {
             <DetailRow label="Method" value={b.brewMethod.name} />
           )}
         </div>
-      </div>
+      </Card>
 
       {/* Parameters */}
-      <div className="rounded-2xl border border-cream-200 bg-cream-50 p-6 animate-slide-up" style={{ animationDelay: '200ms' }}>
+      <Card className="animate-slide-up" style={{ animationDelay: '200ms' }}>
         <SectionLabel>Parameters</SectionLabel>
 
         {/* Hero recipe strip */}
-        <div className="grid grid-cols-3 gap-4 mb-6 pb-6 border-b border-cream-300">
+        <div className="grid grid-cols-3 gap-4 mb-6 pb-6 border-b border-input">
           <div className="text-center">
-            <p className="font-display text-3xl md:text-4xl text-espresso-900 tracking-tight leading-none">{b.coffeeDose}g</p>
-            <p className="font-body text-[10px] text-espresso-400 uppercase tracking-[0.15em] mt-2 font-medium">Dose</p>
+            <p className="font-mono text-3xl md:text-4xl text-foreground tracking-tight leading-none">{b.coffeeDose}g</p>
+            <p className="font-body text-[10px] text-muted-foreground uppercase tracking-[0.15em] mt-2 font-medium">Dose</p>
           </div>
-          <div className="text-center border-x border-cream-300">
-            <p className="font-display text-3xl md:text-4xl text-espresso-900 tracking-tight leading-none">{b.totalWater}g</p>
-            <p className="font-body text-[10px] text-espresso-400 uppercase tracking-[0.15em] mt-2 font-medium">Water</p>
+          <div className="text-center border-x border-input">
+            <p className="font-mono text-3xl md:text-4xl text-foreground tracking-tight leading-none">{b.totalWater}g</p>
+            <p className="font-body text-[10px] text-muted-foreground uppercase tracking-[0.15em] mt-2 font-medium">Water</p>
           </div>
           <div className="text-center">
-            <p className="font-display text-3xl md:text-4xl text-sienna-600 tracking-tight leading-none">1:{b.ratio}</p>
-            <p className="font-body text-[10px] text-espresso-400 uppercase tracking-[0.15em] mt-2 font-medium">Ratio</p>
+            <p className="font-mono text-3xl md:text-4xl text-data tracking-tight leading-none">1:{b.ratio}</p>
+            <p className="font-body text-[10px] text-muted-foreground uppercase tracking-[0.15em] mt-2 font-medium">Ratio</p>
           </div>
         </div>
 
-        <div className="divide-y divide-cream-200">
+        <div className="divide-y divide-border">
           {(() => {
             const brewType = getBrewType(b.brewTypeId);
             return brewType ? (
@@ -431,30 +426,30 @@ export default function BrewDetail() {
           })()}
         </div>
         {b.techniqueNotes && (
-          <div className="mt-4 pt-4 border-t border-cream-200">
-            <p className="text-xs font-display text-espresso-600 mb-1.5">
+          <div className="mt-4 pt-4 border-t border-border">
+            <p className="text-xs font-mono uppercase tracking-widest text-muted-foreground mb-1.5">
               Technique Notes
             </p>
-            <p className="text-sm text-espresso-700 leading-relaxed italic">
+            <p className="text-sm text-secondary-foreground leading-relaxed">
               {b.techniqueNotes}
             </p>
           </div>
         )}
-      </div>
+      </Card>
 
       {/* Tasting */}
       {b.tasting ? (
-        <div className="rounded-2xl border border-cream-200 bg-white paper-texture p-6 animate-slide-up" style={{ animationDelay: '300ms' }}>
+        <Card className="animate-slide-up" style={{ animationDelay: '300ms' }}>
           <SectionLabel>Tasting Evaluation</SectionLabel>
           <div className="space-y-6">
             {/* Mindfulness */}
             {b.tasting.mindfulness && (
               <div>
-                <p className="text-sm font-display text-espresso-700 mb-1.5">Mindfulness</p>
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-cream-200 text-espresso-600 text-xs font-medium">
-                  {b.tasting.mindfulness === "focused" && <Eye size={14} className="text-sienna-500" />}
-                  {b.tasting.mindfulness === "casual" && <CoffeeIcon size={14} className="text-sienna-500" />}
-                  {b.tasting.mindfulness === "distracted" && <Zap size={14} className="text-sienna-500" />}
+                <p className="text-sm font-display text-foreground mb-1.5">Mindfulness</p>
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-muted text-secondary-foreground text-xs font-medium border border-input">
+                  {b.tasting.mindfulness === "focused" && <Eye size={14} className="text-data" />}
+                  {b.tasting.mindfulness === "casual" && <CoffeeIcon size={14} className="text-data" />}
+                  {b.tasting.mindfulness === "distracted" && <Zap size={14} className="text-data" />}
                   {b.tasting.mindfulness.charAt(0).toUpperCase() + b.tasting.mindfulness.slice(1)}
                 </span>
               </div>
@@ -469,7 +464,7 @@ export default function BrewDetail() {
               onChange={() => {}}
               minLabel="Smooth & mellow"
               maxLabel="Bright & sharp"
-              className="pointer-events-none [&_input]:accent-sienna-500"
+              className="pointer-events-none [&_input]:accent-data"
             />
 
             {/* Sweet/Bitter slider (read-only) */}
@@ -481,20 +476,20 @@ export default function BrewDetail() {
               onChange={() => {}}
               minLabel="Sweet"
               maxLabel="Bitter"
-              className="pointer-events-none [&_input]:accent-sienna-500"
+              className="pointer-events-none [&_input]:accent-data"
             />
 
             {/* Body */}
             <div>
-              <p className="text-sm font-display text-espresso-700 mb-1.5">Body</p>
-              <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-cream-200 text-espresso-600 text-xs font-medium">
+              <p className="text-sm font-display text-foreground mb-1.5">Body</p>
+              <span className="inline-flex items-center px-2.5 py-1 bg-muted text-secondary-foreground text-xs font-medium border border-input">
                 {BODY_LABELS[b.tasting.body] ?? b.tasting.body}
               </span>
             </div>
 
             {/* Aftertaste */}
             <div>
-              <p className="text-sm font-display text-espresso-700 mb-1.5">
+              <p className="text-sm font-display text-foreground mb-1.5">
                 Aftertaste
               </p>
               {b.tasting.aftertastePresence ? (
@@ -506,47 +501,47 @@ export default function BrewDetail() {
                   {AFTERTASTE_LABELS[b.tasting.aftertastePleasant ?? "neutral"]}
                 </Badge>
               ) : (
-                <span className="text-sm text-espresso-400 italic">None noticed</span>
+                <span className="text-sm text-muted-foreground">None noticed</span>
               )}
             </div>
 
             {/* Flavor notes */}
             {b.tasting.flavorNotes && (
               <div>
-                <p className="text-sm font-display text-espresso-700 mb-1.5">
+                <p className="text-sm font-display text-foreground mb-1.5">
                   Flavor Notes
                 </p>
-                <p className="text-sm text-espresso-600 italic">
+                <p className="text-sm text-secondary-foreground">
                   {b.tasting.flavorNotes}
                 </p>
               </div>
             )}
 
-            {/* Overall rating — hero moment */}
-            <div className="flex items-center gap-5 pt-5 border-t-2 border-cream-300">
-              <div>
-                <p className="font-body text-[10px] text-espresso-400 uppercase tracking-[0.15em] font-medium mb-1">Overall</p>
-                <p className="font-display text-4xl md:text-5xl text-espresso-900 tracking-tight leading-none">{b.tasting.overallEnjoyment}</p>
+            {/* Overall rating */}
+            <div className="flex items-center gap-5 pt-5 border-t-2 border-border">
+              <div className="bg-inverted text-inverted-foreground px-4 py-3">
+                <p className="font-body text-[10px] text-inverted-muted uppercase tracking-[0.15em] font-medium mb-1">Overall</p>
+                <p className="font-mono text-4xl md:text-5xl text-inverted-foreground tracking-tight leading-none">{b.tasting.overallEnjoyment}</p>
               </div>
               <StarRating value={b.tasting.overallEnjoyment} size="md" />
             </div>
 
             {/* Personal notes */}
             {b.tasting.personalNotes && (
-              <div className="pt-3 border-t border-cream-200">
-                <p className="text-sm font-display text-espresso-700 mb-1.5">
+              <div className="pt-3 border-t border-border">
+                <p className="text-sm font-display text-foreground mb-1.5">
                   Notes
                 </p>
-                <p className="text-sm text-espresso-600 leading-relaxed italic">
+                <p className="text-sm text-secondary-foreground leading-relaxed">
                   {b.tasting.personalNotes}
                 </p>
               </div>
             )}
           </div>
-        </div>
+        </Card>
       ) : (
-        <div className="flex flex-col items-center justify-center py-12 paper-texture rounded-2xl border border-cream-200 bg-cream-50 text-center animate-slide-up" style={{ animationDelay: '300ms' }}>
-          <div className="text-espresso-200 mb-4">
+        <Card className="flex flex-col items-center justify-center py-12 text-center animate-slide-up" style={{ animationDelay: '300ms' }}>
+          <div className="text-muted-foreground mb-4">
             <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
               {[1, 2, 3, 4, 5].map((i) => (
                 <path
@@ -558,19 +553,19 @@ export default function BrewDetail() {
               ))}
             </svg>
           </div>
-          <p className="text-espresso-400 italic mb-2 font-display text-lg">
+          <p className="text-muted-foreground mb-2 font-display text-lg">
             How was this cup?
           </p>
-          <p className="text-espresso-400 text-sm mb-5 max-w-xs">
+          <p className="text-muted-foreground text-sm mb-5 max-w-xs">
             Rate your brew to track what you love and refine your technique.
           </p>
           <Button
             onClick={() => setShowTastingFlow(true)}
-            className="bg-sienna-600 hover:bg-sienna-700 text-white px-8 py-2.5 text-base font-display warm-glow"
+            className="bg-primary hover:bg-accent-foreground text-primary-foreground px-8 py-2.5 text-base font-display"
           >
             Rate this brew
           </Button>
-        </div>
+        </Card>
       )}
 
       {/* AI Commentary */}
@@ -587,16 +582,16 @@ export default function BrewDetail() {
         title="Delete this brew?"
       >
         <div className="space-y-4">
-          <p className="text-sm text-espresso-500">
+          <p className="text-sm text-muted-foreground">
             This will permanently delete this brew log and any associated tasting
             data. This action cannot be undone.
           </p>
-          <div className="flex justify-end gap-3 pt-2 border-t border-cream-200">
+          <div className="flex justify-end gap-3 pt-2 border-t border-border">
             <Button
               variant="secondary"
               size="sm"
               onClick={() => setShowDeleteDialog(false)}
-              className="text-espresso-600 hover:bg-cream-100"
+              className="text-secondary-foreground hover:bg-muted"
             >
               Cancel
             </Button>
@@ -605,7 +600,7 @@ export default function BrewDetail() {
               size="sm"
               onClick={handleDelete}
               disabled={deleteBrew.isPending}
-              className="bg-rose-500 hover:bg-rose-600 text-white"
+              className="bg-destructive hover:bg-destructive/90 text-primary-foreground"
             >
               {deleteBrew.isPending ? "Deleting..." : "Delete brew"}
             </Button>

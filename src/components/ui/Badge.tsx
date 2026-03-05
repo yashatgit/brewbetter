@@ -1,6 +1,6 @@
 import { type ReactNode } from "react";
 
-type BadgeVariant = "default" | "success" | "warning";
+type BadgeVariant = "default" | "success" | "warning" | "editorial";
 
 interface BadgeProps {
   children: ReactNode;
@@ -9,9 +9,10 @@ interface BadgeProps {
 }
 
 const variantClasses: Record<BadgeVariant, string> = {
-  default: "bg-cream-200 text-espresso-700",
-  success: "bg-sage-100 text-sage-700",
-  warning: "bg-amber-100 text-amber-600",
+  default: "bg-muted text-secondary-foreground border border-border",
+  success: "bg-success/10 text-success border border-success/20",
+  warning: "bg-accent text-accent-foreground border border-accent",
+  editorial: "bg-destructive/10 text-editorial border border-destructive/20",
 };
 
 export function Badge({
@@ -21,7 +22,7 @@ export function Badge({
 }: BadgeProps) {
   return (
     <span
-      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${variantClasses[variant]} ${className}`}
+      className={`inline-flex items-center px-2.5 py-0.5 text-xs font-mono font-bold uppercase tracking-wider ${variantClasses[variant]} ${className}`}
     >
       {children}
     </span>

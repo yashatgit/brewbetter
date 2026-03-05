@@ -45,16 +45,16 @@ export function StarRating({
                 }
               : undefined
           }
-          className={`inline-flex rounded-sm transition-all duration-200 ease-out ${
+          className={`inline-flex transition-all duration-200 ease-out ${
             interactive
-              ? "cursor-pointer hover:scale-125 active:scale-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-sienna-400 focus-visible:ring-offset-1 focus-visible:ring-offset-cream-50"
+              ? "cursor-pointer hover:scale-125 active:scale-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background"
               : ""
           }`}
         >
           <Star
             size={starSize}
             strokeWidth={1.5}
-            className={star <= value ? "text-amber-400 fill-amber-400 drop-shadow-[0_2px_4px_rgba(212,149,32,0.4)]" : "text-cream-300"}
+            className={star <= value ? "text-editorial fill-editorial" : "text-secondary"}
             aria-hidden="true"
           />
         </span>
