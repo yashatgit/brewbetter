@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1772642742975,
+      "tag": "0000_broad_wolfpack",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1772644803250,
+      "tag": "0001_windy_thunderbolts",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1772646666025,
+      "tag": "0002_glamorous_naoko",
+      "breakpoints": true
+    }
+  ]
+}

@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brew Better - Design Picker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#111; color:#eee; font-family:'Inter',system-ui,sans-serif; padding:2rem 1rem; }
+h1 { text-align:center; font-size:1.6rem; margin-bottom:.3rem; }
+.sub { text-align:center; color:#777; font-size:.85rem; margin-bottom:2.5rem; }
+.grid { display:grid; grid-template-columns:1fr 1fr; gap:3rem 2.5rem; max-width:1100px; margin:0 auto; }
+@media(max-width:900px){ .grid{grid-template-columns:1fr; max-width:380px;} }
+.phone-wrap { text-align:center; }
+.phone-wrap h2 { font-size:1rem; margin-bottom:.25rem; }
+.phone-wrap .desc { color:#888; font-size:.75rem; margin-bottom:.75rem; }
+.phone { width:100%; aspect-ratio:9/19.5; border-radius:2.2rem; overflow:hidden; display:flex; flex-direction:column; position:relative; border:2px solid #333; }
+.phone .content { flex:1; overflow-y:auto; scrollbar-width:none; }
+.phone .content::-webkit-scrollbar { display:none; }
+
+/* ============================================================
+   THEME 1 — WARM CRAFT
+   Artisanal, textured, hand-made feel. Organic shapes,
+   stacked vertical rhythm, illustration-style elements.
+   ============================================================ */
+.t1 {
+  background: #F2E8D9;
+  font-family: 'Fraunces', Georgia, serif;
+  color: #2C1810;
+}
+.t1 .topbar {
+  padding: .6rem .8rem;
+  text-align: center;
+  background: linear-gradient(180deg, #E8D5BE 0%, #F2E8D9 100%);
+  border-bottom: 2px dashed #C9A87C;
+}
+.t1 .topbar .logo {
+  font-family: 'Fraunces', serif;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #5C2D0E;
+  letter-spacing: -.5px;
+}
+.t1 .topbar .date { font-size: .45rem; color: #8B6F4E; margin-top: 1px; font-style: italic; }
+
+/* hand-drawn style greeting card */
+.t1 .greeting-card {
+  margin: .6rem .7rem;
+  background: #FFF8EE;
+  border: 2px solid #D4B896;
+  border-radius: 1rem;
+  padding: .7rem;
+  position: relative;
+  box-shadow: 3px 3px 0 #D4B896;
+}
+.t1 .greeting-card .hello { font-size: .65rem; color: #8B6F4E; font-style: italic; }
+.t1 .greeting-card .msg { font-size: .85rem; font-weight: 700; color: #5C2D0E; margin-top: .15rem; line-height: 1.3; }
+.t1 .greeting-card .streak { font-size: .5rem; color: #A0784E; margin-top: .3rem; }
+/* decorative coffee ring */
+.t1 .greeting-card::after {
+  content: '';
+  position: absolute; right: .6rem; top: .5rem;
+  width: 28px; height: 28px;
+  border: 3px solid rgba(139,90,43,.15);
+  border-radius: 50%;
+}
+
+/* stat pills in a horizontal scroll feel */
+.t1 .stat-strip {
+  display: flex; gap: .4rem; padding: 0 .7rem; margin-bottom: .6rem; overflow-x: auto;
+}
+.t1 .stat-pill {
+  background: #5C2D0E; color: #F2E8D9;
+  padding: .35rem .65rem; border-radius: 2rem; white-space: nowrap;
+  font-size: .5rem; display: flex; align-items: center; gap: .3rem;
+}
+.t1 .stat-pill .n { font-weight: 700; font-size: .7rem; }
+
+/* brew card — recipe card style */
+.t1 .card-label {
+  padding: 0 .7rem; font-size: .5rem; text-transform: uppercase;
+  letter-spacing: 1.5px; color: #A0784E; margin-bottom: .3rem;
+}
+.t1 .recipe-card {
+  margin: 0 .7rem .5rem; background: #FFF8EE;
+  border: 1.5px solid #D4B896; border-radius: .8rem;
+  overflow: hidden;
+}
+.t1 .recipe-header {
+  background: #5C2D0E; color: #F2E8D9; padding: .5rem .6rem;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.t1 .recipe-header .name { font-weight: 700; font-size: .7rem; }
+.t1 .recipe-header .rating {
+  background: #C9A87C; color: #2C1810; padding: .15rem .45rem;
+  border-radius: 1rem; font-size: .6rem; font-weight: 700;
+}
+.t1 .recipe-body { padding: .5rem .6rem; }
+.t1 .recipe-meta { font-size: .45rem; color: #8B6F4E; margin-bottom: .4rem; font-style: italic; }
+.t1 .recipe-params {
+  display: grid; grid-template-columns: 1fr 1fr; gap: .25rem;
+}
+.t1 .recipe-params .p {
+  font-size: .5rem; display: flex; justify-content: space-between;
+  padding: .15rem .3rem; background: #F2E8D9; border-radius: .3rem;
+}
+.t1 .recipe-params .p .k { color: #8B6F4E; }
+.t1 .recipe-params .p .v { font-weight: 700; color: #5C2D0E; }
+
+/* tasting — bean shaped indicators */
+.t1 .tasting-section { padding: 0 .7rem; margin-bottom: .5rem; }
+.t1 .tasting-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: .2rem .5rem;
+  background: #FFF8EE; border: 1.5px solid #D4B896;
+  border-radius: .8rem; padding: .5rem;
+}
+.t1 .trow { display: flex; justify-content: space-between; align-items: center; font-size: .5rem; }
+.t1 .trow .tl { color: #8B6F4E; }
+.t1 .trow .beans { display: flex; gap: 2px; }
+.t1 .trow .bean {
+  width: 8px; height: 11px; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+}
+.t1 .trow .bean.f { background: #5C2D0E; }
+.t1 .trow .bean.e { background: #DDD0BE; }
+
+/* tags */
+.t1 .tag-row { display: flex; flex-wrap: wrap; gap: .25rem; padding: 0 .7rem; margin-bottom: .5rem; }
+.t1 .tag {
+  background: transparent; border: 1.5px solid #C9A87C; color: #5C2D0E;
+  padding: .2rem .5rem; border-radius: .3rem; font-size: .45rem;
+  font-style: italic;
+}
+
+/* form section */
+.t1 .form-section { padding: 0 .7rem; margin-bottom: .5rem; }
+.t1 .finput {
+  width: 100%; padding: .35rem .5rem; background: #FFF8EE;
+  border: 1.5px solid #D4B896; border-radius: .4rem;
+  font-family: 'Fraunces', serif; font-size: .55rem; color: #2C1810;
+  margin-bottom: .3rem;
+}
+.t1 .frow { display: flex; gap: .3rem; }
+.t1 .frow .finput { flex: 1; }
+.t1 .slider-row { display: flex; align-items: center; gap: .4rem; margin-bottom: .3rem; }
+.t1 .slider-row label { font-size: .5rem; width: 55px; color: #8B6F4E; }
+.t1 .slider-row input[type=range] {
+  flex: 1; height: 6px; appearance: none; background: #D4B896; border-radius: 3px;
+}
+.t1 .slider-row input::-webkit-slider-thumb {
+  appearance: none; width: 14px; height: 14px; background: #5C2D0E; border-radius: 50%;
+}
+.t1 .slider-row .sv { font-size: .55rem; font-weight: 700; width: 24px; color: #5C2D0E; }
+
+/* buttons */
+.t1 .btn-row { display: flex; gap: .4rem; padding: 0 .7rem; margin-bottom: .6rem; }
+.t1 .btn {
+  flex: 1; padding: .5rem; border-radius: 2rem; font-family: 'Fraunces',serif;
+  font-size: .6rem; font-weight: 700; border: none; cursor: pointer; text-align: center;
+}
+.t1 .btn.p { background: #5C2D0E; color: #F2E8D9; box-shadow: 2px 2px 0 #C9A87C; }
+.t1 .btn.s { background: transparent; border: 2px solid #5C2D0E; color: #5C2D0E; }
+
+/* bottom nav — no icons, text-only, handwritten style */
+.t1 .bnav {
+  display: flex; border-top: 2px dashed #C9A87C; background: #E8D5BE;
+}
+.t1 .bnav .nt {
+  flex: 1; text-align: center; padding: .45rem 0; font-size: .45rem;
+  color: #8B6F4E; font-style: italic;
+}
+.t1 .bnav .nt.active { color: #5C2D0E; font-weight: 700; font-style: normal; border-top: 2px solid #5C2D0E; margin-top: -2px; }
+
+
+/* ============================================================
+   THEME 2 — CLEAN MINIMAL
+   Airy, lots of whitespace, thin lines, small type,
+   asymmetric spacing, floating cards, no borders on inputs.
+   ============================================================ */
+.t2 {
+  background: #FAFAF8;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  color: #1A1A1A;
+}
+.t2 .topbar {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: .7rem 1rem;
+}
+.t2 .topbar .logo { font-weight: 700; font-size: .8rem; letter-spacing: -.3px; }
+.t2 .topbar .avatar {
+  width: 22px; height: 22px; border-radius: 50%; background: #E8E8E4;
+  display: flex; align-items: center; justify-content: center; font-size: .5rem; color: #999;
+}
+
+.t2 .section-label {
+  padding: 0 1rem; font-size: .45rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 2px; color: #BBB;
+  margin-bottom: .4rem; margin-top: .5rem;
+}
+
+/* floating stats — large numbers, tiny labels, lots of air */
+.t2 .stats-float {
+  display: flex; justify-content: space-around; padding: .8rem 1rem; margin-bottom: .2rem;
+}
+.t2 .sf { text-align: center; }
+.t2 .sf .n { font-size: 1.5rem; font-weight: 700; letter-spacing: -1px; color: #1A1A1A; }
+.t2 .sf .l { font-size: .4rem; color: #AAA; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 1px; }
+.t2 .divider { height: 1px; background: #EEEEE9; margin: 0 1rem; }
+
+/* mini chart — super clean thin bars */
+.t2 .mini-chart { padding: .6rem 1rem; }
+.t2 .mc-row { display: flex; align-items: center; gap: .5rem; margin-bottom: .35rem; }
+.t2 .mc-row .ml { width: 50px; font-size: .5rem; color: #999; text-align: right; }
+.t2 .mc-row .mt { flex: 1; height: 3px; background: #F0F0EB; border-radius: 2px; }
+.t2 .mc-row .mf { height: 3px; background: #7BA087; border-radius: 2px; }
+.t2 .mc-row .mv { font-size: .45rem; color: #7BA087; font-weight: 600; width: 18px; }
+
+/* card — minimal shadow, rounded, no border */
+.t2 .mcard {
+  margin: .4rem 1rem; background: #fff; border-radius: .7rem;
+  padding: .6rem .7rem; box-shadow: 0 1px 3px rgba(0,0,0,.04);
+}
+.t2 .mcard .mc-top { display: flex; justify-content: space-between; align-items: flex-start; }
+.t2 .mcard .mc-name { font-weight: 600; font-size: .65rem; }
+.t2 .mcard .mc-sub { font-size: .45rem; color: #AAA; margin-top: .1rem; }
+.t2 .mcard .mc-score {
+  font-size: .75rem; font-weight: 700; color: #7BA087;
+}
+.t2 .mcard .mc-tags { display: flex; gap: .25rem; margin-top: .4rem; }
+.t2 .mcard .mc-tag {
+  font-size: .4rem; color: #999; background: #F5F5F1; padding: .15rem .4rem;
+  border-radius: 1rem;
+}
+
+/* tasting — thin horizontal lines with dots */
+.t2 .taste-section { padding: .4rem 1rem; }
+.t2 .taste-row { display: flex; align-items: center; margin-bottom: .3rem; }
+.t2 .taste-row .tl { width: 50px; font-size: .45rem; color: #BBB; text-align: right; margin-right: .5rem; }
+.t2 .taste-row .tline { flex: 1; height: 1px; background: #EEEEE9; position: relative; }
+.t2 .taste-row .tdot {
+  position: absolute; top: -4px;
+  width: 9px; height: 9px; background: #7BA087; border-radius: 50%;
+}
+
+/* form — borderless inputs with bottom line only */
+.t2 .form-area { padding: .3rem 1rem; }
+.t2 .fl { font-size: .4rem; color: #BBB; text-transform: uppercase; letter-spacing: 1px; margin-bottom: .15rem; display: block; }
+.t2 .fi {
+  width: 100%; border: none; border-bottom: 1px solid #E5E5E0;
+  padding: .3rem 0; font-size: .55rem; background: transparent;
+  font-family: 'Plus Jakarta Sans', sans-serif; color: #1A1A1A;
+  margin-bottom: .5rem;
+}
+.t2 .fi-row { display: flex; gap: .8rem; }
+.t2 .fi-row > div { flex: 1; }
+.t2 .range-row { display: flex; align-items: center; gap: .3rem; margin-bottom: .5rem; }
+.t2 .range-row input[type=range] {
+  flex: 1; appearance: none; height: 2px; background: #E5E5E0; border-radius: 1px;
+}
+.t2 .range-row input::-webkit-slider-thumb {
+  appearance: none; width: 10px; height: 10px; background: #7BA087; border-radius: 50%;
+}
+.t2 .range-row .rv { font-size: .5rem; color: #7BA087; font-weight: 600; }
+
+/* toggle */
+.t2 .toggle-row { display: flex; justify-content: space-between; align-items: center; padding: 0 1rem; margin-bottom: .5rem; }
+.t2 .toggle-row span { font-size: .5rem; color: #999; }
+.t2 .tgl { width: 28px; height: 16px; background: #7BA087; border-radius: 8px; position: relative; }
+.t2 .tgl::after { content:''; width: 12px; height: 12px; background: #fff; border-radius: 50%; position: absolute; top: 2px; left: 14px; }
+
+/* buttons — pill shaped, very subtle */
+.t2 .btn-area { display: flex; gap: .5rem; padding: .3rem 1rem .6rem; }
+.t2 .bt {
+  flex: 1; padding: .45rem; border-radius: 2rem; font-size: .55rem;
+  font-weight: 600; border: none; cursor: pointer; text-align: center;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+.t2 .bt.p { background: #1A1A1A; color: #FAFAF8; }
+.t2 .bt.s { background: #F0F0EB; color: #666; }
+
+/* bottom nav — dot indicator */
+.t2 .bnav {
+  display: flex; border-top: 1px solid #EEEEE9; background: #FAFAF8;
+}
+.t2 .bnav .nt {
+  flex: 1; text-align: center; padding: .4rem 0; font-size: .4rem;
+  color: #CCC; font-weight: 500;
+}
+.t2 .bnav .nt.active { color: #1A1A1A; }
+.t2 .bnav .nt.active::before {
+  content: ''; display: block; width: 4px; height: 4px;
+  background: #7BA087; border-radius: 50%; margin: 0 auto .15rem;
+}
+
+
+/* ============================================================
+   THEME 3 — DARK LAB
+   Monospaced, grid-lined, data console. Dense info layout,
+   segmented displays, technical instrument look.
+   ============================================================ */
+.t3 {
+  background: #0A0A0A;
+  font-family: 'Space Mono', 'Courier New', monospace;
+  color: #C8B88A;
+}
+.t3 .topbar {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: .5rem .7rem;
+  background: linear-gradient(180deg, #121212 0%, #0A0A0A 100%);
+  border-bottom: 1px solid #1E1E1E;
+}
+.t3 .topbar .logo { font-size: .65rem; font-weight: 700; color: #D4A744; letter-spacing: 2px; text-transform: uppercase; }
+.t3 .topbar .status { display: flex; gap: .3rem; align-items: center; }
+.t3 .topbar .dot-live { width: 6px; height: 6px; background: #4A7; border-radius: 50%; box-shadow: 0 0 4px #4A7; }
+.t3 .topbar .st { font-size: .4rem; color: #555; }
+
+/* segmented display — like LCD readouts */
+.t3 .readouts {
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px;
+  background: #1A1A1A; margin: .5rem .5rem; border: 1px solid #252525;
+}
+.t3 .ro {
+  background: #0F0F0F; padding: .5rem .3rem; text-align: center;
+}
+.t3 .ro .rv { font-size: 1.1rem; font-weight: 700; color: #D4A744; letter-spacing: 1px; }
+.t3 .ro .rl { font-size: .35rem; color: #555; text-transform: uppercase; letter-spacing: 2px; margin-top: .15rem; }
+
+/* terminal-style brew log */
+.t3 .terminal {
+  margin: .4rem .5rem; background: #0F0F0F; border: 1px solid #252525; padding: .5rem;
+  font-size: .45rem; line-height: 1.6;
+}
+.t3 .terminal .prompt { color: #555; }
+.t3 .terminal .cmd { color: #D4A744; }
+.t3 .terminal .val { color: #C8B88A; }
+.t3 .terminal .comment { color: #3A3A3A; }
+
+/* parameters grid — dense data */
+.t3 .params-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+  background: #1A1A1A; margin: .4rem .5rem; border: 1px solid #252525;
+}
+.t3 .pg {
+  background: #0F0F0F; padding: .35rem .4rem;
+  display: flex; justify-content: space-between;
+}
+.t3 .pg .pk { font-size: .4rem; color: #555; text-transform: uppercase; }
+.t3 .pg .pv { font-size: .5rem; color: #D4A744; font-weight: 700; }
+
+/* gauge-style tasting — ASCII arc meters */
+.t3 .gauges {
+  margin: .4rem .5rem; background: #0F0F0F; border: 1px solid #252525; padding: .5rem;
+}
+.t3 .gauge-title { font-size: .4rem; color: #555; text-transform: uppercase; letter-spacing: 2px; margin-bottom: .4rem; }
+.t3 .gauge-row { display: flex; align-items: center; gap: .4rem; margin-bottom: .3rem; }
+.t3 .gauge-row .gl { width: 55px; font-size: .4rem; color: #555; text-align: right; text-transform: uppercase; }
+.t3 .gauge-row .gbar {
+  flex: 1; height: 10px; background: #1A1A1A; border: 1px solid #252525;
+  display: flex; gap: 1px; padding: 1px;
+}
+.t3 .gauge-row .gseg { flex: 1; height: 100%; }
+.t3 .gauge-row .gseg.on { background: #D4A744; }
+.t3 .gauge-row .gseg.off { background: #1A1A1A; }
+.t3 .gauge-row .gv { font-size: .45rem; color: #D4A744; width: 20px; font-weight: 700; }
+
+/* chips — bordered, technical */
+.t3 .chip-row { display: flex; flex-wrap: wrap; gap: .25rem; padding: 0 .5rem; margin-bottom: .4rem; }
+.t3 .chip {
+  font-size: .38rem; padding: .15rem .4rem; border: 1px solid #252525;
+  color: #777; text-transform: uppercase; letter-spacing: 1px;
+}
+
+/* input — terminal style */
+.t3 .input-area { padding: 0 .5rem; margin-bottom: .4rem; }
+.t3 .il { font-size: .35rem; color: #555; text-transform: uppercase; letter-spacing: 2px; margin-bottom: .15rem; display: block; }
+.t3 .ii {
+  width: 100%; background: #0F0F0F; border: 1px solid #252525;
+  padding: .3rem .4rem; color: #D4A744; font-family: 'Space Mono', monospace;
+  font-size: .5rem;
+}
+.t3 .ii-row { display: flex; gap: .3rem; }
+.t3 .ii-row .ii { flex: 1; }
+.t3 .range-area { display: flex; align-items: center; gap: .3rem; margin-top: .3rem; margin-bottom: .3rem; }
+.t3 .range-area input[type=range] {
+  flex:1; appearance:none; height:3px; background:#252525; border-radius:0;
+}
+.t3 .range-area input::-webkit-slider-thumb {
+  appearance:none; width:8px; height:14px; background:#D4A744; border-radius:0;
+}
+.t3 .range-area .rv { font-size:.45rem; color:#D4A744; font-weight:700; font-family:'Space Mono',monospace; }
+
+/* buttons — sharp, industrial */
+.t3 .btn-area { display: flex; gap: .3rem; padding: 0 .5rem; margin-bottom: .5rem; }
+.t3 .bt {
+  flex:1; padding:.4rem; font-family:'Space Mono',monospace; font-size:.5rem;
+  font-weight:700; text-transform:uppercase; letter-spacing:1px;
+  border:none; cursor:pointer; text-align:center;
+}
+.t3 .bt.p { background:#D4A744; color:#0A0A0A; }
+.t3 .bt.s { background:transparent; border:1px solid #D4A744; color:#D4A744; }
+
+/* bottom nav — segmented */
+.t3 .bnav {
+  display:flex; background:#0F0F0F; border-top:1px solid #252525;
+}
+.t3 .bnav .nt {
+  flex:1; text-align:center; padding:.35rem 0; font-size:.35rem;
+  color:#3A3A3A; text-transform:uppercase; letter-spacing:1px; border-right:1px solid #1A1A1A;
+}
+.t3 .bnav .nt:last-child { border-right:none; }
+.t3 .bnav .nt.active { color:#D4A744; background:#1A1800; }
+
+
+/* ============================================================
+   THEME 4 — BOLD EDITORIAL
+   Magazine layout. Oversized type, dramatic contrast,
+   asymmetric, pull-quotes, strong visual hierarchy.
+   ============================================================ */
+.t4 {
+  background: #FAF7F2;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  color: #1A1A1A;
+}
+.t4 .topbar {
+  background: #1A1A1A; color: #FAF7F2;
+  padding: .5rem .7rem; display: flex; justify-content: space-between; align-items: center;
+}
+.t4 .topbar .logo {
+  font-family: 'Playfair Display', serif; font-weight: 900;
+  font-size: .7rem; letter-spacing: -0.5px;
+}
+.t4 .topbar .issue { font-size: .35rem; color: #888; text-transform: uppercase; letter-spacing: 2px; }
+
+/* hero section — oversized number */
+.t4 .hero {
+  padding: .8rem .7rem .4rem;
+  border-bottom: 3px solid #1A1A1A;
+}
+.t4 .hero .kicker {
+  font-size: .4rem; text-transform: uppercase; letter-spacing: 3px; color: #C44B2B;
+  font-weight: 700; margin-bottom: .2rem;
+}
+.t4 .hero .big-num {
+  font-family: 'Playfair Display', serif; font-weight: 900;
+  font-size: 2.5rem; line-height: 1; letter-spacing: -2px; color: #1A1A1A;
+}
+.t4 .hero .big-label { font-size: .5rem; color: #999; margin-top: .1rem; }
+.t4 .hero-stats {
+  display: flex; gap: 1rem; margin-top: .5rem;
+}
+.t4 .hero-stats .hs { }
+.t4 .hero-stats .hs .hv { font-family: 'Playfair Display', serif; font-weight: 900; font-size: 1rem; }
+.t4 .hero-stats .hs .hl { font-size: .35rem; color: #999; text-transform: uppercase; letter-spacing: 1px; }
+
+/* editorial card — asymmetric, left bar accent */
+.t4 .ed-card {
+  margin: .6rem .7rem; display: flex; gap: 0;
+  border: 2px solid #1A1A1A;
+}
+.t4 .ed-accent { width: 5px; background: #C44B2B; flex-shrink: 0; }
+.t4 .ed-body { padding: .5rem; flex: 1; }
+.t4 .ed-body .ed-overline {
+  font-size: .35rem; text-transform: uppercase; letter-spacing: 2px;
+  color: #C44B2B; font-weight: 700; margin-bottom: .15rem;
+}
+.t4 .ed-body .ed-title {
+  font-family: 'Playfair Display', serif; font-weight: 900;
+  font-size: .8rem; line-height: 1.15; margin-bottom: .2rem;
+}
+.t4 .ed-body .ed-sub { font-size: .45rem; color: #888; line-height: 1.4; }
+.t4 .ed-score {
+  background: #1A1A1A; color: #FAF7F2; padding: .5rem;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  min-width: 40px;
+}
+.t4 .ed-score .es-n { font-family: 'Playfair Display', serif; font-weight: 900; font-size: 1.1rem; }
+.t4 .ed-score .es-l { font-size: .3rem; color: #888; text-transform: uppercase; }
+
+/* pullquote-style tasting */
+.t4 .pullquote {
+  margin: .4rem .7rem; padding: .5rem 0 .5rem .7rem;
+  border-left: 4px solid #C44B2B;
+}
+.t4 .pullquote .pq-text {
+  font-family: 'Playfair Display', serif; font-style: italic;
+  font-size: .7rem; line-height: 1.3; color: #1A1A1A;
+}
+.t4 .pullquote .pq-attr { font-size: .4rem; color: #999; margin-top: .2rem; }
+
+/* bar chart — bold, thick bars */
+.t4 .ed-chart { padding: .3rem .7rem; margin-bottom: .3rem; }
+.t4 .ec-title { font-size: .4rem; text-transform: uppercase; letter-spacing: 2px; color: #999; font-weight: 700; margin-bottom: .3rem; }
+.t4 .ec-row { display: flex; align-items: center; margin-bottom: .25rem; }
+.t4 .ec-row .ecl { width: 55px; font-size: .45rem; font-weight: 700; text-align: right; margin-right: .5rem; }
+.t4 .ec-row .ect { flex: 1; height: 14px; background: #F0EDE6; }
+.t4 .ec-row .ecf { height: 14px; background: #C44B2B; }
+.t4 .ec-row .ecv { font-size: .4rem; font-weight: 700; margin-left: .3rem; width: 20px; }
+
+/* chips — black bg */
+.t4 .chip-row { display: flex; flex-wrap: wrap; gap: .3rem; padding: 0 .7rem; margin-bottom: .5rem; }
+.t4 .chip {
+  background: #1A1A1A; color: #FAF7F2; padding: .2rem .55rem;
+  font-size: .42rem; font-weight: 700; text-transform: uppercase; letter-spacing: .5px;
+}
+
+/* form — heavy borders, bold labels */
+.t4 .form-area { padding: 0 .7rem; margin-bottom: .3rem; }
+.t4 .fl {
+  font-size: .4rem; text-transform: uppercase; letter-spacing: 2px;
+  font-weight: 700; margin-bottom: .15rem; display: block;
+}
+.t4 .fi {
+  width: 100%; border: 2px solid #1A1A1A; padding: .35rem .4rem;
+  font-size: .55rem; background: #fff; font-family: 'DM Sans', sans-serif;
+  margin-bottom: .4rem;
+}
+.t4 .fi-row { display: flex; gap: .4rem; }
+.t4 .fi-row > div { flex: 1; }
+.t4 .range-row { display: flex; align-items: center; gap: .3rem; margin-bottom: .4rem; }
+.t4 .range-row input[type=range] {
+  flex:1; appearance:none; height:4px; background:#E0DDD6; border-radius:0;
+}
+.t4 .range-row input::-webkit-slider-thumb {
+  appearance:none; width:14px; height:14px; background:#C44B2B; border-radius:0;
+}
+.t4 .range-row .rv { font-size:.5rem; font-weight:700; }
+
+/* toggle */
+.t4 .toggle-row { display: flex; justify-content: space-between; align-items: center; padding: 0 .7rem; margin-bottom: .4rem; }
+.t4 .toggle-row span { font-size: .5rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+.t4 .tgl { width: 30px; height: 16px; background: #C44B2B; border-radius: 0; position: relative; }
+.t4 .tgl::after { content:''; width: 12px; height: 12px; background: #fff; position: absolute; top: 2px; left: 16px; }
+
+/* buttons — sharp, editorial */
+.t4 .btn-area { display: flex; gap: .4rem; padding: 0 .7rem; margin-bottom: .6rem; }
+.t4 .bt {
+  flex:1; padding:.5rem; font-size:.55rem; font-weight:700;
+  text-transform: uppercase; letter-spacing: 1px;
+  border:none; cursor:pointer; text-align:center;
+  font-family: 'DM Sans', sans-serif;
+}
+.t4 .bt.p { background:#C44B2B; color:#fff; }
+.t4 .bt.s { background:transparent; border:2px solid #1A1A1A; color:#1A1A1A; }
+
+/* bottom nav — heavy top border, editorial */
+.t4 .bnav {
+  display:flex; background:#1A1A1A;
+}
+.t4 .bnav .nt {
+  flex:1; text-align:center; padding:.4rem 0; font-size:.38rem;
+  color:#666; text-transform:uppercase; letter-spacing:1px; font-weight:700;
+}
+.t4 .bnav .nt.active { color:#C44B2B; }
+</style>
+</head>
+<body>
+
+<h1>Brew Better - Pick a Direction</h1>
+<p class="sub">Same app, four completely different design languages. Which one feels right?</p>
+
+<div class="grid">
+
+<!-- ====== THEME 1: WARM CRAFT ====== -->
+<div class="phone-wrap">
+  <h2>Warm Craft</h2>
+  <p class="desc">Artisanal, textured, cozy coffee-shop energy</p>
+  <div class="phone t1">
+    <div class="topbar">
+      <div class="logo">Brew Better</div>
+      <div class="date">Thursday, Mar 5</div>
+    </div>
+    <div class="content">
+      <div class="greeting-card">
+        <div class="hello">Good morning,</div>
+        <div class="msg">Your last V60 was a 4.5. Let's beat that today.</div>
+        <div class="streak">7-day brew streak going strong</div>
+      </div>
+      <div class="stat-strip">
+        <div class="stat-pill"><span class="n">142</span> brews</div>
+        <div class="stat-pill"><span class="n">4.2</span> avg</div>
+        <div class="stat-pill"><span class="n">12</span> beans</div>
+      </div>
+      <div class="card-label">Latest Brew</div>
+      <div class="recipe-card">
+        <div class="recipe-header">
+          <span class="name">Yirgacheffe Natural</span>
+          <span class="rating">4.5</span>
+        </div>
+        <div class="recipe-body">
+          <div class="recipe-meta">V60 pour-over &middot; this morning</div>
+          <div class="recipe-params">
+            <div class="p"><span class="k">Dose</span><span class="v">18.0g</span></div>
+            <div class="p"><span class="k">Water</span><span class="v">300ml</span></div>
+            <div class="p"><span class="k">Ratio</span><span class="v">1:16.7</span></div>
+            <div class="p"><span class="k">Temp</span><span class="v">94C</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="card-label">Tasting Notes</div>
+      <div class="tasting-section">
+        <div class="tasting-grid">
+          <div class="trow"><span class="tl">Acidity</span><div class="beans"><div class="bean f"></div><div class="bean f"></div><div class="bean f"></div><div class="bean f"></div><div class="bean e"></div></div></div>
+          <div class="trow"><span class="tl">Sweet</span><div class="beans"><div class="bean f"></div><div class="bean f"></div><div class="bean f"></div><div class="bean e"></div><div class="bean e"></div></div></div>
+          <div class="trow"><span class="tl">Body</span><div class="beans"><div class="bean f"></div><div class="bean f"></div><div class="bean e"></div><div class="bean e"></div><div class="bean e"></div></div></div>
+          <div class="trow"><span class="tl">Finish</span><div class="beans"><div class="bean f"></div><div class="bean f"></div><div class="bean f"></div><div class="bean f"></div><div class="bean e"></div></div></div>
+        </div>
+      </div>
+      <div class="tag-row">
+        <span class="tag">Ethiopian</span><span class="tag">Light Roast</span>
+        <span class="tag">Washed</span><span class="tag">V60</span><span class="tag">Fruity</span>
+      </div>
+      <div class="form-section">
+        <input class="finput" value="Yirgacheffe Natural" readonly>
+        <div class="frow">
+          <input class="finput" value="V60" readonly>
+          <input class="finput" value="18.0g" readonly>
+        </div>
+        <div class="slider-row">
+          <label>Temp</label>
+          <input type="range" min="80" max="100" value="94">
+          <span class="sv">94C</span>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn p">Log This Brew</button>
+        <button class="btn s">Draft</button>
+      </div>
+    </div>
+    <div class="bnav">
+      <div class="nt active">Home</div>
+      <div class="nt">Brew</div>
+      <div class="nt">History</div>
+      <div class="nt">Taste</div>
+      <div class="nt">Settings</div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== THEME 2: CLEAN MINIMAL ====== -->
+<div class="phone-wrap">
+  <h2>Clean Minimal</h2>
+  <p class="desc">Scandinavian, airy, premium productivity tool</p>
+  <div class="phone t2">
+    <div class="topbar">
+      <div class="logo">brew better</div>
+      <div class="avatar">Y</div>
+    </div>
+    <div class="content">
+      <div class="stats-float">
+        <div class="sf"><div class="n">142</div><div class="l">Brews</div></div>
+        <div class="sf"><div class="n">4.2</div><div class="l">Average</div></div>
+        <div class="sf"><div class="n">12</div><div class="l">Beans</div></div>
+      </div>
+      <div class="divider"></div>
+      <div class="section-label">Enjoyment by Origin</div>
+      <div class="mini-chart">
+        <div class="mc-row"><span class="ml">Ethiopia</span><div class="mt"><div class="mf" style="width:88%"></div></div><span class="mv">4.4</span></div>
+        <div class="mc-row"><span class="ml">Colombia</span><div class="mt"><div class="mf" style="width:76%"></div></div><span class="mv">3.8</span></div>
+        <div class="mc-row"><span class="ml">Kenya</span><div class="mt"><div class="mf" style="width:68%"></div></div><span class="mv">3.4</span></div>
+      </div>
+      <div class="divider"></div>
+      <div class="section-label">Recent</div>
+      <div class="mcard">
+        <div class="mc-top">
+          <div>
+            <div class="mc-name">Yirgacheffe Natural</div>
+            <div class="mc-sub">V60 &middot; 18g &rarr; 300ml &middot; 3:20 &middot; today</div>
+          </div>
+          <div class="mc-score">4.5</div>
+        </div>
+        <div class="mc-tags">
+          <span class="mc-tag">Ethiopian</span>
+          <span class="mc-tag">Light</span>
+          <span class="mc-tag">Washed</span>
+          <span class="mc-tag">Fruity</span>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="section-label">Tasting</div>
+      <div class="taste-section">
+        <div class="taste-row"><span class="tl">Acidity</span><div class="tline"><div class="tdot" style="left:78%"></div></div></div>
+        <div class="taste-row"><span class="tl">Sweetness</span><div class="tline"><div class="tdot" style="left:58%"></div></div></div>
+        <div class="taste-row"><span class="tl">Body</span><div class="tline"><div class="tdot" style="left:38%"></div></div></div>
+        <div class="taste-row"><span class="tl">Aftertaste</span><div class="tline"><div class="tdot" style="left:72%"></div></div></div>
+      </div>
+      <div class="divider"></div>
+      <div class="section-label">Quick Log</div>
+      <div class="form-area">
+        <label class="fl">Bean</label>
+        <input class="fi" value="Yirgacheffe Natural" readonly>
+        <div class="fi-row">
+          <div><label class="fl">Method</label><input class="fi" value="V60" readonly></div>
+          <div><label class="fl">Dose</label><input class="fi" value="18.0g" readonly></div>
+        </div>
+        <label class="fl">Temperature</label>
+        <div class="range-row">
+          <input type="range" min="80" max="100" value="94">
+          <span class="rv">94</span>
+        </div>
+      </div>
+      <div class="toggle-row"><span>AI Commentary</span><div class="tgl"></div></div>
+      <div class="btn-area">
+        <button class="bt p">Log Brew</button>
+        <button class="bt s">Save Draft</button>
+      </div>
+    </div>
+    <div class="bnav">
+      <div class="nt active">Home</div>
+      <div class="nt">Brew</div>
+      <div class="nt">History</div>
+      <div class="nt">Analytics</div>
+      <div class="nt">Settings</div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== THEME 3: DARK LAB ====== -->
+<div class="phone-wrap">
+  <h2>Dark Lab</h2>
+  <p class="desc">Precision instrument, scientific brewing console</p>
+  <div class="phone t3">
+    <div class="topbar">
+      <div class="logo">BREW_BETTER</div>
+      <div class="status"><div class="dot-live"></div><span class="st">SYS OK</span></div>
+    </div>
+    <div class="content">
+      <div class="readouts">
+        <div class="ro"><div class="rv">142</div><div class="rl">Brews</div></div>
+        <div class="ro"><div class="rv">4.2</div><div class="rl">Avg Scr</div></div>
+        <div class="ro"><div class="rv">012</div><div class="rl">Beans</div></div>
+      </div>
+      <div class="terminal">
+        <div><span class="prompt">&gt; </span><span class="cmd">last_brew</span></div>
+        <div><span class="prompt">  bean: </span><span class="val">Yirgacheffe Natural</span></div>
+        <div><span class="prompt">  method: </span><span class="val">V60 pour-over</span></div>
+        <div><span class="prompt">  score: </span><span class="val">4.5/5.0</span></div>
+        <div><span class="comment">  # logged 2h ago</span></div>
+      </div>
+      <div class="params-grid">
+        <div class="pg"><span class="pk">Dose</span><span class="pv">18.0g</span></div>
+        <div class="pg"><span class="pk">Water</span><span class="pv">300ml</span></div>
+        <div class="pg"><span class="pk">Ratio</span><span class="pv">1:16.7</span></div>
+        <div class="pg"><span class="pk">Temp</span><span class="pv">94.0C</span></div>
+        <div class="pg"><span class="pk">Bloom</span><span class="pv">00:45</span></div>
+        <div class="pg"><span class="pk">Total</span><span class="pv">03:20</span></div>
+      </div>
+      <div class="gauges">
+        <div class="gauge-title">Tasting Analysis</div>
+        <div class="gauge-row"><span class="gl">ACID</span><div class="gbar"><div class="gseg on"></div><div class="gseg on"></div><div class="gseg on"></div><div class="gseg on"></div><div class="gseg off"></div></div><span class="gv">4</span></div>
+        <div class="gauge-row"><span class="gl">SWEET</span><div class="gbar"><div class="gseg on"></div><div class="gseg on"></div><div class="gseg on"></div><div class="gseg off"></div><div class="gseg off"></div></div><span class="gv">3</span></div>
+        <div class="gauge-row"><span class="gl">BODY</span><div class="gbar"><div class="gseg on"></div><div class="gseg on"></div><div class="gseg off"></div><div class="gseg off"></div><div class="gseg off"></div></div><span class="gv">2</span></div>
+        <div class="gauge-row"><span class="gl">FINISH</span><div class="gbar"><div class="gseg on"></div><div class="gseg on"></div><div class="gseg on"></div><div class="gseg on"></div><div class="gseg off"></div></div><span class="gv">4</span></div>
+      </div>
+      <div class="chip-row">
+        <span class="chip">ETHIOPIAN</span><span class="chip">LIGHT</span>
+        <span class="chip">WASHED</span><span class="chip">V60</span>
+      </div>
+      <div class="input-area">
+        <label class="il">Bean ID</label>
+        <input class="ii" value="yirgacheffe_natural_v2" readonly>
+        <div class="ii-row" style="margin-top:.3rem">
+          <div><label class="il">Method</label><input class="ii" value="V60" readonly></div>
+          <div><label class="il">Dose (g)</label><input class="ii" value="18.0" readonly></div>
+        </div>
+        <label class="il" style="margin-top:.3rem">Temp (C)</label>
+        <div class="range-area">
+          <input type="range" min="80" max="100" value="94">
+          <span class="rv">094</span>
+        </div>
+      </div>
+      <div class="btn-area">
+        <button class="bt p">EXECUTE</button>
+        <button class="bt s">STAGE</button>
+      </div>
+    </div>
+    <div class="bnav">
+      <div class="nt active">DASH</div>
+      <div class="nt">LOG</div>
+      <div class="nt">HIST</div>
+      <div class="nt">DATA</div>
+      <div class="nt">SYS</div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== THEME 4: BOLD EDITORIAL ====== -->
+<div class="phone-wrap">
+  <h2>Bold Editorial</h2>
+  <p class="desc">Magazine typography, dramatic, publication-grade</p>
+  <div class="phone t4">
+    <div class="topbar">
+      <div class="logo">Brew Better</div>
+      <div class="issue">Vol. 142</div>
+    </div>
+    <div class="content">
+      <div class="hero">
+        <div class="kicker">Your Journey</div>
+        <div class="big-num">4.5</div>
+        <div class="big-label">Latest brew score</div>
+        <div class="hero-stats">
+          <div class="hs"><div class="hv">142</div><div class="hl">Total Brews</div></div>
+          <div class="hs"><div class="hv">4.2</div><div class="hl">Lifetime Avg</div></div>
+          <div class="hs"><div class="hv">12</div><div class="hl">Beans Tried</div></div>
+        </div>
+      </div>
+      <div class="ed-card">
+        <div class="ed-accent"></div>
+        <div class="ed-body">
+          <div class="ed-overline">Latest Pour</div>
+          <div class="ed-title">Yirgacheffe Natural</div>
+          <div class="ed-sub">V60 &middot; 18g/300ml &middot; 94C &middot; 3:20 brew time. Bright acidity with stone fruit notes and a clean finish.</div>
+        </div>
+        <div class="ed-score">
+          <div class="es-n">4.5</div>
+          <div class="es-l">Score</div>
+        </div>
+      </div>
+      <div class="pullquote">
+        <div class="pq-text">"Blueberry brightness with a honey-like sweetness that lingers."</div>
+        <div class="pq-attr">- Tasting notes, this morning</div>
+      </div>
+      <div class="ed-chart">
+        <div class="ec-title">By Origin</div>
+        <div class="ec-row"><span class="ecl">Ethiopia</span><div class="ect"><div class="ecf" style="width:88%"></div></div><span class="ecv">4.4</span></div>
+        <div class="ec-row"><span class="ecl">Colombia</span><div class="ect"><div class="ecf" style="width:76%"></div></div><span class="ecv">3.8</span></div>
+        <div class="ec-row"><span class="ecl">Kenya</span><div class="ect"><div class="ecf" style="width:68%"></div></div><span class="ecv">3.4</span></div>
+      </div>
+      <div class="chip-row">
+        <span class="chip">Ethiopian</span><span class="chip">Light Roast</span>
+        <span class="chip">Washed</span><span class="chip">V60</span>
+      </div>
+      <div class="form-area">
+        <label class="fl">Bean</label>
+        <input class="fi" value="Yirgacheffe Natural" readonly>
+        <div class="fi-row">
+          <div><label class="fl">Method</label><input class="fi" value="V60" readonly></div>
+          <div><label class="fl">Dose</label><input class="fi" value="18.0g" readonly></div>
+        </div>
+        <label class="fl">Temperature</label>
+        <div class="range-row">
+          <input type="range" min="80" max="100" value="94">
+          <span class="rv">94C</span>
+        </div>
+      </div>
+      <div class="toggle-row"><span>AI Commentary</span><div class="tgl"></div></div>
+      <div class="btn-area">
+        <button class="bt p">Log Brew</button>
+        <button class="bt s">Save Draft</button>
+      </div>
+    </div>
+    <div class="bnav">
+      <div class="nt active">Home</div>
+      <div class="nt">Brew</div>
+      <div class="nt">History</div>
+      <div class="nt">Analytics</div>
+      <div class="nt">More</div>
+    </div>
+  </div>
+</div>
+
+</div>
+</body>
+</html>
