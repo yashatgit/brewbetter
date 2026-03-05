@@ -28,6 +28,9 @@ server/db/*.db-journal
 server/db/*.db-wal
 server/db/*.db-shm
 
+# Next.js
+.next/
+
 # Environment variables
 .env
 .env.*

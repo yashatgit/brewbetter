@@ -151,8 +151,12 @@ Use these instead of duplicating Tailwind strings:
 
 ## Tech Stack
 
-- React 19, React Router v7, TanStack Query v5
-- Tailwind CSS v4 with `@theme` block in `src/index.css` (no tailwind.config.js)
-- Vite 7 with `@tailwindcss/vite`
+- Next.js 15 (App Router) with Turbopack
+- React 19, TanStack Query v5
+- Tailwind CSS v4 with `@tailwindcss/postcss` and `@theme` block in `src/index.css`
+- All pages are Client Components using TanStack Query for data fetching
+- API routes in `app/api/` (Next.js Route Handlers replacing Express)
+- Server code (DB, schema, analytics, LLM) in `server/`
+- SQLite via better-sqlite3 + Drizzle ORM
 - UI components in `src/components/ui/` (Button, Card, Badge, Input, Select, Slider, StarRating, Dialog)
 - Design tokens defined in `src/index.css` @theme block
