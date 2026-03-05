@@ -43,12 +43,11 @@ Optionally generate a short AI-written commentary on any brew, analyzing your pa
 
 | Layer | Technology |
 |---|---|
-| Frontend | React 19, React Router v7, TanStack Query v5 |
-| Styling | Tailwind CSS v4, Fraunces + Plus Jakarta Sans |
-| Backend | Express 5, TypeScript, tsx |
+| Framework | Next.js 15 (App Router) with Turbopack |
+| Frontend | React 19, TanStack Query v5 |
+| Styling | Tailwind CSS v4 |
 | Database | SQLite via Drizzle ORM + better-sqlite3 |
 | AI (optional) | OpenAI (gpt-4o-mini) or Anthropic (Claude Sonnet) |
-| Build | Vite 7 |
 
 ## Getting Started
 
@@ -62,17 +61,16 @@ npm run db:push
 # (Optional) Seed with sample data
 npm run db:seed
 
-# Start dev server (frontend + backend)
+# Start dev server
 npm run dev
 ```
 
-The app runs at `http://localhost:5173` with the API on port 3001 (auto-proxied by Vite).
+The app runs at [http://localhost:3000](http://localhost:3000).
 
 ### Environment Variables (optional)
 
 | Variable | Purpose | Default |
 |---|---|---|
-| `DB_PROVIDER` | Database backend (`sqlite` or `postgres`) | `sqlite` |
 | `LLM_PROVIDER` | AI provider (`openai` or `anthropic`) | `openai` |
 | `OPENAI_API_KEY` | OpenAI API key for brew commentary & bag scanning | — |
 | `ANTHROPIC_API_KEY` | Anthropic API key (if using `anthropic` provider) | — |
@@ -82,20 +80,31 @@ AI features are entirely optional. The app works fully without any API keys.
 ## Project Structure
 
 ```
-server/
-  db/          Schema, migrations, SQLite connection
-  routes/      Express routers (beans, equipment, brew-logs, tasting, analytics, etc.)
-  lib/         Analytics refresh, LLM provider abstraction
-  prompts/     AI prompt templates
-
 src/
-  pages/       Dashboard, Inventory, NewBrew, BrewHistory, BrewDetail,
-               Setups, Analytics, Export, Settings
-  components/  Layout (AppShell, MobileNav), UI primitives, domain components
-  hooks/       TanStack Query hooks per domain
-  lib/         API client, brew type configs, utilities
-  types/       TypeScript interfaces mirroring DB schema
+  app/           Next.js App Router (pages + API route handlers)
+  views/         Page-level React components
+  components/    UI primitives and domain components
+  hooks/         TanStack Query hooks per domain
+  lib/           API client, brew type configs, utilities
+  types/         TypeScript interfaces mirroring DB schema
+
+server/
+  db/            Schema, migrations, SQLite connection
+  lib/           Analytics refresh, LLM provider abstraction
+  prompts/       AI prompt templates
 ```
+
+## Scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start dev server with Turbopack |
+| `npm run build` | Production build |
+| `npm run start` | Start production server |
+| `npm run lint` | Run ESLint |
+| `npm run db:generate` | Generate Drizzle migrations |
+| `npm run db:push` | Push schema to database |
+| `npm run db:seed` | Seed database with sample data |
 
 ---
 
