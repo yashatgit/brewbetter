@@ -99,9 +99,23 @@ export const tastingEvaluations = sqliteTable('tasting_evaluations', {
     .notNull()
     .unique()
     .references(() => brewLogs.id),
-  acidityFeel: integer('acidity_feel').notNull(),
-  sweetBitter: integer('sweet_bitter').notNull(),
+  sweetness: integer('sweetness').notNull(),
+  sourness: integer('sourness').notNull(),
+  bitterness: integer('bitterness').notNull(),
+  sweetnessDirection: text('sweetness_direction', {
+    enum: ['wanted_less', 'just_right', 'wanted_more'],
+  }),
+  sournessDirection: text('sourness_direction', {
+    enum: ['wanted_less', 'just_right', 'wanted_more'],
+  }),
+  bitternessDirection: text('bitterness_direction', {
+    enum: ['wanted_less', 'just_right', 'wanted_more'],
+  }),
   body: text('body', { enum: ['thin', 'medium', 'thick'] }).notNull(),
+  bodyDirection: text('body_direction', {
+    enum: ['wanted_lighter', 'just_right', 'wanted_heavier'],
+  }),
+  flavorTags: text('flavor_tags'),
   aftertastePresence: integer('aftertaste_presence', { mode: 'boolean' }).notNull(),
   aftertastePleasant: text('aftertaste_pleasant', {
     enum: ['pleasant', 'neutral', 'unpleasant'],
@@ -164,8 +178,9 @@ export const preferenceScores = sqliteTable('preference_scores', {
   value: text('value').notNull(),
   brewCount: integer('brew_count').notNull().default(0),
   avgEnjoyment: real('avg_enjoyment'),
-  avgAcidity: real('avg_acidity'),
-  avgSweetBitter: real('avg_sweet_bitter'),
+  avgSweetness: real('avg_sweetness'),
+  avgSourness: real('avg_sourness'),
+  avgBitterness: real('avg_bitterness'),
   updatedAt: text('updated_at')
     .notNull()
     .default(sql`(datetime('now'))`),

@@ -5,6 +5,8 @@ export type TimeOfDay = 'morning' | 'midday' | 'afternoon' | 'evening'
 export type BodyType = 'thin' | 'medium' | 'thick'
 export type AftertastePleasant = 'pleasant' | 'neutral' | 'unpleasant'
 export type Mindfulness = 'focused' | 'casual' | 'distracted'
+export type TasteDirection = 'wanted_less' | 'just_right' | 'wanted_more'
+export type BodyDirection = 'wanted_lighter' | 'just_right' | 'wanted_heavier'
 
 export interface Bean {
   id: string
@@ -90,17 +92,24 @@ export interface PreferenceScore {
   value: string
   brewCount: number
   avgEnjoyment?: number | null
-  avgAcidity?: number | null
-  avgSweetBitter?: number | null
+  avgSweetness?: number | null
+  avgSourness?: number | null
+  avgBitterness?: number | null
   updatedAt: string
 }
 
 export interface TastingEvaluation {
   id: string
   brewLogId: string
-  acidityFeel: number
-  sweetBitter: number
+  sweetness: number
+  sourness: number
+  bitterness: number
+  sweetnessDirection?: TasteDirection | null
+  sournessDirection?: TasteDirection | null
+  bitternessDirection?: TasteDirection | null
   body: BodyType
+  bodyDirection?: BodyDirection | null
+  flavorTags?: string | null
   aftertastePresence: boolean
   aftertastePleasant?: AftertastePleasant | null
   flavorNotes?: string | null

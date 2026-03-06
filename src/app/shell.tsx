@@ -84,6 +84,7 @@ function MobileTabItem({
   return (
     <Link
       href={href}
+      aria-current={isActive ? 'page' : undefined}
       className={[
         'flex flex-1 flex-col items-center justify-center gap-0.5 py-2.5 text-[10px] font-bold uppercase tracking-widest transition-all duration-250',
         isActive
@@ -130,7 +131,7 @@ function MobileNav() {
   )
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 md:hidden">
+    <nav aria-label="Mobile navigation" className="fixed bottom-0 left-0 right-0 z-50 md:hidden">
       <div className="relative bg-inverted border-t border-white/10">
         <div className="flex items-end justify-around px-1">
           <MobileTabItem href="/" label="Home" icon={Home} exact />
@@ -214,6 +215,14 @@ export function Shell({ children }: { children: ReactNode }) {
 
   return (
     <div className="flex min-h-screen bg-background">
+      {/* Skip to content link for keyboard users */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[60] focus:bg-primary focus:text-primary-foreground focus:px-4 focus:py-2 focus:text-sm focus:font-bold"
+      >
+        Skip to content
+      </a>
+
       {/* -- Desktop sidebar (dark inverted) -- */}
       <aside className="hidden w-64 shrink-0 flex-col bg-inverted border-r border-inverted md:flex overflow-hidden">
         {/* Logo area */}
@@ -232,7 +241,7 @@ export function Shell({ children }: { children: ReactNode }) {
         </div>
 
         {/* Main nav */}
-        <nav className="flex flex-1 flex-col pt-4">
+        <nav aria-label="Main navigation" className="flex flex-1 flex-col pt-4">
           <div className="flex flex-col gap-0.5">
             {mainNavItems.map((item) => {
               const active = isLinkActive(pathname, item.href, 'exact' in item ? item.exact : undefined)
@@ -240,6 +249,7 @@ export function Shell({ children }: { children: ReactNode }) {
                 <Link
                   key={item.href}
                   href={item.href}
+                  aria-current={active ? 'page' : undefined}
                   className={sidebarLinkClass(active)}
                 >
                   <item.icon size={18} strokeWidth={1.8} />
@@ -260,6 +270,7 @@ export function Shell({ children }: { children: ReactNode }) {
                 <Link
                   key={item.href}
                   href={item.href}
+                  aria-current={active ? 'page' : undefined}
                   className={sidebarLinkClass(active)}
                 >
                   <item.icon size={18} strokeWidth={1.8} />
@@ -291,7 +302,7 @@ export function Shell({ children }: { children: ReactNode }) {
         </header>
 
         {/* Content area */}
-        <main className="flex-1 overflow-y-auto bg-background p-5 pb-28 md:p-10 md:pb-10">
+        <main id="main-content" className="flex-1 overflow-y-auto bg-background p-5 pb-28 md:p-10 md:pb-10">
           {children}
         </main>
       </div>

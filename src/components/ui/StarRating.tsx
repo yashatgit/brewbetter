@@ -25,40 +25,37 @@ export function StarRating({
   return (
     <div
       className={`inline-flex items-center ${gap}`}
-      role="group"
-      aria-label="Star rating"
+      role={interactive ? "radiogroup" : "group"}
+      aria-label={interactive ? "Star rating" : `Rating: ${value} out of 5 stars`}
     >
-      {[1, 2, 3, 4, 5].map((star) => (
-        <span
-          key={star}
-          role={interactive ? "button" : "presentation"}
-          tabIndex={interactive ? 0 : -1}
-          aria-label={`${star} star${star > 1 ? "s" : ""}`}
-          onClick={() => onChange?.(star)}
-          onKeyDown={
-            interactive
-              ? (e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    onChange!(star);
-                  }
-                }
-              : undefined
-          }
-          className={`inline-flex transition-all duration-200 ease-out ${
-            interactive
-              ? "cursor-pointer hover:scale-125 active:scale-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background"
-              : ""
-          }`}
-        >
-          <Star
-            size={starSize}
-            strokeWidth={1.5}
-            className={star <= value ? "text-editorial fill-editorial" : "text-secondary"}
-            aria-hidden="true"
-          />
-        </span>
-      ))}
+      {[1, 2, 3, 4, 5].map((star) =>
+        interactive ? (
+          <button
+            key={star}
+            type="button"
+            role="radio"
+            aria-checked={star === value}
+            aria-label={`${star} star${star > 1 ? "s" : ""}`}
+            onClick={() => onChange!(star)}
+            className="inline-flex cursor-pointer transition-all duration-200 ease-out hover:scale-125 active:scale-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background"
+          >
+            <Star
+              size={starSize}
+              strokeWidth={1.5}
+              className={star <= value ? "text-editorial fill-editorial" : "text-secondary"}
+              aria-hidden="true"
+            />
+          </button>
+        ) : (
+          <span key={star} aria-hidden="true" className="inline-flex">
+            <Star
+              size={starSize}
+              strokeWidth={1.5}
+              className={star <= value ? "text-editorial fill-editorial" : "text-secondary"}
+            />
+          </span>
+        )
+      )}
     </div>
   );
 }

@@ -157,8 +157,8 @@ export default function Setups() {
 
   return (
     <div className="p-6 space-y-8 max-w-5xl mx-auto animate-fade-in">
-      <div className="flex items-end justify-between gap-4">
-        <div className="space-y-1">
+      <div className="flex flex-col items-center md:flex-row md:items-end md:justify-between gap-4">
+        <div className="space-y-1 text-center md:text-left">
           <p className="kicker">Configurations</p>
           <h1 className="text-4xl md:text-5xl font-display text-foreground tracking-tight leading-[0.95]">
             Saved Setups

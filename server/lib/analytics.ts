@@ -64,8 +64,9 @@ export function refreshPreferenceScores() {
       value: beans.originCountry,
       brewCount: sql<number>`count(*)`,
       avgEnjoyment: sql<number>`avg(${tastingEvaluations.overallEnjoyment})`,
-      avgAcidity: sql<number>`avg(${tastingEvaluations.acidityFeel})`,
-      avgSweetBitter: sql<number>`avg(${tastingEvaluations.sweetBitter})`,
+      avgSweetness: sql<number>`avg(${tastingEvaluations.sweetness})`,
+      avgSourness: sql<number>`avg(${tastingEvaluations.sourness})`,
+      avgBitterness: sql<number>`avg(${tastingEvaluations.bitterness})`,
     })
     .from(brewLogs)
     .innerJoin(beans, eq(brewLogs.beanId, beans.id))
@@ -80,8 +81,9 @@ export function refreshPreferenceScores() {
       value: row.value,
       brewCount: row.brewCount,
       avgEnjoyment: row.avgEnjoyment,
-      avgAcidity: row.avgAcidity,
-      avgSweetBitter: row.avgSweetBitter,
+      avgSweetness: row.avgSweetness,
+      avgSourness: row.avgSourness,
+      avgBitterness: row.avgBitterness,
       updatedAt: now,
     }).run()
   }
@@ -92,8 +94,9 @@ export function refreshPreferenceScores() {
       value: beans.processingMethod,
       brewCount: sql<number>`count(*)`,
       avgEnjoyment: sql<number>`avg(${tastingEvaluations.overallEnjoyment})`,
-      avgAcidity: sql<number>`avg(${tastingEvaluations.acidityFeel})`,
-      avgSweetBitter: sql<number>`avg(${tastingEvaluations.sweetBitter})`,
+      avgSweetness: sql<number>`avg(${tastingEvaluations.sweetness})`,
+      avgSourness: sql<number>`avg(${tastingEvaluations.sourness})`,
+      avgBitterness: sql<number>`avg(${tastingEvaluations.bitterness})`,
     })
     .from(brewLogs)
     .innerJoin(beans, eq(brewLogs.beanId, beans.id))
@@ -108,8 +111,9 @@ export function refreshPreferenceScores() {
       value: row.value,
       brewCount: row.brewCount,
       avgEnjoyment: row.avgEnjoyment,
-      avgAcidity: row.avgAcidity,
-      avgSweetBitter: row.avgSweetBitter,
+      avgSweetness: row.avgSweetness,
+      avgSourness: row.avgSourness,
+      avgBitterness: row.avgBitterness,
       updatedAt: now,
     }).run()
   }
@@ -120,8 +124,9 @@ export function refreshPreferenceScores() {
       value: beans.roastLevel,
       brewCount: sql<number>`count(*)`,
       avgEnjoyment: sql<number>`avg(${tastingEvaluations.overallEnjoyment})`,
-      avgAcidity: sql<number>`avg(${tastingEvaluations.acidityFeel})`,
-      avgSweetBitter: sql<number>`avg(${tastingEvaluations.sweetBitter})`,
+      avgSweetness: sql<number>`avg(${tastingEvaluations.sweetness})`,
+      avgSourness: sql<number>`avg(${tastingEvaluations.sourness})`,
+      avgBitterness: sql<number>`avg(${tastingEvaluations.bitterness})`,
     })
     .from(brewLogs)
     .innerJoin(beans, eq(brewLogs.beanId, beans.id))
@@ -136,8 +141,9 @@ export function refreshPreferenceScores() {
       value: row.value,
       brewCount: row.brewCount,
       avgEnjoyment: row.avgEnjoyment,
-      avgAcidity: row.avgAcidity,
-      avgSweetBitter: row.avgSweetBitter,
+      avgSweetness: row.avgSweetness,
+      avgSourness: row.avgSourness,
+      avgBitterness: row.avgBitterness,
       updatedAt: now,
     }).run()
   }
@@ -148,8 +154,9 @@ export function refreshPreferenceScores() {
       value: brewLogs.brewTypeId,
       brewCount: sql<number>`count(*)`,
       avgEnjoyment: sql<number>`avg(${tastingEvaluations.overallEnjoyment})`,
-      avgAcidity: sql<number>`avg(${tastingEvaluations.acidityFeel})`,
-      avgSweetBitter: sql<number>`avg(${tastingEvaluations.sweetBitter})`,
+      avgSweetness: sql<number>`avg(${tastingEvaluations.sweetness})`,
+      avgSourness: sql<number>`avg(${tastingEvaluations.sourness})`,
+      avgBitterness: sql<number>`avg(${tastingEvaluations.bitterness})`,
     })
     .from(brewLogs)
     .innerJoin(tastingEvaluations, eq(tastingEvaluations.brewLogId, brewLogs.id))
@@ -165,8 +172,9 @@ export function refreshPreferenceScores() {
       value: row.value,
       brewCount: row.brewCount,
       avgEnjoyment: row.avgEnjoyment,
-      avgAcidity: row.avgAcidity,
-      avgSweetBitter: row.avgSweetBitter,
+      avgSweetness: row.avgSweetness,
+      avgSourness: row.avgSourness,
+      avgBitterness: row.avgBitterness,
       updatedAt: now,
     }).run()
   }

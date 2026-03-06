@@ -1,4 +1,4 @@
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useRef, useCallback, type ReactNode } from "react";
 import { X } from "lucide-react";
 
 interface DialogProps {
@@ -22,6 +22,30 @@ export function Dialog({ open, onClose, title, children }: DialogProps) {
     }
   }, [open]);
 
+  // Focus trap: cycle through focusable elements within the dialog
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key !== "Tab" || !dialogRef.current) return;
+
+      const focusable = dialogRef.current.querySelectorAll<HTMLElement>(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      if (focusable.length === 0) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    },
+    []
+  );
+
   return (
     <dialog
       ref={dialogRef}
@@ -29,6 +53,7 @@ export function Dialog({ open, onClose, title, children }: DialogProps) {
       onClick={(e) => {
         if (e.target === dialogRef.current) onClose();
       }}
+      onKeyDown={handleKeyDown}
       className="m-auto max-w-lg w-full bg-card p-0 border-2 border-border backdrop:bg-[#000]/40 backdrop:backdrop-blur-sm"
     >
       <div className={`p-8 md:p-10 ${open ? "animate-fade-in-scale" : ""}`}>
@@ -43,7 +68,7 @@ export function Dialog({ open, onClose, title, children }: DialogProps) {
             <button
               onClick={onClose}
               aria-label="Close"
-              className="p-2 text-muted-foreground transition-all duration-200 ease-out hover:text-secondary-foreground hover:bg-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              className="p-3 -m-1 text-muted-foreground transition-all duration-200 ease-out hover:text-secondary-foreground hover:bg-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             >
               <X size={20} strokeWidth={2} aria-hidden="true" />
             </button>

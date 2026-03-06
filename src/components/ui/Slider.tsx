@@ -51,6 +51,10 @@ export function Slider({
           min={min}
           max={max}
           value={value}
+          aria-label={label}
+          aria-valuenow={value}
+          aria-valuemin={min}
+          aria-valuemax={max}
           onChange={(e) => onChange(Number(e.target.value))}
           className={`w-full ${className}`}
           {...props}

@@ -3,862 +3,742 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Brew Better - Design Picker</title>
+<title>Brew Better - Design Deep Dive</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-* { margin:0; padding:0; box-sizing:border-box; }
-body { background:#111; color:#eee; font-family:'Inter',system-ui,sans-serif; padding:2rem 1rem; }
-h1 { text-align:center; font-size:1.6rem; margin-bottom:.3rem; }
-.sub { text-align:center; color:#777; font-size:.85rem; margin-bottom:2.5rem; }
-.grid { display:grid; grid-template-columns:1fr 1fr; gap:3rem 2.5rem; max-width:1100px; margin:0 auto; }
-@media(max-width:900px){ .grid{grid-template-columns:1fr; max-width:380px;} }
-.phone-wrap { text-align:center; }
-.phone-wrap h2 { font-size:1rem; margin-bottom:.25rem; }
-.phone-wrap .desc { color:#888; font-size:.75rem; margin-bottom:.75rem; }
-.phone { width:100%; aspect-ratio:9/19.5; border-radius:2.2rem; overflow:hidden; display:flex; flex-direction:column; position:relative; border:2px solid #333; }
-.phone .content { flex:1; overflow-y:auto; scrollbar-width:none; }
-.phone .content::-webkit-scrollbar { display:none; }
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#111;color:#eee;font-family:'DM Sans',system-ui,sans-serif;padding:2rem 1rem;}
+h1{text-align:center;font-size:1.6rem;margin-bottom:.3rem;}
+.sub{text-align:center;color:#777;font-size:.85rem;margin-bottom:1rem;}
+.theme-label{text-align:center;font-size:1.15rem;font-weight:700;margin:2rem 0 .3rem;color:#fff;}
+.theme-desc{text-align:center;color:#666;font-size:.75rem;margin-bottom:1.2rem;}
+.row{display:flex;gap:1.5rem;max-width:1600px;margin:0 auto;overflow-x:auto;padding-bottom:1rem;justify-content:center;}
+.phone-wrap{text-align:center;flex-shrink:0;}
+.phone-wrap .screen-name{font-size:.7rem;color:#888;margin-bottom:.5rem;}
+.phone{width:280px;aspect-ratio:9/19.5;border-radius:2.2rem;overflow:hidden;display:flex;flex-direction:column;border:2px solid #333;}
+.phone .content{flex:1;overflow-y:auto;scrollbar-width:none;}
+.phone .content::-webkit-scrollbar{display:none;}
 
 /* ============================================================
-   THEME 1 — WARM CRAFT
-   Artisanal, textured, hand-made feel. Organic shapes,
-   stacked vertical rhythm, illustration-style elements.
+   BOLD EDITORIAL — shared styles
    ============================================================ */
-.t1 {
-  background: #F2E8D9;
-  font-family: 'Fraunces', Georgia, serif;
-  color: #2C1810;
-}
-.t1 .topbar {
-  padding: .6rem .8rem;
-  text-align: center;
-  background: linear-gradient(180deg, #E8D5BE 0%, #F2E8D9 100%);
-  border-bottom: 2px dashed #C9A87C;
-}
-.t1 .topbar .logo {
-  font-family: 'Fraunces', serif;
-  font-weight: 700;
-  font-size: 1rem;
-  color: #5C2D0E;
-  letter-spacing: -.5px;
-}
-.t1 .topbar .date { font-size: .45rem; color: #8B6F4E; margin-top: 1px; font-style: italic; }
+.ed{background:#FAF7F2;font-family:'DM Sans',sans-serif;color:#1A1A1A;}
+.ed .topbar{background:#1A1A1A;color:#FAF7F2;padding:.5rem .7rem;display:flex;justify-content:space-between;align-items:center;}
+.ed .topbar .logo{font-family:'Playfair Display',serif;font-weight:900;font-size:.7rem;letter-spacing:-.5px;}
+.ed .topbar .tr{font-size:.35rem;color:#888;text-transform:uppercase;letter-spacing:2px;}
+.ed .bnav{display:flex;background:#1A1A1A;}
+.ed .bnav .nt{flex:1;text-align:center;padding:.4rem 0;font-size:.38rem;color:#666;text-transform:uppercase;letter-spacing:1px;font-weight:700;}
+.ed .bnav .nt.active{color:#C44B2B;}
 
-/* hand-drawn style greeting card */
-.t1 .greeting-card {
-  margin: .6rem .7rem;
-  background: #FFF8EE;
-  border: 2px solid #D4B896;
-  border-radius: 1rem;
-  padding: .7rem;
-  position: relative;
-  box-shadow: 3px 3px 0 #D4B896;
-}
-.t1 .greeting-card .hello { font-size: .65rem; color: #8B6F4E; font-style: italic; }
-.t1 .greeting-card .msg { font-size: .85rem; font-weight: 700; color: #5C2D0E; margin-top: .15rem; line-height: 1.3; }
-.t1 .greeting-card .streak { font-size: .5rem; color: #A0784E; margin-top: .3rem; }
-/* decorative coffee ring */
-.t1 .greeting-card::after {
-  content: '';
-  position: absolute; right: .6rem; top: .5rem;
-  width: 28px; height: 28px;
-  border: 3px solid rgba(139,90,43,.15);
-  border-radius: 50%;
-}
-
-/* stat pills in a horizontal scroll feel */
-.t1 .stat-strip {
-  display: flex; gap: .4rem; padding: 0 .7rem; margin-bottom: .6rem; overflow-x: auto;
-}
-.t1 .stat-pill {
-  background: #5C2D0E; color: #F2E8D9;
-  padding: .35rem .65rem; border-radius: 2rem; white-space: nowrap;
-  font-size: .5rem; display: flex; align-items: center; gap: .3rem;
-}
-.t1 .stat-pill .n { font-weight: 700; font-size: .7rem; }
-
-/* brew card — recipe card style */
-.t1 .card-label {
-  padding: 0 .7rem; font-size: .5rem; text-transform: uppercase;
-  letter-spacing: 1.5px; color: #A0784E; margin-bottom: .3rem;
-}
-.t1 .recipe-card {
-  margin: 0 .7rem .5rem; background: #FFF8EE;
-  border: 1.5px solid #D4B896; border-radius: .8rem;
-  overflow: hidden;
-}
-.t1 .recipe-header {
-  background: #5C2D0E; color: #F2E8D9; padding: .5rem .6rem;
-  display: flex; justify-content: space-between; align-items: center;
-}
-.t1 .recipe-header .name { font-weight: 700; font-size: .7rem; }
-.t1 .recipe-header .rating {
-  background: #C9A87C; color: #2C1810; padding: .15rem .45rem;
-  border-radius: 1rem; font-size: .6rem; font-weight: 700;
-}
-.t1 .recipe-body { padding: .5rem .6rem; }
-.t1 .recipe-meta { font-size: .45rem; color: #8B6F4E; margin-bottom: .4rem; font-style: italic; }
-.t1 .recipe-params {
-  display: grid; grid-template-columns: 1fr 1fr; gap: .25rem;
-}
-.t1 .recipe-params .p {
-  font-size: .5rem; display: flex; justify-content: space-between;
-  padding: .15rem .3rem; background: #F2E8D9; border-radius: .3rem;
-}
-.t1 .recipe-params .p .k { color: #8B6F4E; }
-.t1 .recipe-params .p .v { font-weight: 700; color: #5C2D0E; }
-
-/* tasting — bean shaped indicators */
-.t1 .tasting-section { padding: 0 .7rem; margin-bottom: .5rem; }
-.t1 .tasting-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: .2rem .5rem;
-  background: #FFF8EE; border: 1.5px solid #D4B896;
-  border-radius: .8rem; padding: .5rem;
-}
-.t1 .trow { display: flex; justify-content: space-between; align-items: center; font-size: .5rem; }
-.t1 .trow .tl { color: #8B6F4E; }
-.t1 .trow .beans { display: flex; gap: 2px; }
-.t1 .trow .bean {
-  width: 8px; height: 11px; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-}
-.t1 .trow .bean.f { background: #5C2D0E; }
-.t1 .trow .bean.e { background: #DDD0BE; }
-
-/* tags */
-.t1 .tag-row { display: flex; flex-wrap: wrap; gap: .25rem; padding: 0 .7rem; margin-bottom: .5rem; }
-.t1 .tag {
-  background: transparent; border: 1.5px solid #C9A87C; color: #5C2D0E;
-  padding: .2rem .5rem; border-radius: .3rem; font-size: .45rem;
-  font-style: italic;
-}
-
-/* form section */
-.t1 .form-section { padding: 0 .7rem; margin-bottom: .5rem; }
-.t1 .finput {
-  width: 100%; padding: .35rem .5rem; background: #FFF8EE;
-  border: 1.5px solid #D4B896; border-radius: .4rem;
-  font-family: 'Fraunces', serif; font-size: .55rem; color: #2C1810;
-  margin-bottom: .3rem;
-}
-.t1 .frow { display: flex; gap: .3rem; }
-.t1 .frow .finput { flex: 1; }
-.t1 .slider-row { display: flex; align-items: center; gap: .4rem; margin-bottom: .3rem; }
-.t1 .slider-row label { font-size: .5rem; width: 55px; color: #8B6F4E; }
-.t1 .slider-row input[type=range] {
-  flex: 1; height: 6px; appearance: none; background: #D4B896; border-radius: 3px;
-}
-.t1 .slider-row input::-webkit-slider-thumb {
-  appearance: none; width: 14px; height: 14px; background: #5C2D0E; border-radius: 50%;
-}
-.t1 .slider-row .sv { font-size: .55rem; font-weight: 700; width: 24px; color: #5C2D0E; }
-
-/* buttons */
-.t1 .btn-row { display: flex; gap: .4rem; padding: 0 .7rem; margin-bottom: .6rem; }
-.t1 .btn {
-  flex: 1; padding: .5rem; border-radius: 2rem; font-family: 'Fraunces',serif;
-  font-size: .6rem; font-weight: 700; border: none; cursor: pointer; text-align: center;
-}
-.t1 .btn.p { background: #5C2D0E; color: #F2E8D9; box-shadow: 2px 2px 0 #C9A87C; }
-.t1 .btn.s { background: transparent; border: 2px solid #5C2D0E; color: #5C2D0E; }
-
-/* bottom nav — no icons, text-only, handwritten style */
-.t1 .bnav {
-  display: flex; border-top: 2px dashed #C9A87C; background: #E8D5BE;
-}
-.t1 .bnav .nt {
-  flex: 1; text-align: center; padding: .45rem 0; font-size: .45rem;
-  color: #8B6F4E; font-style: italic;
-}
-.t1 .bnav .nt.active { color: #5C2D0E; font-weight: 700; font-style: normal; border-top: 2px solid #5C2D0E; margin-top: -2px; }
-
+/* editorial utilities */
+.ed .kicker{font-size:.4rem;text-transform:uppercase;letter-spacing:3px;color:#C44B2B;font-weight:700;margin-bottom:.2rem;}
+.ed .sect-title{font-family:'Playfair Display',serif;font-weight:900;font-size:1rem;line-height:1.1;letter-spacing:-.5px;margin-bottom:.4rem;}
+.ed .sect-sub{font-size:.45rem;color:#999;margin-bottom:.5rem;}
+.ed .divider{height:3px;background:#1A1A1A;margin:.5rem .7rem;}
+.ed .divider-thin{height:1px;background:#E0DDD6;margin:.4rem .7rem;}
+.ed .fl{font-size:.4rem;text-transform:uppercase;letter-spacing:2px;font-weight:700;margin-bottom:.15rem;display:block;}
+.ed .fi{width:100%;border:2px solid #1A1A1A;padding:.35rem .4rem;font-size:.55rem;background:#fff;font-family:'DM Sans',sans-serif;margin-bottom:.4rem;}
+.ed .chip-row{display:flex;flex-wrap:wrap;gap:.3rem;padding:0 .7rem;margin-bottom:.5rem;}
+.ed .chip{background:#1A1A1A;color:#FAF7F2;padding:.2rem .55rem;font-size:.42rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
+.ed .btn-area{display:flex;gap:.4rem;padding:0 .7rem;margin-bottom:.6rem;}
+.ed .bt{flex:1;padding:.5rem;font-size:.55rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;border:none;cursor:pointer;text-align:center;font-family:'DM Sans',sans-serif;}
+.ed .bt.p{background:#C44B2B;color:#fff;}
+.ed .bt.s{background:transparent;border:2px solid #1A1A1A;color:#1A1A1A;}
 
 /* ============================================================
-   THEME 2 — CLEAN MINIMAL
-   Airy, lots of whitespace, thin lines, small type,
-   asymmetric spacing, floating cards, no borders on inputs.
+   DARK LAB — shared styles
    ============================================================ */
-.t2 {
-  background: #FAFAF8;
-  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-  color: #1A1A1A;
-}
-.t2 .topbar {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: .7rem 1rem;
-}
-.t2 .topbar .logo { font-weight: 700; font-size: .8rem; letter-spacing: -.3px; }
-.t2 .topbar .avatar {
-  width: 22px; height: 22px; border-radius: 50%; background: #E8E8E4;
-  display: flex; align-items: center; justify-content: center; font-size: .5rem; color: #999;
-}
+.dl{background:#0A0A0A;font-family:'Space Mono','Courier New',monospace;color:#C8B88A;}
+.dl .topbar{display:flex;justify-content:space-between;align-items:center;padding:.5rem .7rem;background:#0F0F0F;border-bottom:1px solid #1E1E1E;}
+.dl .topbar .logo{font-size:.6rem;font-weight:700;color:#D4A744;letter-spacing:2px;text-transform:uppercase;}
+.dl .topbar .tr{display:flex;gap:.3rem;align-items:center;}
+.dl .topbar .dot-live{width:6px;height:6px;background:#4A7;border-radius:50%;box-shadow:0 0 4px #4A7;}
+.dl .topbar .st{font-size:.38rem;color:#555;}
+.dl .bnav{display:flex;background:#0F0F0F;border-top:1px solid #252525;}
+.dl .bnav .nt{flex:1;text-align:center;padding:.35rem 0;font-size:.35rem;color:#3A3A3A;text-transform:uppercase;letter-spacing:1px;border-right:1px solid #1A1A1A;}
+.dl .bnav .nt:last-child{border-right:none;}
+.dl .bnav .nt.active{color:#D4A744;background:#1A1800;}
 
-.t2 .section-label {
-  padding: 0 1rem; font-size: .45rem; font-weight: 600;
-  text-transform: uppercase; letter-spacing: 2px; color: #BBB;
-  margin-bottom: .4rem; margin-top: .5rem;
-}
-
-/* floating stats — large numbers, tiny labels, lots of air */
-.t2 .stats-float {
-  display: flex; justify-content: space-around; padding: .8rem 1rem; margin-bottom: .2rem;
-}
-.t2 .sf { text-align: center; }
-.t2 .sf .n { font-size: 1.5rem; font-weight: 700; letter-spacing: -1px; color: #1A1A1A; }
-.t2 .sf .l { font-size: .4rem; color: #AAA; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 1px; }
-.t2 .divider { height: 1px; background: #EEEEE9; margin: 0 1rem; }
-
-/* mini chart — super clean thin bars */
-.t2 .mini-chart { padding: .6rem 1rem; }
-.t2 .mc-row { display: flex; align-items: center; gap: .5rem; margin-bottom: .35rem; }
-.t2 .mc-row .ml { width: 50px; font-size: .5rem; color: #999; text-align: right; }
-.t2 .mc-row .mt { flex: 1; height: 3px; background: #F0F0EB; border-radius: 2px; }
-.t2 .mc-row .mf { height: 3px; background: #7BA087; border-radius: 2px; }
-.t2 .mc-row .mv { font-size: .45rem; color: #7BA087; font-weight: 600; width: 18px; }
-
-/* card — minimal shadow, rounded, no border */
-.t2 .mcard {
-  margin: .4rem 1rem; background: #fff; border-radius: .7rem;
-  padding: .6rem .7rem; box-shadow: 0 1px 3px rgba(0,0,0,.04);
-}
-.t2 .mcard .mc-top { display: flex; justify-content: space-between; align-items: flex-start; }
-.t2 .mcard .mc-name { font-weight: 600; font-size: .65rem; }
-.t2 .mcard .mc-sub { font-size: .45rem; color: #AAA; margin-top: .1rem; }
-.t2 .mcard .mc-score {
-  font-size: .75rem; font-weight: 700; color: #7BA087;
-}
-.t2 .mcard .mc-tags { display: flex; gap: .25rem; margin-top: .4rem; }
-.t2 .mcard .mc-tag {
-  font-size: .4rem; color: #999; background: #F5F5F1; padding: .15rem .4rem;
-  border-radius: 1rem;
-}
-
-/* tasting — thin horizontal lines with dots */
-.t2 .taste-section { padding: .4rem 1rem; }
-.t2 .taste-row { display: flex; align-items: center; margin-bottom: .3rem; }
-.t2 .taste-row .tl { width: 50px; font-size: .45rem; color: #BBB; text-align: right; margin-right: .5rem; }
-.t2 .taste-row .tline { flex: 1; height: 1px; background: #EEEEE9; position: relative; }
-.t2 .taste-row .tdot {
-  position: absolute; top: -4px;
-  width: 9px; height: 9px; background: #7BA087; border-radius: 50%;
-}
-
-/* form — borderless inputs with bottom line only */
-.t2 .form-area { padding: .3rem 1rem; }
-.t2 .fl { font-size: .4rem; color: #BBB; text-transform: uppercase; letter-spacing: 1px; margin-bottom: .15rem; display: block; }
-.t2 .fi {
-  width: 100%; border: none; border-bottom: 1px solid #E5E5E0;
-  padding: .3rem 0; font-size: .55rem; background: transparent;
-  font-family: 'Plus Jakarta Sans', sans-serif; color: #1A1A1A;
-  margin-bottom: .5rem;
-}
-.t2 .fi-row { display: flex; gap: .8rem; }
-.t2 .fi-row > div { flex: 1; }
-.t2 .range-row { display: flex; align-items: center; gap: .3rem; margin-bottom: .5rem; }
-.t2 .range-row input[type=range] {
-  flex: 1; appearance: none; height: 2px; background: #E5E5E0; border-radius: 1px;
-}
-.t2 .range-row input::-webkit-slider-thumb {
-  appearance: none; width: 10px; height: 10px; background: #7BA087; border-radius: 50%;
-}
-.t2 .range-row .rv { font-size: .5rem; color: #7BA087; font-weight: 600; }
-
-/* toggle */
-.t2 .toggle-row { display: flex; justify-content: space-between; align-items: center; padding: 0 1rem; margin-bottom: .5rem; }
-.t2 .toggle-row span { font-size: .5rem; color: #999; }
-.t2 .tgl { width: 28px; height: 16px; background: #7BA087; border-radius: 8px; position: relative; }
-.t2 .tgl::after { content:''; width: 12px; height: 12px; background: #fff; border-radius: 50%; position: absolute; top: 2px; left: 14px; }
-
-/* buttons — pill shaped, very subtle */
-.t2 .btn-area { display: flex; gap: .5rem; padding: .3rem 1rem .6rem; }
-.t2 .bt {
-  flex: 1; padding: .45rem; border-radius: 2rem; font-size: .55rem;
-  font-weight: 600; border: none; cursor: pointer; text-align: center;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-}
-.t2 .bt.p { background: #1A1A1A; color: #FAFAF8; }
-.t2 .bt.s { background: #F0F0EB; color: #666; }
-
-/* bottom nav — dot indicator */
-.t2 .bnav {
-  display: flex; border-top: 1px solid #EEEEE9; background: #FAFAF8;
-}
-.t2 .bnav .nt {
-  flex: 1; text-align: center; padding: .4rem 0; font-size: .4rem;
-  color: #CCC; font-weight: 500;
-}
-.t2 .bnav .nt.active { color: #1A1A1A; }
-.t2 .bnav .nt.active::before {
-  content: ''; display: block; width: 4px; height: 4px;
-  background: #7BA087; border-radius: 50%; margin: 0 auto .15rem;
-}
-
+/* lab utilities */
+.dl .section-hdr{padding:.3rem .5rem;font-size:.38rem;color:#555;text-transform:uppercase;letter-spacing:2px;border-bottom:1px solid #1A1A1A;}
+.dl .panel{margin:.4rem .5rem;background:#0F0F0F;border:1px solid #252525;}
+.dl .panel-title{font-size:.4rem;color:#555;text-transform:uppercase;letter-spacing:2px;padding:.3rem .4rem;border-bottom:1px solid #1A1A1A;}
+.dl .il{font-size:.35rem;color:#555;text-transform:uppercase;letter-spacing:2px;margin-bottom:.15rem;display:block;}
+.dl .ii{width:100%;background:#0F0F0F;border:1px solid #252525;padding:.3rem .4rem;color:#D4A744;font-family:'Space Mono',monospace;font-size:.5rem;}
+.dl .chip-row{display:flex;flex-wrap:wrap;gap:.25rem;padding:0 .5rem;margin-bottom:.4rem;}
+.dl .chip{font-size:.38rem;padding:.15rem .4rem;border:1px solid #252525;color:#777;text-transform:uppercase;letter-spacing:1px;}
+.dl .btn-area{display:flex;gap:.3rem;padding:0 .5rem;margin-bottom:.5rem;}
+.dl .bt{flex:1;padding:.4rem;font-family:'Space Mono',monospace;font-size:.5rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;border:none;cursor:pointer;text-align:center;}
+.dl .bt.p{background:#D4A744;color:#0A0A0A;}
+.dl .bt.s{background:transparent;border:1px solid #D4A744;color:#D4A744;}
 
 /* ============================================================
-   THEME 3 — DARK LAB
-   Monospaced, grid-lined, data console. Dense info layout,
-   segmented displays, technical instrument look.
+   EDITORIAL SCREENS
    ============================================================ */
-.t3 {
-  background: #0A0A0A;
-  font-family: 'Space Mono', 'Courier New', monospace;
-  color: #C8B88A;
-}
-.t3 .topbar {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: .5rem .7rem;
-  background: linear-gradient(180deg, #121212 0%, #0A0A0A 100%);
-  border-bottom: 1px solid #1E1E1E;
-}
-.t3 .topbar .logo { font-size: .65rem; font-weight: 700; color: #D4A744; letter-spacing: 2px; text-transform: uppercase; }
-.t3 .topbar .status { display: flex; gap: .3rem; align-items: center; }
-.t3 .topbar .dot-live { width: 6px; height: 6px; background: #4A7; border-radius: 50%; box-shadow: 0 0 4px #4A7; }
-.t3 .topbar .st { font-size: .4rem; color: #555; }
 
-/* segmented display — like LCD readouts */
-.t3 .readouts {
-  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px;
-  background: #1A1A1A; margin: .5rem .5rem; border: 1px solid #252525;
-}
-.t3 .ro {
-  background: #0F0F0F; padding: .5rem .3rem; text-align: center;
-}
-.t3 .ro .rv { font-size: 1.1rem; font-weight: 700; color: #D4A744; letter-spacing: 1px; }
-.t3 .ro .rl { font-size: .35rem; color: #555; text-transform: uppercase; letter-spacing: 2px; margin-top: .15rem; }
+/* ED: Dashboard */
+.ed .hero{padding:.8rem .7rem .4rem;border-bottom:3px solid #1A1A1A;}
+.ed .hero .big-num{font-family:'Playfair Display',serif;font-weight:900;font-size:2.5rem;line-height:1;letter-spacing:-2px;}
+.ed .hero .big-label{font-size:.5rem;color:#999;margin-top:.1rem;}
+.ed .hero-stats{display:flex;gap:1rem;margin-top:.5rem;}
+.ed .hero-stats .hs .hv{font-family:'Playfair Display',serif;font-weight:900;font-size:1rem;}
+.ed .hero-stats .hs .hl{font-size:.35rem;color:#999;text-transform:uppercase;letter-spacing:1px;}
+.ed .ed-card{margin:.5rem .7rem;display:flex;border:2px solid #1A1A1A;}
+.ed .ed-accent{width:5px;background:#C44B2B;flex-shrink:0;}
+.ed .ed-body{padding:.5rem;flex:1;}
+.ed .ed-body .ed-overline{font-size:.35rem;text-transform:uppercase;letter-spacing:2px;color:#C44B2B;font-weight:700;margin-bottom:.1rem;}
+.ed .ed-body .ed-title{font-family:'Playfair Display',serif;font-weight:900;font-size:.75rem;line-height:1.15;margin-bottom:.15rem;}
+.ed .ed-body .ed-sub{font-size:.42rem;color:#888;line-height:1.4;}
+.ed .ed-score{background:#1A1A1A;color:#FAF7F2;padding:.5rem;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:40px;}
+.ed .ed-score .es-n{font-family:'Playfair Display',serif;font-weight:900;font-size:1.1rem;}
+.ed .ed-score .es-l{font-size:.3rem;color:#888;text-transform:uppercase;}
+.ed .pullquote{margin:.4rem .7rem;padding:.4rem 0 .4rem .7rem;border-left:4px solid #C44B2B;}
+.ed .pullquote .pq-text{font-family:'Playfair Display',serif;font-style:italic;font-size:.65rem;line-height:1.3;}
+.ed .pullquote .pq-attr{font-size:.38rem;color:#999;margin-top:.15rem;}
 
-/* terminal-style brew log */
-.t3 .terminal {
-  margin: .4rem .5rem; background: #0F0F0F; border: 1px solid #252525; padding: .5rem;
-  font-size: .45rem; line-height: 1.6;
-}
-.t3 .terminal .prompt { color: #555; }
-.t3 .terminal .cmd { color: #D4A744; }
-.t3 .terminal .val { color: #C8B88A; }
-.t3 .terminal .comment { color: #3A3A3A; }
+/* ED: History */
+.ed .history-item{margin:0 .7rem .4rem;border:2px solid #1A1A1A;display:flex;}
+.ed .history-item .hi-date{background:#1A1A1A;color:#FAF7F2;padding:.4rem;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:44px;}
+.ed .history-item .hi-day{font-family:'Playfair Display',serif;font-weight:900;font-size:1rem;}
+.ed .history-item .hi-month{font-size:.3rem;text-transform:uppercase;letter-spacing:1px;color:#888;}
+.ed .history-item .hi-body{padding:.4rem .5rem;flex:1;}
+.ed .history-item .hi-name{font-weight:700;font-size:.6rem;}
+.ed .history-item .hi-meta{font-size:.4rem;color:#999;margin-top:.1rem;}
+.ed .history-item .hi-tags{display:flex;gap:.2rem;margin-top:.25rem;}
+.ed .history-item .hi-tag{font-size:.32rem;background:#F0EDE6;padding:.1rem .3rem;font-weight:600;}
+.ed .history-item .hi-score{display:flex;align-items:center;padding:0 .5rem;font-family:'Playfair Display',serif;font-weight:900;font-size:.9rem;color:#C44B2B;}
 
-/* parameters grid — dense data */
-.t3 .params-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
-  background: #1A1A1A; margin: .4rem .5rem; border: 1px solid #252525;
-}
-.t3 .pg {
-  background: #0F0F0F; padding: .35rem .4rem;
-  display: flex; justify-content: space-between;
-}
-.t3 .pg .pk { font-size: .4rem; color: #555; text-transform: uppercase; }
-.t3 .pg .pv { font-size: .5rem; color: #D4A744; font-weight: 700; }
+/* ED: Analytics */
+.ed .ec-row{display:flex;align-items:center;margin-bottom:.25rem;padding:0 .7rem;}
+.ed .ec-row .ecl{width:55px;font-size:.45rem;font-weight:700;text-align:right;margin-right:.5rem;}
+.ed .ec-row .ect{flex:1;height:14px;background:#F0EDE6;}
+.ed .ec-row .ecf{height:14px;background:#C44B2B;}
+.ed .ec-row .ecv{font-size:.4rem;font-weight:700;margin-left:.3rem;width:20px;}
+.ed .ring-area{display:flex;justify-content:center;gap:1.2rem;padding:.5rem .7rem;}
+.ed .ring{text-align:center;}
+.ed .ring svg{width:50px;height:50px;}
+.ed .ring .ring-label{font-size:.35rem;text-transform:uppercase;letter-spacing:1px;color:#999;margin-top:.2rem;}
+.ed .ring .ring-val{font-family:'Playfair Display',serif;font-weight:900;font-size:.7rem;}
+.ed .insight-row{display:flex;gap:.4rem;padding:0 .7rem;margin-bottom:.4rem;}
+.ed .insight{flex:1;border:2px solid #1A1A1A;padding:.4rem;text-align:center;}
+.ed .insight .iv{font-family:'Playfair Display',serif;font-weight:900;font-size:.8rem;}
+.ed .insight .il2{font-size:.33rem;text-transform:uppercase;letter-spacing:1px;color:#999;margin-top:.1rem;}
+.ed .insight.accent{background:#C44B2B;border-color:#C44B2B;color:#fff;}
+.ed .insight.accent .il2{color:rgba(255,255,255,.7);}
 
-/* gauge-style tasting — ASCII arc meters */
-.t3 .gauges {
-  margin: .4rem .5rem; background: #0F0F0F; border: 1px solid #252525; padding: .5rem;
-}
-.t3 .gauge-title { font-size: .4rem; color: #555; text-transform: uppercase; letter-spacing: 2px; margin-bottom: .4rem; }
-.t3 .gauge-row { display: flex; align-items: center; gap: .4rem; margin-bottom: .3rem; }
-.t3 .gauge-row .gl { width: 55px; font-size: .4rem; color: #555; text-align: right; text-transform: uppercase; }
-.t3 .gauge-row .gbar {
-  flex: 1; height: 10px; background: #1A1A1A; border: 1px solid #252525;
-  display: flex; gap: 1px; padding: 1px;
-}
-.t3 .gauge-row .gseg { flex: 1; height: 100%; }
-.t3 .gauge-row .gseg.on { background: #D4A744; }
-.t3 .gauge-row .gseg.off { background: #1A1A1A; }
-.t3 .gauge-row .gv { font-size: .45rem; color: #D4A744; width: 20px; font-weight: 700; }
+/* ED: New Brew */
+.ed .step-indicator{display:flex;gap:0;padding:0 .7rem;margin-bottom:.5rem;}
+.ed .step{flex:1;text-align:center;padding:.3rem 0;font-size:.35rem;text-transform:uppercase;letter-spacing:1px;font-weight:700;border-bottom:3px solid #E0DDD6;color:#CCC;}
+.ed .step.active{border-color:#C44B2B;color:#C44B2B;}
+.ed .step.done{border-color:#1A1A1A;color:#1A1A1A;}
+.ed .select-card{margin:0 .7rem .4rem;border:2px solid #E0DDD6;padding:.5rem;display:flex;justify-content:space-between;align-items:center;cursor:pointer;}
+.ed .select-card.selected{border-color:#C44B2B;background:#FFF5F2;}
+.ed .select-card .sc-name{font-weight:700;font-size:.6rem;}
+.ed .select-card .sc-sub{font-size:.4rem;color:#999;}
+.ed .select-card .sc-check{width:16px;height:16px;border:2px solid #CCC;display:flex;align-items:center;justify-content:center;font-size:.5rem;}
+.ed .select-card.selected .sc-check{border-color:#C44B2B;background:#C44B2B;color:#fff;}
+.ed .param-grid{display:grid;grid-template-columns:1fr 1fr;gap:.3rem .5rem;padding:0 .7rem;margin-bottom:.5rem;}
+.ed .param-grid > div{display:flex;flex-direction:column;}
+.ed .range-row{display:flex;align-items:center;gap:.3rem;padding:0 .7rem;margin-bottom:.4rem;}
+.ed .range-row input[type=range]{flex:1;appearance:none;height:4px;background:#E0DDD6;border-radius:0;}
+.ed .range-row input::-webkit-slider-thumb{appearance:none;width:14px;height:14px;background:#C44B2B;border-radius:0;}
+.ed .range-row .rv{font-size:.5rem;font-weight:700;}
 
-/* chips — bordered, technical */
-.t3 .chip-row { display: flex; flex-wrap: wrap; gap: .25rem; padding: 0 .5rem; margin-bottom: .4rem; }
-.t3 .chip {
-  font-size: .38rem; padding: .15rem .4rem; border: 1px solid #252525;
-  color: #777; text-transform: uppercase; letter-spacing: 1px;
-}
-
-/* input — terminal style */
-.t3 .input-area { padding: 0 .5rem; margin-bottom: .4rem; }
-.t3 .il { font-size: .35rem; color: #555; text-transform: uppercase; letter-spacing: 2px; margin-bottom: .15rem; display: block; }
-.t3 .ii {
-  width: 100%; background: #0F0F0F; border: 1px solid #252525;
-  padding: .3rem .4rem; color: #D4A744; font-family: 'Space Mono', monospace;
-  font-size: .5rem;
-}
-.t3 .ii-row { display: flex; gap: .3rem; }
-.t3 .ii-row .ii { flex: 1; }
-.t3 .range-area { display: flex; align-items: center; gap: .3rem; margin-top: .3rem; margin-bottom: .3rem; }
-.t3 .range-area input[type=range] {
-  flex:1; appearance:none; height:3px; background:#252525; border-radius:0;
-}
-.t3 .range-area input::-webkit-slider-thumb {
-  appearance:none; width:8px; height:14px; background:#D4A744; border-radius:0;
-}
-.t3 .range-area .rv { font-size:.45rem; color:#D4A744; font-weight:700; font-family:'Space Mono',monospace; }
-
-/* buttons — sharp, industrial */
-.t3 .btn-area { display: flex; gap: .3rem; padding: 0 .5rem; margin-bottom: .5rem; }
-.t3 .bt {
-  flex:1; padding:.4rem; font-family:'Space Mono',monospace; font-size:.5rem;
-  font-weight:700; text-transform:uppercase; letter-spacing:1px;
-  border:none; cursor:pointer; text-align:center;
-}
-.t3 .bt.p { background:#D4A744; color:#0A0A0A; }
-.t3 .bt.s { background:transparent; border:1px solid #D4A744; color:#D4A744; }
-
-/* bottom nav — segmented */
-.t3 .bnav {
-  display:flex; background:#0F0F0F; border-top:1px solid #252525;
-}
-.t3 .bnav .nt {
-  flex:1; text-align:center; padding:.35rem 0; font-size:.35rem;
-  color:#3A3A3A; text-transform:uppercase; letter-spacing:1px; border-right:1px solid #1A1A1A;
-}
-.t3 .bnav .nt:last-child { border-right:none; }
-.t3 .bnav .nt.active { color:#D4A744; background:#1A1800; }
-
+/* ED: Brew Detail */
+.ed .detail-hero{padding:.7rem;border-bottom:3px solid #1A1A1A;display:flex;justify-content:space-between;align-items:flex-end;}
+.ed .detail-hero .dh-left{}
+.ed .detail-hero .dh-score{font-family:'Playfair Display',serif;font-weight:900;font-size:2rem;color:#C44B2B;line-height:1;}
+.ed .detail-hero .dh-label{font-size:.35rem;color:#999;text-transform:uppercase;letter-spacing:1px;}
+.ed .recipe-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:#1A1A1A;margin:.5rem .7rem;border:2px solid #1A1A1A;}
+.ed .recipe-grid .rg{background:#FAF7F2;padding:.4rem;text-align:center;}
+.ed .recipe-grid .rg .rg-v{font-family:'Playfair Display',serif;font-weight:900;font-size:.75rem;}
+.ed .recipe-grid .rg .rg-l{font-size:.3rem;text-transform:uppercase;letter-spacing:1px;color:#999;margin-top:.05rem;}
+.ed .taste-bars{padding:0 .7rem;margin-bottom:.4rem;}
+.ed .tb-row{display:flex;align-items:center;margin-bottom:.2rem;}
+.ed .tb-row .tb-l{width:55px;font-size:.42rem;font-weight:700;text-align:right;margin-right:.5rem;}
+.ed .tb-row .tb-track{flex:1;height:6px;background:#F0EDE6;}
+.ed .tb-row .tb-fill{height:6px;background:#C44B2B;}
+.ed .tb-row .tb-v{font-size:.4rem;font-weight:700;margin-left:.4rem;width:14px;}
+.ed .ai-card{margin:.4rem .7rem;background:#1A1A1A;color:#FAF7F2;padding:.6rem;}
+.ed .ai-card .ai-label{font-size:.35rem;text-transform:uppercase;letter-spacing:2px;color:#888;margin-bottom:.25rem;}
+.ed .ai-card .ai-text{font-size:.45rem;line-height:1.5;color:#CCC;}
 
 /* ============================================================
-   THEME 4 — BOLD EDITORIAL
-   Magazine layout. Oversized type, dramatic contrast,
-   asymmetric, pull-quotes, strong visual hierarchy.
+   DARK LAB SCREENS
    ============================================================ */
-.t4 {
-  background: #FAF7F2;
-  font-family: 'DM Sans', system-ui, sans-serif;
-  color: #1A1A1A;
-}
-.t4 .topbar {
-  background: #1A1A1A; color: #FAF7F2;
-  padding: .5rem .7rem; display: flex; justify-content: space-between; align-items: center;
-}
-.t4 .topbar .logo {
-  font-family: 'Playfair Display', serif; font-weight: 900;
-  font-size: .7rem; letter-spacing: -0.5px;
-}
-.t4 .topbar .issue { font-size: .35rem; color: #888; text-transform: uppercase; letter-spacing: 2px; }
 
-/* hero section — oversized number */
-.t4 .hero {
-  padding: .8rem .7rem .4rem;
-  border-bottom: 3px solid #1A1A1A;
-}
-.t4 .hero .kicker {
-  font-size: .4rem; text-transform: uppercase; letter-spacing: 3px; color: #C44B2B;
-  font-weight: 700; margin-bottom: .2rem;
-}
-.t4 .hero .big-num {
-  font-family: 'Playfair Display', serif; font-weight: 900;
-  font-size: 2.5rem; line-height: 1; letter-spacing: -2px; color: #1A1A1A;
-}
-.t4 .hero .big-label { font-size: .5rem; color: #999; margin-top: .1rem; }
-.t4 .hero-stats {
-  display: flex; gap: 1rem; margin-top: .5rem;
-}
-.t4 .hero-stats .hs { }
-.t4 .hero-stats .hs .hv { font-family: 'Playfair Display', serif; font-weight: 900; font-size: 1rem; }
-.t4 .hero-stats .hs .hl { font-size: .35rem; color: #999; text-transform: uppercase; letter-spacing: 1px; }
+/* DL: Dashboard */
+.dl .readouts{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:#1A1A1A;margin:.5rem .5rem;border:1px solid #252525;}
+.dl .ro{background:#0F0F0F;padding:.5rem .3rem;text-align:center;}
+.dl .ro .rv2{font-size:1.1rem;font-weight:700;color:#D4A744;letter-spacing:1px;}
+.dl .ro .rl{font-size:.35rem;color:#555;text-transform:uppercase;letter-spacing:2px;margin-top:.15rem;}
+.dl .terminal{margin:.4rem .5rem;background:#0F0F0F;border:1px solid #252525;padding:.5rem;font-size:.45rem;line-height:1.6;}
+.dl .terminal .prompt{color:#555;}
+.dl .terminal .cmd{color:#D4A744;}
+.dl .terminal .val{color:#C8B88A;}
+.dl .terminal .comment{color:#3A3A3A;}
+.dl .params-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#1A1A1A;margin:.4rem .5rem;border:1px solid #252525;}
+.dl .pg{background:#0F0F0F;padding:.35rem .4rem;display:flex;justify-content:space-between;}
+.dl .pg .pk{font-size:.4rem;color:#555;text-transform:uppercase;}
+.dl .pg .pv{font-size:.5rem;color:#D4A744;font-weight:700;}
+.dl .gauges{margin:.4rem .5rem;background:#0F0F0F;border:1px solid #252525;padding:.5rem;}
+.dl .gauge-title{font-size:.4rem;color:#555;text-transform:uppercase;letter-spacing:2px;margin-bottom:.4rem;}
+.dl .gauge-row{display:flex;align-items:center;gap:.4rem;margin-bottom:.3rem;}
+.dl .gauge-row .gl{width:48px;font-size:.38rem;color:#555;text-align:right;text-transform:uppercase;}
+.dl .gauge-row .gbar{flex:1;height:10px;background:#1A1A1A;border:1px solid #252525;display:flex;gap:1px;padding:1px;}
+.dl .gauge-row .gseg{flex:1;height:100%;}
+.dl .gauge-row .gseg.on{background:#D4A744;}
+.dl .gauge-row .gseg.off{background:#1A1A1A;}
+.dl .gauge-row .gv{font-size:.42rem;color:#D4A744;width:18px;font-weight:700;}
 
-/* editorial card — asymmetric, left bar accent */
-.t4 .ed-card {
-  margin: .6rem .7rem; display: flex; gap: 0;
-  border: 2px solid #1A1A1A;
-}
-.t4 .ed-accent { width: 5px; background: #C44B2B; flex-shrink: 0; }
-.t4 .ed-body { padding: .5rem; flex: 1; }
-.t4 .ed-body .ed-overline {
-  font-size: .35rem; text-transform: uppercase; letter-spacing: 2px;
-  color: #C44B2B; font-weight: 700; margin-bottom: .15rem;
-}
-.t4 .ed-body .ed-title {
-  font-family: 'Playfair Display', serif; font-weight: 900;
-  font-size: .8rem; line-height: 1.15; margin-bottom: .2rem;
-}
-.t4 .ed-body .ed-sub { font-size: .45rem; color: #888; line-height: 1.4; }
-.t4 .ed-score {
-  background: #1A1A1A; color: #FAF7F2; padding: .5rem;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  min-width: 40px;
-}
-.t4 .ed-score .es-n { font-family: 'Playfair Display', serif; font-weight: 900; font-size: 1.1rem; }
-.t4 .ed-score .es-l { font-size: .3rem; color: #888; text-transform: uppercase; }
+/* DL: History (log format) */
+.dl .log-entry{margin:.3rem .5rem;border:1px solid #252525;background:#0F0F0F;}
+.dl .log-entry .le-header{display:flex;justify-content:space-between;padding:.3rem .4rem;border-bottom:1px solid #1A1A1A;}
+.dl .log-entry .le-id{font-size:.4rem;color:#D4A744;}
+.dl .log-entry .le-ts{font-size:.35rem;color:#3A3A3A;}
+.dl .log-entry .le-body{padding:.3rem .4rem;font-size:.42rem;}
+.dl .log-entry .le-row{display:flex;justify-content:space-between;margin-bottom:.1rem;}
+.dl .log-entry .le-row .lk{color:#555;}
+.dl .log-entry .le-row .lv{color:#C8B88A;}
+.dl .log-entry .le-score{display:flex;justify-content:flex-end;padding:.2rem .4rem;border-top:1px solid #1A1A1A;}
+.dl .log-entry .le-score span{font-size:.5rem;font-weight:700;color:#D4A744;}
 
-/* pullquote-style tasting */
-.t4 .pullquote {
-  margin: .4rem .7rem; padding: .5rem 0 .5rem .7rem;
-  border-left: 4px solid #C44B2B;
-}
-.t4 .pullquote .pq-text {
-  font-family: 'Playfair Display', serif; font-style: italic;
-  font-size: .7rem; line-height: 1.3; color: #1A1A1A;
-}
-.t4 .pullquote .pq-attr { font-size: .4rem; color: #999; margin-top: .2rem; }
+/* DL: Analytics */
+.dl .data-table{margin:.4rem .5rem;border:1px solid #252525;}
+.dl .dt-header{display:grid;grid-template-columns:1fr .6fr .6fr;background:#1A1800;padding:.25rem .4rem;font-size:.35rem;color:#D4A744;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid #252525;}
+.dl .dt-row{display:grid;grid-template-columns:1fr .6fr .6fr;padding:.25rem .4rem;font-size:.42rem;border-bottom:1px solid #1A1A1A;}
+.dl .dt-row .dk{color:#555;}
+.dl .dt-row .dv{color:#C8B88A;text-align:right;}
+.dl .dt-row .dh{color:#D4A744;text-align:right;font-weight:700;}
+.dl .sparkline{margin:.4rem .5rem;background:#0F0F0F;border:1px solid #252525;padding:.5rem;}
+.dl .sparkline .sp-title{font-size:.38rem;color:#555;text-transform:uppercase;letter-spacing:2px;margin-bottom:.4rem;}
+.dl .spark-bars{display:flex;gap:2px;align-items:flex-end;height:40px;}
+.dl .spark-bars .sb{flex:1;background:#D4A744;min-height:3px;border-top:1px solid #D4A744;}
+.dl .agg-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#1A1A1A;margin:.4rem .5rem;border:1px solid #252525;}
+.dl .ag{background:#0F0F0F;padding:.4rem;text-align:center;}
+.dl .ag .agv{font-size:.8rem;font-weight:700;color:#D4A744;}
+.dl .ag .agl{font-size:.32rem;color:#555;text-transform:uppercase;letter-spacing:1.5px;margin-top:.1rem;}
 
-/* bar chart — bold, thick bars */
-.t4 .ed-chart { padding: .3rem .7rem; margin-bottom: .3rem; }
-.t4 .ec-title { font-size: .4rem; text-transform: uppercase; letter-spacing: 2px; color: #999; font-weight: 700; margin-bottom: .3rem; }
-.t4 .ec-row { display: flex; align-items: center; margin-bottom: .25rem; }
-.t4 .ec-row .ecl { width: 55px; font-size: .45rem; font-weight: 700; text-align: right; margin-right: .5rem; }
-.t4 .ec-row .ect { flex: 1; height: 14px; background: #F0EDE6; }
-.t4 .ec-row .ecf { height: 14px; background: #C44B2B; }
-.t4 .ec-row .ecv { font-size: .4rem; font-weight: 700; margin-left: .3rem; width: 20px; }
+/* DL: New Brew */
+.dl .phase-bar{display:flex;margin:.5rem .5rem .4rem;border:1px solid #252525;}
+.dl .phase{flex:1;text-align:center;padding:.25rem;font-size:.35rem;text-transform:uppercase;letter-spacing:1px;color:#3A3A3A;background:#0F0F0F;border-right:1px solid #252525;}
+.dl .phase:last-child{border-right:none;}
+.dl .phase.active{color:#D4A744;background:#1A1800;border-bottom:2px solid #D4A744;}
+.dl .phase.done{color:#4A7;background:#0A1A0A;}
+.dl .select-panel{margin:.3rem .5rem;border:1px solid #252525;background:#0F0F0F;padding:.4rem;display:flex;justify-content:space-between;align-items:center;cursor:pointer;}
+.dl .select-panel.selected{border-color:#D4A744;background:#1A1800;}
+.dl .select-panel .sp-name{font-size:.45rem;color:#C8B88A;}
+.dl .select-panel .sp-sub{font-size:.35rem;color:#3A3A3A;margin-top:.1rem;}
+.dl .select-panel .sp-check{width:12px;height:12px;border:1px solid #3A3A3A;}
+.dl .select-panel.selected .sp-check{border-color:#D4A744;background:#D4A744;}
+.dl .input-grid{display:grid;grid-template-columns:1fr 1fr;gap:.3rem;padding:0 .5rem;margin-bottom:.4rem;}
+.dl .input-grid > div {}
+.dl .range-area{display:flex;align-items:center;gap:.3rem;padding:0 .5rem;margin-bottom:.4rem;}
+.dl .range-area input[type=range]{flex:1;appearance:none;height:3px;background:#252525;border-radius:0;}
+.dl .range-area input::-webkit-slider-thumb{appearance:none;width:8px;height:14px;background:#D4A744;border-radius:0;}
+.dl .range-area .rv{font-size:.45rem;color:#D4A744;font-weight:700;font-family:'Space Mono',monospace;}
 
-/* chips — black bg */
-.t4 .chip-row { display: flex; flex-wrap: wrap; gap: .3rem; padding: 0 .7rem; margin-bottom: .5rem; }
-.t4 .chip {
-  background: #1A1A1A; color: #FAF7F2; padding: .2rem .55rem;
-  font-size: .42rem; font-weight: 700; text-transform: uppercase; letter-spacing: .5px;
-}
+/* DL: Detail */
+.dl .detail-header{padding:.5rem;border-bottom:1px solid #252525;display:flex;justify-content:space-between;align-items:center;}
+.dl .detail-header .dh-name{font-size:.55rem;color:#D4A744;}
+.dl .detail-header .dh-score{font-size:1rem;font-weight:700;color:#D4A744;}
+.dl .detail-header .dh-id{font-size:.35rem;color:#3A3A3A;}
+.dl .ai-panel{margin:.4rem .5rem;background:#0F0F0F;border:1px solid #252525;border-left:3px solid #D4A744;padding:.5rem;font-size:.42rem;line-height:1.6;color:#777;}
+.dl .ai-panel .aip-label{font-size:.35rem;color:#D4A744;text-transform:uppercase;letter-spacing:2px;margin-bottom:.2rem;}
 
-/* form — heavy borders, bold labels */
-.t4 .form-area { padding: 0 .7rem; margin-bottom: .3rem; }
-.t4 .fl {
-  font-size: .4rem; text-transform: uppercase; letter-spacing: 2px;
-  font-weight: 700; margin-bottom: .15rem; display: block;
-}
-.t4 .fi {
-  width: 100%; border: 2px solid #1A1A1A; padding: .35rem .4rem;
-  font-size: .55rem; background: #fff; font-family: 'DM Sans', sans-serif;
-  margin-bottom: .4rem;
-}
-.t4 .fi-row { display: flex; gap: .4rem; }
-.t4 .fi-row > div { flex: 1; }
-.t4 .range-row { display: flex; align-items: center; gap: .3rem; margin-bottom: .4rem; }
-.t4 .range-row input[type=range] {
-  flex:1; appearance:none; height:4px; background:#E0DDD6; border-radius:0;
-}
-.t4 .range-row input::-webkit-slider-thumb {
-  appearance:none; width:14px; height:14px; background:#C44B2B; border-radius:0;
-}
-.t4 .range-row .rv { font-size:.5rem; font-weight:700; }
-
-/* toggle */
-.t4 .toggle-row { display: flex; justify-content: space-between; align-items: center; padding: 0 .7rem; margin-bottom: .4rem; }
-.t4 .toggle-row span { font-size: .5rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
-.t4 .tgl { width: 30px; height: 16px; background: #C44B2B; border-radius: 0; position: relative; }
-.t4 .tgl::after { content:''; width: 12px; height: 12px; background: #fff; position: absolute; top: 2px; left: 16px; }
-
-/* buttons — sharp, editorial */
-.t4 .btn-area { display: flex; gap: .4rem; padding: 0 .7rem; margin-bottom: .6rem; }
-.t4 .bt {
-  flex:1; padding:.5rem; font-size:.55rem; font-weight:700;
-  text-transform: uppercase; letter-spacing: 1px;
-  border:none; cursor:pointer; text-align:center;
-  font-family: 'DM Sans', sans-serif;
-}
-.t4 .bt.p { background:#C44B2B; color:#fff; }
-.t4 .bt.s { background:transparent; border:2px solid #1A1A1A; color:#1A1A1A; }
-
-/* bottom nav — heavy top border, editorial */
-.t4 .bnav {
-  display:flex; background:#1A1A1A;
-}
-.t4 .bnav .nt {
-  flex:1; text-align:center; padding:.4rem 0; font-size:.38rem;
-  color:#666; text-transform:uppercase; letter-spacing:1px; font-weight:700;
-}
-.t4 .bnav .nt.active { color:#C44B2B; }
 </style>
 </head>
 <body>
 
-<h1>Brew Better - Pick a Direction</h1>
-<p class="sub">Same app, four completely different design languages. Which one feels right?</p>
+<h1>Brew Better - Design Deep Dive</h1>
+<p class="sub">Two finalists, five screens each. See how each aesthetic carries across the full app.</p>
 
-<div class="grid">
+<!-- ============================================================
+     BOLD EDITORIAL
+     ============================================================ -->
+<div class="theme-label">Bold Editorial</div>
+<div class="theme-desc">Magazine-grade typography, dramatic contrast, asymmetric layouts, pull-quotes</div>
 
-<!-- ====== THEME 1: WARM CRAFT ====== -->
+<div class="row">
+
+<!-- ED: Dashboard -->
 <div class="phone-wrap">
-  <h2>Warm Craft</h2>
-  <p class="desc">Artisanal, textured, cozy coffee-shop energy</p>
-  <div class="phone t1">
-    <div class="topbar">
-      <div class="logo">Brew Better</div>
-      <div class="date">Thursday, Mar 5</div>
-    </div>
-    <div class="content">
-      <div class="greeting-card">
-        <div class="hello">Good morning,</div>
-        <div class="msg">Your last V60 was a 4.5. Let's beat that today.</div>
-        <div class="streak">7-day brew streak going strong</div>
-      </div>
-      <div class="stat-strip">
-        <div class="stat-pill"><span class="n">142</span> brews</div>
-        <div class="stat-pill"><span class="n">4.2</span> avg</div>
-        <div class="stat-pill"><span class="n">12</span> beans</div>
-      </div>
-      <div class="card-label">Latest Brew</div>
-      <div class="recipe-card">
-        <div class="recipe-header">
-          <span class="name">Yirgacheffe Natural</span>
-          <span class="rating">4.5</span>
-        </div>
-        <div class="recipe-body">
-          <div class="recipe-meta">V60 pour-over &middot; this morning</div>
-          <div class="recipe-params">
-            <div class="p"><span class="k">Dose</span><span class="v">18.0g</span></div>
-            <div class="p"><span class="k">Water</span><span class="v">300ml</span></div>
-            <div class="p"><span class="k">Ratio</span><span class="v">1:16.7</span></div>
-            <div class="p"><span class="k">Temp</span><span class="v">94C</span></div>
-          </div>
-        </div>
-      </div>
-      <div class="card-label">Tasting Notes</div>
-      <div class="tasting-section">
-        <div class="tasting-grid">
-          <div class="trow"><span class="tl">Acidity</span><div class="beans"><div class="bean f"></div><div class="bean f"></div><div class="bean f"></div><div class="bean f"></div><div class="bean e"></div></div></div>
-          <div class="trow"><span class="tl">Sweet</span><div class="beans"><div class="bean f"></div><div class="bean f"></div><div class="bean f"></div><div class="bean e"></div><div class="bean e"></div></div></div>
-          <div class="trow"><span class="tl">Body</span><div class="beans"><div class="bean f"></div><div class="bean f"></div><div class="bean e"></div><div class="bean e"></div><div class="bean e"></div></div></div>
-          <div class="trow"><span class="tl">Finish</span><div class="beans"><div class="bean f"></div><div class="bean f"></div><div class="bean f"></div><div class="bean f"></div><div class="bean e"></div></div></div>
-        </div>
-      </div>
-      <div class="tag-row">
-        <span class="tag">Ethiopian</span><span class="tag">Light Roast</span>
-        <span class="tag">Washed</span><span class="tag">V60</span><span class="tag">Fruity</span>
-      </div>
-      <div class="form-section">
-        <input class="finput" value="Yirgacheffe Natural" readonly>
-        <div class="frow">
-          <input class="finput" value="V60" readonly>
-          <input class="finput" value="18.0g" readonly>
-        </div>
-        <div class="slider-row">
-          <label>Temp</label>
-          <input type="range" min="80" max="100" value="94">
-          <span class="sv">94C</span>
-        </div>
-      </div>
-      <div class="btn-row">
-        <button class="btn p">Log This Brew</button>
-        <button class="btn s">Draft</button>
+<div class="screen-name">Dashboard</div>
+<div class="phone ed">
+  <div class="topbar"><div class="logo">Brew Better</div><div class="tr">Vol. 142</div></div>
+  <div class="content">
+    <div class="hero">
+      <div class="kicker">This Week</div>
+      <div class="big-num">4.5</div>
+      <div class="big-label">Your best brew yet</div>
+      <div class="hero-stats">
+        <div class="hs"><div class="hv">142</div><div class="hl">Total Brews</div></div>
+        <div class="hs"><div class="hv">4.2</div><div class="hl">Lifetime Avg</div></div>
+        <div class="hs"><div class="hv">12</div><div class="hl">Beans Tried</div></div>
       </div>
     </div>
-    <div class="bnav">
-      <div class="nt active">Home</div>
-      <div class="nt">Brew</div>
-      <div class="nt">History</div>
-      <div class="nt">Taste</div>
-      <div class="nt">Settings</div>
+    <div class="ed-card">
+      <div class="ed-accent"></div>
+      <div class="ed-body">
+        <div class="ed-overline">Latest Pour</div>
+        <div class="ed-title">Yirgacheffe Natural</div>
+        <div class="ed-sub">V60 &middot; 18g/300ml &middot; 94C &middot; Bright acidity, stone fruit, clean finish.</div>
+      </div>
+      <div class="ed-score"><div class="es-n">4.5</div><div class="es-l">Score</div></div>
+    </div>
+    <div class="pullquote">
+      <div class="pq-text">"Blueberry brightness with honey sweetness that lingers."</div>
+      <div class="pq-attr">- This morning's tasting note</div>
+    </div>
+    <div class="chip-row">
+      <span class="chip">Ethiopian</span><span class="chip">Light Roast</span><span class="chip">V60</span><span class="chip">Fruity</span>
     </div>
   </div>
+  <div class="bnav"><div class="nt active">Home</div><div class="nt">Brew</div><div class="nt">History</div><div class="nt">Data</div><div class="nt">More</div></div>
+</div>
 </div>
 
-<!-- ====== THEME 2: CLEAN MINIMAL ====== -->
+<!-- ED: History -->
 <div class="phone-wrap">
-  <h2>Clean Minimal</h2>
-  <p class="desc">Scandinavian, airy, premium productivity tool</p>
-  <div class="phone t2">
-    <div class="topbar">
-      <div class="logo">brew better</div>
-      <div class="avatar">Y</div>
+<div class="screen-name">Brew History</div>
+<div class="phone ed">
+  <div class="topbar"><div class="logo">Brew Better</div><div class="tr">Archive</div></div>
+  <div class="content">
+    <div style="padding:.6rem .7rem .3rem;">
+      <div class="kicker">Your Journal</div>
+      <div class="sect-title">Brew History</div>
+      <div class="sect-sub">23 brews this month</div>
     </div>
-    <div class="content">
-      <div class="stats-float">
-        <div class="sf"><div class="n">142</div><div class="l">Brews</div></div>
-        <div class="sf"><div class="n">4.2</div><div class="l">Average</div></div>
-        <div class="sf"><div class="n">12</div><div class="l">Beans</div></div>
-      </div>
-      <div class="divider"></div>
-      <div class="section-label">Enjoyment by Origin</div>
-      <div class="mini-chart">
-        <div class="mc-row"><span class="ml">Ethiopia</span><div class="mt"><div class="mf" style="width:88%"></div></div><span class="mv">4.4</span></div>
-        <div class="mc-row"><span class="ml">Colombia</span><div class="mt"><div class="mf" style="width:76%"></div></div><span class="mv">3.8</span></div>
-        <div class="mc-row"><span class="ml">Kenya</span><div class="mt"><div class="mf" style="width:68%"></div></div><span class="mv">3.4</span></div>
-      </div>
-      <div class="divider"></div>
-      <div class="section-label">Recent</div>
-      <div class="mcard">
-        <div class="mc-top">
-          <div>
-            <div class="mc-name">Yirgacheffe Natural</div>
-            <div class="mc-sub">V60 &middot; 18g &rarr; 300ml &middot; 3:20 &middot; today</div>
-          </div>
-          <div class="mc-score">4.5</div>
-        </div>
-        <div class="mc-tags">
-          <span class="mc-tag">Ethiopian</span>
-          <span class="mc-tag">Light</span>
-          <span class="mc-tag">Washed</span>
-          <span class="mc-tag">Fruity</span>
-        </div>
-      </div>
-      <div class="divider"></div>
-      <div class="section-label">Tasting</div>
-      <div class="taste-section">
-        <div class="taste-row"><span class="tl">Acidity</span><div class="tline"><div class="tdot" style="left:78%"></div></div></div>
-        <div class="taste-row"><span class="tl">Sweetness</span><div class="tline"><div class="tdot" style="left:58%"></div></div></div>
-        <div class="taste-row"><span class="tl">Body</span><div class="tline"><div class="tdot" style="left:38%"></div></div></div>
-        <div class="taste-row"><span class="tl">Aftertaste</span><div class="tline"><div class="tdot" style="left:72%"></div></div></div>
-      </div>
-      <div class="divider"></div>
-      <div class="section-label">Quick Log</div>
-      <div class="form-area">
-        <label class="fl">Bean</label>
-        <input class="fi" value="Yirgacheffe Natural" readonly>
-        <div class="fi-row">
-          <div><label class="fl">Method</label><input class="fi" value="V60" readonly></div>
-          <div><label class="fl">Dose</label><input class="fi" value="18.0g" readonly></div>
-        </div>
-        <label class="fl">Temperature</label>
-        <div class="range-row">
-          <input type="range" min="80" max="100" value="94">
-          <span class="rv">94</span>
-        </div>
-      </div>
-      <div class="toggle-row"><span>AI Commentary</span><div class="tgl"></div></div>
-      <div class="btn-area">
-        <button class="bt p">Log Brew</button>
-        <button class="bt s">Save Draft</button>
-      </div>
+    <div class="chip-row">
+      <span class="chip" style="background:#C44B2B;color:#fff;">All</span><span class="chip">This Week</span><span class="chip">This Month</span><span class="chip">V60</span>
     </div>
-    <div class="bnav">
-      <div class="nt active">Home</div>
-      <div class="nt">Brew</div>
-      <div class="nt">History</div>
-      <div class="nt">Analytics</div>
-      <div class="nt">Settings</div>
+    <div class="history-item">
+      <div class="hi-date"><div class="hi-day">5</div><div class="hi-month">Mar</div></div>
+      <div class="hi-body"><div class="hi-name">Yirgacheffe Natural</div><div class="hi-meta">V60 &middot; 18g &middot; 94C &middot; 3:20</div><div class="hi-tags"><span class="hi-tag">Ethiopian</span><span class="hi-tag">Light</span></div></div>
+      <div class="hi-score">4.5</div>
+    </div>
+    <div class="history-item">
+      <div class="hi-date"><div class="hi-day">4</div><div class="hi-month">Mar</div></div>
+      <div class="hi-body"><div class="hi-name">Huila Supremo</div><div class="hi-meta">Chemex &middot; 30g &middot; 92C &middot; 4:10</div><div class="hi-tags"><span class="hi-tag">Colombian</span><span class="hi-tag">Medium</span></div></div>
+      <div class="hi-score">3.8</div>
+    </div>
+    <div class="history-item">
+      <div class="hi-date"><div class="hi-day">3</div><div class="hi-month">Mar</div></div>
+      <div class="hi-body"><div class="hi-name">Nyeri AA</div><div class="hi-meta">AeroPress &middot; 15g &middot; 88C &middot; 1:45</div><div class="hi-tags"><span class="hi-tag">Kenyan</span><span class="hi-tag">Light</span></div></div>
+      <div class="hi-score">4.1</div>
+    </div>
+    <div class="history-item">
+      <div class="hi-date"><div class="hi-day">2</div><div class="hi-month">Mar</div></div>
+      <div class="hi-body"><div class="hi-name">Antigua Pastores</div><div class="hi-meta">French Press &middot; 28g &middot; 96C &middot; 4:00</div><div class="hi-tags"><span class="hi-tag">Guatemala</span><span class="hi-tag">Dark</span></div></div>
+      <div class="hi-score">3.2</div>
+    </div>
+    <div class="history-item">
+      <div class="hi-date"><div class="hi-day">1</div><div class="hi-month">Mar</div></div>
+      <div class="hi-body"><div class="hi-name">Sidamo Washed</div><div class="hi-meta">V60 &middot; 18g &middot; 93C &middot; 3:05</div><div class="hi-tags"><span class="hi-tag">Ethiopian</span><span class="hi-tag">Washed</span></div></div>
+      <div class="hi-score">4.3</div>
     </div>
   </div>
+  <div class="bnav"><div class="nt">Home</div><div class="nt">Brew</div><div class="nt active">History</div><div class="nt">Data</div><div class="nt">More</div></div>
+</div>
 </div>
 
-<!-- ====== THEME 3: DARK LAB ====== -->
+<!-- ED: Analytics -->
 <div class="phone-wrap">
-  <h2>Dark Lab</h2>
-  <p class="desc">Precision instrument, scientific brewing console</p>
-  <div class="phone t3">
-    <div class="topbar">
-      <div class="logo">BREW_BETTER</div>
-      <div class="status"><div class="dot-live"></div><span class="st">SYS OK</span></div>
+<div class="screen-name">Analytics</div>
+<div class="phone ed">
+  <div class="topbar"><div class="logo">Brew Better</div><div class="tr">Insights</div></div>
+  <div class="content">
+    <div style="padding:.6rem .7rem .3rem;">
+      <div class="kicker">Your Taste</div>
+      <div class="sect-title">Analytics</div>
     </div>
-    <div class="content">
-      <div class="readouts">
-        <div class="ro"><div class="rv">142</div><div class="rl">Brews</div></div>
-        <div class="ro"><div class="rv">4.2</div><div class="rl">Avg Scr</div></div>
-        <div class="ro"><div class="rv">012</div><div class="rl">Beans</div></div>
-      </div>
-      <div class="terminal">
-        <div><span class="prompt">&gt; </span><span class="cmd">last_brew</span></div>
-        <div><span class="prompt">  bean: </span><span class="val">Yirgacheffe Natural</span></div>
-        <div><span class="prompt">  method: </span><span class="val">V60 pour-over</span></div>
-        <div><span class="prompt">  score: </span><span class="val">4.5/5.0</span></div>
-        <div><span class="comment">  # logged 2h ago</span></div>
-      </div>
-      <div class="params-grid">
-        <div class="pg"><span class="pk">Dose</span><span class="pv">18.0g</span></div>
-        <div class="pg"><span class="pk">Water</span><span class="pv">300ml</span></div>
-        <div class="pg"><span class="pk">Ratio</span><span class="pv">1:16.7</span></div>
-        <div class="pg"><span class="pk">Temp</span><span class="pv">94.0C</span></div>
-        <div class="pg"><span class="pk">Bloom</span><span class="pv">00:45</span></div>
-        <div class="pg"><span class="pk">Total</span><span class="pv">03:20</span></div>
-      </div>
-      <div class="gauges">
-        <div class="gauge-title">Tasting Analysis</div>
-        <div class="gauge-row"><span class="gl">ACID</span><div class="gbar"><div class="gseg on"></div><div class="gseg on"></div><div class="gseg on"></div><div class="gseg on"></div><div class="gseg off"></div></div><span class="gv">4</span></div>
-        <div class="gauge-row"><span class="gl">SWEET</span><div class="gbar"><div class="gseg on"></div><div class="gseg on"></div><div class="gseg on"></div><div class="gseg off"></div><div class="gseg off"></div></div><span class="gv">3</span></div>
-        <div class="gauge-row"><span class="gl">BODY</span><div class="gbar"><div class="gseg on"></div><div class="gseg on"></div><div class="gseg off"></div><div class="gseg off"></div><div class="gseg off"></div></div><span class="gv">2</span></div>
-        <div class="gauge-row"><span class="gl">FINISH</span><div class="gbar"><div class="gseg on"></div><div class="gseg on"></div><div class="gseg on"></div><div class="gseg on"></div><div class="gseg off"></div></div><span class="gv">4</span></div>
-      </div>
-      <div class="chip-row">
-        <span class="chip">ETHIOPIAN</span><span class="chip">LIGHT</span>
-        <span class="chip">WASHED</span><span class="chip">V60</span>
-      </div>
-      <div class="input-area">
-        <label class="il">Bean ID</label>
-        <input class="ii" value="yirgacheffe_natural_v2" readonly>
-        <div class="ii-row" style="margin-top:.3rem">
-          <div><label class="il">Method</label><input class="ii" value="V60" readonly></div>
-          <div><label class="il">Dose (g)</label><input class="ii" value="18.0" readonly></div>
-        </div>
-        <label class="il" style="margin-top:.3rem">Temp (C)</label>
-        <div class="range-area">
-          <input type="range" min="80" max="100" value="94">
-          <span class="rv">094</span>
-        </div>
-      </div>
-      <div class="btn-area">
-        <button class="bt p">EXECUTE</button>
-        <button class="bt s">STAGE</button>
-      </div>
+    <div class="insight-row">
+      <div class="insight accent"><div class="iv">Ethiopia</div><div class="il2">Top Origin</div></div>
+      <div class="insight"><div class="iv">Light</div><div class="il2">Top Roast</div></div>
+      <div class="insight"><div class="iv">Washed</div><div class="il2">Top Process</div></div>
     </div>
-    <div class="bnav">
-      <div class="nt active">DASH</div>
-      <div class="nt">LOG</div>
-      <div class="nt">HIST</div>
-      <div class="nt">DATA</div>
-      <div class="nt">SYS</div>
+    <div class="divider"></div>
+    <div style="padding:.4rem .7rem .2rem;"><div class="kicker">By Origin</div></div>
+    <div class="ec-row"><span class="ecl">Ethiopia</span><div class="ect"><div class="ecf" style="width:88%"></div></div><span class="ecv">4.4</span></div>
+    <div class="ec-row"><span class="ecl">Colombia</span><div class="ect"><div class="ecf" style="width:76%"></div></div><span class="ecv">3.8</span></div>
+    <div class="ec-row"><span class="ecl">Kenya</span><div class="ect"><div class="ecf" style="width:68%"></div></div><span class="ecv">3.4</span></div>
+    <div class="ec-row"><span class="ecl">Guatemala</span><div class="ect"><div class="ecf" style="width:56%"></div></div><span class="ecv">2.8</span></div>
+    <div class="divider-thin"></div>
+    <div style="padding:.3rem .7rem .2rem;"><div class="kicker">By Roast</div></div>
+    <div class="ec-row"><span class="ecl">Light</span><div class="ect"><div class="ecf" style="width:84%"></div></div><span class="ecv">4.2</span></div>
+    <div class="ec-row"><span class="ecl">Medium</span><div class="ect"><div class="ecf" style="width:70%"></div></div><span class="ecv">3.5</span></div>
+    <div class="ec-row"><span class="ecl">Dark</span><div class="ect"><div class="ecf" style="width:52%"></div></div><span class="ecv">2.6</span></div>
+    <div class="divider-thin"></div>
+    <div style="padding:.3rem .7rem .2rem;"><div class="kicker">By Method</div></div>
+    <div class="ec-row"><span class="ecl">V60</span><div class="ect"><div class="ecf" style="width:90%"></div></div><span class="ecv">4.5</span></div>
+    <div class="ec-row"><span class="ecl">AeroPress</span><div class="ect"><div class="ecf" style="width:74%"></div></div><span class="ecv">3.7</span></div>
+    <div class="ec-row"><span class="ecl">Chemex</span><div class="ect"><div class="ecf" style="width:66%"></div></div><span class="ecv">3.3</span></div>
+    <div style="height:.5rem;"></div>
+  </div>
+  <div class="bnav"><div class="nt">Home</div><div class="nt">Brew</div><div class="nt">History</div><div class="nt active">Data</div><div class="nt">More</div></div>
+</div>
+</div>
+
+<!-- ED: New Brew -->
+<div class="phone-wrap">
+<div class="screen-name">New Brew</div>
+<div class="phone ed">
+  <div class="topbar"><div class="logo">Brew Better</div><div class="tr">New Entry</div></div>
+  <div class="content">
+    <div style="padding:.6rem .7rem .3rem;">
+      <div class="kicker">Step by Step</div>
+      <div class="sect-title">New Brew</div>
+    </div>
+    <div class="step-indicator">
+      <div class="step done">Bean</div>
+      <div class="step active">Recipe</div>
+      <div class="step">Taste</div>
+    </div>
+    <div style="padding:0 .7rem .3rem;"><div class="fl">Selected Bean</div></div>
+    <div class="select-card selected" style="margin:0 .7rem .5rem;">
+      <div><div class="sc-name">Yirgacheffe Natural</div><div class="sc-sub">Ethiopian &middot; Light &middot; Washed</div></div>
+      <div class="sc-check">&#10003;</div>
+    </div>
+    <div class="param-grid">
+      <div><label class="fl">Dose</label><input class="fi" value="18.0g" readonly></div>
+      <div><label class="fl">Water</label><input class="fi" value="300ml" readonly></div>
+      <div><label class="fl">Ratio</label><input class="fi" value="1:16.7" readonly></div>
+      <div><label class="fl">Brew Time</label><input class="fi" value="3:20" readonly></div>
+    </div>
+    <div style="padding:0 .7rem;"><label class="fl">Temperature</label></div>
+    <div class="range-row">
+      <input type="range" min="80" max="100" value="94">
+      <span class="rv">94C</span>
+    </div>
+    <div style="padding:0 .7rem;"><label class="fl">Bloom Time</label></div>
+    <div class="range-row">
+      <input type="range" min="0" max="60" value="45">
+      <span class="rv">0:45</span>
+    </div>
+    <div style="padding:0 .7rem .3rem;"><label class="fl">Technique Notes</label><textarea class="fi" style="height:3rem;resize:none;font-family:'DM Sans',sans-serif;" readonly>Single pour after bloom. Gentle swirl at the end.</textarea></div>
+    <div class="btn-area">
+      <button class="bt s">Back</button>
+      <button class="bt p">Next: Tasting</button>
     </div>
   </div>
+  <div class="bnav"><div class="nt">Home</div><div class="nt active">Brew</div><div class="nt">History</div><div class="nt">Data</div><div class="nt">More</div></div>
+</div>
 </div>
 
-<!-- ====== THEME 4: BOLD EDITORIAL ====== -->
+<!-- ED: Brew Detail -->
 <div class="phone-wrap">
-  <h2>Bold Editorial</h2>
-  <p class="desc">Magazine typography, dramatic, publication-grade</p>
-  <div class="phone t4">
-    <div class="topbar">
-      <div class="logo">Brew Better</div>
-      <div class="issue">Vol. 142</div>
-    </div>
-    <div class="content">
-      <div class="hero">
-        <div class="kicker">Your Journey</div>
-        <div class="big-num">4.5</div>
-        <div class="big-label">Latest brew score</div>
-        <div class="hero-stats">
-          <div class="hs"><div class="hv">142</div><div class="hl">Total Brews</div></div>
-          <div class="hs"><div class="hv">4.2</div><div class="hl">Lifetime Avg</div></div>
-          <div class="hs"><div class="hv">12</div><div class="hl">Beans Tried</div></div>
-        </div>
+<div class="screen-name">Brew Detail</div>
+<div class="phone ed">
+  <div class="topbar"><div class="logo">Brew Better</div><div class="tr">Mar 5</div></div>
+  <div class="content">
+    <div class="detail-hero">
+      <div class="dh-left">
+        <div class="kicker">V60 Pour-Over</div>
+        <div class="sect-title" style="margin-bottom:.1rem;">Yirgacheffe Natural</div>
+        <div class="sect-sub" style="margin-bottom:0;">Ethiopian &middot; Light Roast &middot; Washed</div>
       </div>
-      <div class="ed-card">
-        <div class="ed-accent"></div>
-        <div class="ed-body">
-          <div class="ed-overline">Latest Pour</div>
-          <div class="ed-title">Yirgacheffe Natural</div>
-          <div class="ed-sub">V60 &middot; 18g/300ml &middot; 94C &middot; 3:20 brew time. Bright acidity with stone fruit notes and a clean finish.</div>
-        </div>
-        <div class="ed-score">
-          <div class="es-n">4.5</div>
-          <div class="es-l">Score</div>
-        </div>
-      </div>
-      <div class="pullquote">
-        <div class="pq-text">"Blueberry brightness with a honey-like sweetness that lingers."</div>
-        <div class="pq-attr">- Tasting notes, this morning</div>
-      </div>
-      <div class="ed-chart">
-        <div class="ec-title">By Origin</div>
-        <div class="ec-row"><span class="ecl">Ethiopia</span><div class="ect"><div class="ecf" style="width:88%"></div></div><span class="ecv">4.4</span></div>
-        <div class="ec-row"><span class="ecl">Colombia</span><div class="ect"><div class="ecf" style="width:76%"></div></div><span class="ecv">3.8</span></div>
-        <div class="ec-row"><span class="ecl">Kenya</span><div class="ect"><div class="ecf" style="width:68%"></div></div><span class="ecv">3.4</span></div>
-      </div>
-      <div class="chip-row">
-        <span class="chip">Ethiopian</span><span class="chip">Light Roast</span>
-        <span class="chip">Washed</span><span class="chip">V60</span>
-      </div>
-      <div class="form-area">
-        <label class="fl">Bean</label>
-        <input class="fi" value="Yirgacheffe Natural" readonly>
-        <div class="fi-row">
-          <div><label class="fl">Method</label><input class="fi" value="V60" readonly></div>
-          <div><label class="fl">Dose</label><input class="fi" value="18.0g" readonly></div>
-        </div>
-        <label class="fl">Temperature</label>
-        <div class="range-row">
-          <input type="range" min="80" max="100" value="94">
-          <span class="rv">94C</span>
-        </div>
-      </div>
-      <div class="toggle-row"><span>AI Commentary</span><div class="tgl"></div></div>
-      <div class="btn-area">
-        <button class="bt p">Log Brew</button>
-        <button class="bt s">Save Draft</button>
+      <div style="text-align:right;">
+        <div class="dh-score">4.5</div>
+        <div class="dh-label">Score</div>
       </div>
     </div>
-    <div class="bnav">
-      <div class="nt active">Home</div>
-      <div class="nt">Brew</div>
-      <div class="nt">History</div>
-      <div class="nt">Analytics</div>
-      <div class="nt">More</div>
+    <div class="recipe-grid">
+      <div class="rg"><div class="rg-v">18.0g</div><div class="rg-l">Dose</div></div>
+      <div class="rg"><div class="rg-v">300ml</div><div class="rg-l">Water</div></div>
+      <div class="rg"><div class="rg-v">1:16.7</div><div class="rg-l">Ratio</div></div>
+      <div class="rg"><div class="rg-v">94C</div><div class="rg-l">Temp</div></div>
+      <div class="rg"><div class="rg-v">0:45</div><div class="rg-l">Bloom</div></div>
+      <div class="rg"><div class="rg-v">3:20</div><div class="rg-l">Time</div></div>
+    </div>
+    <div style="padding:.3rem .7rem .2rem;"><div class="kicker">Tasting Profile</div></div>
+    <div class="taste-bars">
+      <div class="tb-row"><span class="tb-l">Acidity</span><div class="tb-track"><div class="tb-fill" style="width:80%"></div></div><span class="tb-v">4</span></div>
+      <div class="tb-row"><span class="tb-l">Sweetness</span><div class="tb-track"><div class="tb-fill" style="width:60%"></div></div><span class="tb-v">3</span></div>
+      <div class="tb-row"><span class="tb-l">Body</span><div class="tb-track"><div class="tb-fill" style="width:40%"></div></div><span class="tb-v">2</span></div>
+      <div class="tb-row"><span class="tb-l">Aftertaste</span><div class="tb-track"><div class="tb-fill" style="width:80%"></div></div><span class="tb-v">4</span></div>
+      <div class="tb-row"><span class="tb-l">Overall</span><div class="tb-track"><div class="tb-fill" style="width:90%"></div></div><span class="tb-v">4.5</span></div>
+    </div>
+    <div class="pullquote">
+      <div class="pq-text">"Blueberry brightness with a honey-like sweetness that lingers."</div>
+      <div class="pq-attr">- Flavor notes</div>
+    </div>
+    <div class="ai-card">
+      <div class="ai-label">AI Commentary</div>
+      <div class="ai-text">A well-extracted brew with an excellent dose-to-water ratio. The 94C temp brought out bright fruit notes without over-extracting. Consider a 30s longer bloom next time to further develop sweetness.</div>
+    </div>
+    <div class="chip-row">
+      <span class="chip">Blueberry</span><span class="chip">Honey</span><span class="chip">Stone Fruit</span><span class="chip">Clean</span>
     </div>
   </div>
+  <div class="bnav"><div class="nt">Home</div><div class="nt">Brew</div><div class="nt active">History</div><div class="nt">Data</div><div class="nt">More</div></div>
+</div>
 </div>
 
 </div>
+
+<!-- ============================================================
+     DARK LAB
+     ============================================================ -->
+<div class="theme-label" style="margin-top:3rem;">Dark Lab</div>
+<div class="theme-desc">Precision instrument console, monospaced data density, terminal aesthetics</div>
+
+<div class="row">
+
+<!-- DL: Dashboard -->
+<div class="phone-wrap">
+<div class="screen-name">Dashboard</div>
+<div class="phone dl">
+  <div class="topbar"><div class="logo">BREW_BETTER</div><div class="tr"><div class="dot-live"></div><span class="st">SYS OK</span></div></div>
+  <div class="content">
+    <div class="readouts">
+      <div class="ro"><div class="rv2">142</div><div class="rl">Brews</div></div>
+      <div class="ro"><div class="rv2">4.2</div><div class="rl">Avg Scr</div></div>
+      <div class="ro"><div class="rv2">012</div><div class="rl">Beans</div></div>
+    </div>
+    <div class="terminal">
+      <div><span class="prompt">&gt; </span><span class="cmd">last_brew</span></div>
+      <div><span class="prompt">  bean: </span><span class="val">Yirgacheffe Natural</span></div>
+      <div><span class="prompt">  method: </span><span class="val">V60 pour-over</span></div>
+      <div><span class="prompt">  score: </span><span class="val">4.5/5.0</span></div>
+      <div><span class="comment">  # logged 2h ago</span></div>
+    </div>
+    <div class="params-grid">
+      <div class="pg"><span class="pk">Dose</span><span class="pv">18.0g</span></div>
+      <div class="pg"><span class="pk">Water</span><span class="pv">300ml</span></div>
+      <div class="pg"><span class="pk">Ratio</span><span class="pv">1:16.7</span></div>
+      <div class="pg"><span class="pk">Temp</span><span class="pv">094.0C</span></div>
+    </div>
+    <div class="gauges">
+      <div class="gauge-title">Tasting Analysis</div>
+      <div class="gauge-row"><span class="gl">ACID</span><div class="gbar"><div class="gseg on"></div><div class="gseg on"></div><div class="gseg on"></div><div class="gseg on"></div><div class="gseg off"></div></div><span class="gv">4</span></div>
+      <div class="gauge-row"><span class="gl">SWEET</span><div class="gbar"><div class="gseg on"></div><div class="gseg on"></div><div class="gseg on"></div><div class="gseg off"></div><div class="gseg off"></div></div><span class="gv">3</span></div>
+      <div class="gauge-row"><span class="gl">BODY</span><div class="gbar"><div class="gseg on"></div><div class="gseg on"></div><div class="gseg off"></div><div class="gseg off"></div><div class="gseg off"></div></div><span class="gv">2</span></div>
+      <div class="gauge-row"><span class="gl">FINISH</span><div class="gbar"><div class="gseg on"></div><div class="gseg on"></div><div class="gseg on"></div><div class="gseg on"></div><div class="gseg off"></div></div><span class="gv">4</span></div>
+    </div>
+    <div class="chip-row">
+      <span class="chip">ETHIOPIAN</span><span class="chip">LIGHT</span><span class="chip">WASHED</span><span class="chip">V60</span>
+    </div>
+  </div>
+  <div class="bnav"><div class="nt active">DASH</div><div class="nt">LOG</div><div class="nt">HIST</div><div class="nt">DATA</div><div class="nt">SYS</div></div>
+</div>
+</div>
+
+<!-- DL: History -->
+<div class="phone-wrap">
+<div class="screen-name">Brew History</div>
+<div class="phone dl">
+  <div class="topbar"><div class="logo">BREW_BETTER</div><div class="tr"><span class="st">HIST_LOG</span></div></div>
+  <div class="content">
+    <div class="section-hdr">// BREW HISTORY &mdash; 142 RECORDS</div>
+    <div class="chip-row" style="padding-top:.4rem;">
+      <span class="chip" style="border-color:#D4A744;color:#D4A744;">ALL</span><span class="chip">7D</span><span class="chip">30D</span><span class="chip">V60</span><span class="chip">ESPRESSO</span>
+    </div>
+    <div class="log-entry">
+      <div class="le-header"><span class="le-id">#142 YIRGACHEFFE_NAT</span><span class="le-ts">2026-03-05 08:14</span></div>
+      <div class="le-body">
+        <div class="le-row"><span class="lk">METHOD</span><span class="lv">V60</span></div>
+        <div class="le-row"><span class="lk">PARAMS</span><span class="lv">18.0g / 300ml / 94C</span></div>
+      </div>
+      <div class="le-score"><span>4.5</span></div>
+    </div>
+    <div class="log-entry">
+      <div class="le-header"><span class="le-id">#141 HUILA_SUPREMO</span><span class="le-ts">2026-03-04 07:52</span></div>
+      <div class="le-body">
+        <div class="le-row"><span class="lk">METHOD</span><span class="lv">CHEMEX</span></div>
+        <div class="le-row"><span class="lk">PARAMS</span><span class="lv">30.0g / 480ml / 92C</span></div>
+      </div>
+      <div class="le-score"><span>3.8</span></div>
+    </div>
+    <div class="log-entry">
+      <div class="le-header"><span class="le-id">#140 NYERI_AA</span><span class="le-ts">2026-03-03 09:01</span></div>
+      <div class="le-body">
+        <div class="le-row"><span class="lk">METHOD</span><span class="lv">AEROPRESS</span></div>
+        <div class="le-row"><span class="lk">PARAMS</span><span class="lv">15.0g / 200ml / 88C</span></div>
+      </div>
+      <div class="le-score"><span>4.1</span></div>
+    </div>
+    <div class="log-entry">
+      <div class="le-header"><span class="le-id">#139 ANTIGUA_PAST</span><span class="le-ts">2026-03-02 07:30</span></div>
+      <div class="le-body">
+        <div class="le-row"><span class="lk">METHOD</span><span class="lv">FRENCH_PRESS</span></div>
+        <div class="le-row"><span class="lk">PARAMS</span><span class="lv">28.0g / 420ml / 96C</span></div>
+      </div>
+      <div class="le-score"><span>3.2</span></div>
+    </div>
+    <div class="log-entry">
+      <div class="le-header"><span class="le-id">#138 SIDAMO_WASH</span><span class="le-ts">2026-03-01 08:45</span></div>
+      <div class="le-body">
+        <div class="le-row"><span class="lk">METHOD</span><span class="lv">V60</span></div>
+        <div class="le-row"><span class="lk">PARAMS</span><span class="lv">18.0g / 300ml / 93C</span></div>
+      </div>
+      <div class="le-score"><span>4.3</span></div>
+    </div>
+  </div>
+  <div class="bnav"><div class="nt">DASH</div><div class="nt">LOG</div><div class="nt active">HIST</div><div class="nt">DATA</div><div class="nt">SYS</div></div>
+</div>
+</div>
+
+<!-- DL: Analytics -->
+<div class="phone-wrap">
+<div class="screen-name">Analytics</div>
+<div class="phone dl">
+  <div class="topbar"><div class="logo">BREW_BETTER</div><div class="tr"><span class="st">ANALYTICS</span></div></div>
+  <div class="content">
+    <div class="section-hdr">// TASTE PROFILE</div>
+    <div class="agg-grid">
+      <div class="ag"><div class="agv">ETHIOPIA</div><div class="agl">Top Origin</div></div>
+      <div class="ag"><div class="agv">LIGHT</div><div class="agl">Top Roast</div></div>
+      <div class="ag"><div class="agv">WASHED</div><div class="agl">Top Process</div></div>
+      <div class="ag"><div class="agv">V60</div><div class="agl">Top Method</div></div>
+    </div>
+    <div class="sparkline">
+      <div class="sp-title">Enjoyment &mdash; Last 14 Days</div>
+      <div class="spark-bars">
+        <div class="sb" style="height:70%"></div>
+        <div class="sb" style="height:55%"></div>
+        <div class="sb" style="height:82%"></div>
+        <div class="sb" style="height:60%"></div>
+        <div class="sb" style="height:90%"></div>
+        <div class="sb" style="height:48%"></div>
+        <div class="sb" style="height:75%"></div>
+        <div class="sb" style="height:85%"></div>
+        <div class="sb" style="height:65%"></div>
+        <div class="sb" style="height:92%"></div>
+        <div class="sb" style="height:78%"></div>
+        <div class="sb" style="height:88%"></div>
+        <div class="sb" style="height:70%"></div>
+        <div class="sb" style="height:95%"></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-title">ORIGIN PERFORMANCE</div>
+    </div>
+    <div class="data-table">
+      <div class="dt-header"><span>ORIGIN</span><span>BREWS</span><span>AVG</span></div>
+      <div class="dt-row"><span class="dk">ETHIOPIA</span><span class="dv">42</span><span class="dh">4.4</span></div>
+      <div class="dt-row"><span class="dk">COLOMBIA</span><span class="dv">31</span><span class="dh">3.8</span></div>
+      <div class="dt-row"><span class="dk">KENYA</span><span class="dv">28</span><span class="dh">3.4</span></div>
+      <div class="dt-row"><span class="dk">GUATEMALA</span><span class="dv">22</span><span class="dh">2.8</span></div>
+      <div class="dt-row"><span class="dk">BRAZIL</span><span class="dv">19</span><span class="dh">3.1</span></div>
+    </div>
+    <div class="panel" style="margin-top:.4rem;">
+      <div class="panel-title">METHOD PERFORMANCE</div>
+    </div>
+    <div class="data-table">
+      <div class="dt-header"><span>METHOD</span><span>BREWS</span><span>AVG</span></div>
+      <div class="dt-row"><span class="dk">V60</span><span class="dv">58</span><span class="dh">4.5</span></div>
+      <div class="dt-row"><span class="dk">AEROPRESS</span><span class="dv">34</span><span class="dh">3.7</span></div>
+      <div class="dt-row"><span class="dk">CHEMEX</span><span class="dv">26</span><span class="dh">3.3</span></div>
+      <div class="dt-row"><span class="dk">FR_PRESS</span><span class="dv">24</span><span class="dh">2.9</span></div>
+    </div>
+  </div>
+  <div class="bnav"><div class="nt">DASH</div><div class="nt">LOG</div><div class="nt">HIST</div><div class="nt active">DATA</div><div class="nt">SYS</div></div>
+</div>
+</div>
+
+<!-- DL: New Brew -->
+<div class="phone-wrap">
+<div class="screen-name">New Brew</div>
+<div class="phone dl">
+  <div class="topbar"><div class="logo">BREW_BETTER</div><div class="tr"><span class="st">NEW_LOG</span></div></div>
+  <div class="content">
+    <div class="phase-bar">
+      <div class="phase done">01_BEAN</div>
+      <div class="phase active">02_RECIPE</div>
+      <div class="phase">03_TASTE</div>
+    </div>
+    <div class="section-hdr">// SELECT BEAN</div>
+    <div class="select-panel selected">
+      <div><div class="sp-name">YIRGACHEFFE_NATURAL</div><div class="sp-sub">ETHIOPIAN / LIGHT / WASHED</div></div>
+      <div class="sp-check"></div>
+    </div>
+    <div class="select-panel">
+      <div><div class="sp-name">HUILA_SUPREMO</div><div class="sp-sub">COLOMBIAN / MEDIUM / NATURAL</div></div>
+      <div class="sp-check"></div>
+    </div>
+    <div class="section-hdr" style="margin-top:.3rem;">// PARAMETERS</div>
+    <div class="input-grid" style="padding-top:.3rem;">
+      <div><label class="il" style="padding-left:.5rem;">DOSE (G)</label><input class="ii" value="18.0" readonly style="margin-left:.5rem;width:calc(100% - .5rem);"></div>
+      <div><label class="il">WATER (ML)</label><input class="ii" value="300" readonly style="width:calc(100% - .5rem);"></div>
+    </div>
+    <div class="input-grid">
+      <div><label class="il" style="padding-left:.5rem;">RATIO</label><input class="ii" value="1:16.7" readonly style="margin-left:.5rem;width:calc(100% - .5rem);"></div>
+      <div><label class="il">BREW_TIME</label><input class="ii" value="03:20" readonly style="width:calc(100% - .5rem);"></div>
+    </div>
+    <div style="padding:0 .5rem;"><label class="il">TEMP (C)</label></div>
+    <div class="range-area">
+      <input type="range" min="80" max="100" value="94">
+      <span class="rv">094</span>
+    </div>
+    <div style="padding:0 .5rem;"><label class="il">BLOOM (S)</label></div>
+    <div class="range-area">
+      <input type="range" min="0" max="60" value="45">
+      <span class="rv">045</span>
+    </div>
+    <div style="padding:0 .5rem .2rem;"><label class="il">NOTES</label></div>
+    <div style="padding:0 .5rem .4rem;"><textarea class="ii" style="height:2.5rem;resize:none;width:100%;font-family:'Space Mono',monospace;" readonly>single_pour after bloom. swirl.</textarea></div>
+    <div class="btn-area">
+      <button class="bt s">BACK</button>
+      <button class="bt p">NEXT: TASTE</button>
+    </div>
+  </div>
+  <div class="bnav"><div class="nt">DASH</div><div class="nt active">LOG</div><div class="nt">HIST</div><div class="nt">DATA</div><div class="nt">SYS</div></div>
+</div>
+</div>
+
+<!-- DL: Brew Detail -->
+<div class="phone-wrap">
+<div class="screen-name">Brew Detail</div>
+<div class="phone dl">
+  <div class="topbar"><div class="logo">BREW_BETTER</div><div class="tr"><span class="st">#142</span></div></div>
+  <div class="content">
+    <div class="detail-header">
+      <div>
+        <div class="dh-name">YIRGACHEFFE_NATURAL</div>
+        <div class="dh-id">V60 // 2026-03-05 08:14:32 UTC</div>
+      </div>
+      <div class="dh-score">4.5</div>
+    </div>
+    <div class="params-grid">
+      <div class="pg"><span class="pk">DOSE</span><span class="pv">18.0g</span></div>
+      <div class="pg"><span class="pk">WATER</span><span class="pv">300ml</span></div>
+      <div class="pg"><span class="pk">RATIO</span><span class="pv">1:16.7</span></div>
+      <div class="pg"><span class="pk">TEMP</span><span class="pv">094.0C</span></div>
+      <div class="pg"><span class="pk">BLOOM</span><span class="pv">00:45</span></div>
+      <div class="pg"><span class="pk">TOTAL</span><span class="pv">03:20</span></div>
+    </div>
+    <div class="gauges">
+      <div class="gauge-title">Tasting Analysis</div>
+      <div class="gauge-row"><span class="gl">ACID</span><div class="gbar"><div class="gseg on"></div><div class="gseg on"></div><div class="gseg on"></div><div class="gseg on"></div><div class="gseg off"></div></div><span class="gv">4</span></div>
+      <div class="gauge-row"><span class="gl">SWEET</span><div class="gbar"><div class="gseg on"></div><div class="gseg on"></div><div class="gseg on"></div><div class="gseg off"></div><div class="gseg off"></div></div><span class="gv">3</span></div>
+      <div class="gauge-row"><span class="gl">BODY</span><div class="gbar"><div class="gseg on"></div><div class="gseg on"></div><div class="gseg off"></div><div class="gseg off"></div><div class="gseg off"></div></div><span class="gv">2</span></div>
+      <div class="gauge-row"><span class="gl">FINISH</span><div class="gbar"><div class="gseg on"></div><div class="gseg on"></div><div class="gseg on"></div><div class="gseg on"></div><div class="gseg off"></div></div><span class="gv">4</span></div>
+      <div class="gauge-row"><span class="gl">ENJOY</span><div class="gbar"><div class="gseg on"></div><div class="gseg on"></div><div class="gseg on"></div><div class="gseg on"></div><div class="gseg on" style="background:#4A7;"></div></div><span class="gv" style="color:#4A7;">4.5</span></div>
+    </div>
+    <div class="chip-row">
+      <span class="chip">BLUEBERRY</span><span class="chip">HONEY</span><span class="chip">STONE_FRUIT</span><span class="chip">CLEAN</span>
+    </div>
+    <div class="ai-panel">
+      <div class="aip-label">AI_ANALYSIS</div>
+      Well-extracted brew. Dose-to-water ratio optimal for V60. 94C temp extracted bright fruit without bitterness. Consider extending bloom +30s to develop sweetness further. Score trajectory: +0.3 vs 7-day avg.
+    </div>
+    <div class="terminal" style="margin-top:0;">
+      <div><span class="prompt">&gt; </span><span class="cmd">notes</span></div>
+      <div><span class="val">Single pour after bloom.</span></div>
+      <div><span class="val">Gentle swirl to flatten bed.</span></div>
+      <div><span class="comment"># mindfulness: focused</span></div>
+    </div>
+    <div class="btn-area">
+      <button class="bt s">EXPORT</button>
+      <button class="bt p">REBREW</button>
+    </div>
+  </div>
+  <div class="bnav"><div class="nt">DASH</div><div class="nt">LOG</div><div class="nt active">HIST</div><div class="nt">DATA</div><div class="nt">SYS</div></div>
+</div>
+</div>
+
+</div>
+
 </body>
 </html>

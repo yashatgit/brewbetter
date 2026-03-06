@@ -4,11 +4,11 @@ import { useBrewLog, useDeleteBrewLog } from "../hooks/use-brew-logs";
 import { Badge } from "../components/ui/Badge";
 import { StarRating } from "../components/ui/StarRating";
 import { Button } from "../components/ui/Button";
-import { Slider } from "../components/ui/Slider";
+
 import { Dialog } from "../components/ui/Dialog";
 import { TastingFlow } from "../components/tasting/TastingFlow";
 import { Card } from "../components/ui/Card";
-import { Eye, Coffee as CoffeeIcon, Zap, Sparkles, Bean } from "lucide-react";
+import { Eye, Coffee as CoffeeIcon, Zap, Sparkles, Bean, XCircle } from "lucide-react";
 import { useBrewCommentary } from "../hooks/use-llm";
 import { formatDateTime, formatBrewTime, daysOffRoast } from "../lib/utils";
 import { getEquipmentIcon } from "../lib/equipment-icons";
@@ -52,6 +52,24 @@ const AFTERTASTE_LABELS: Record<string, string> = {
   pleasant: "Pleasant",
   neutral: "Neutral",
   unpleasant: "Unpleasant",
+};
+
+const TASTE_LEVEL_LABELS: Record<number, string> = {
+  1: "Low",
+  2: "Medium",
+  3: "High",
+};
+
+const DIRECTION_LABELS: Record<string, string> = {
+  wanted_less: "Wanted less",
+  just_right: "Just right",
+  wanted_more: "Wanted more",
+};
+
+const BODY_DIRECTION_LABELS: Record<string, string> = {
+  wanted_lighter: "Wanted lighter",
+  just_right: "Just right",
+  wanted_heavier: "Wanted heavier",
 };
 
 const AFTERTASTE_VARIANTS: Record<string, "success" | "default" | "warning"> = {
@@ -173,10 +191,7 @@ export default function BrewDetail() {
         </Button>
         <Card className="flex flex-col items-center justify-center py-16">
           <div className="text-muted-foreground mb-4">
-            <svg width="64" height="64" viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="32" cy="32" r="24" className="opacity-30" />
-              <path d="M26 26 L38 38 M38 26 L26 38" className="opacity-40" strokeWidth="1.5" />
-            </svg>
+            <XCircle size={48} strokeWidth={1.5} />
           </div>
           <h2 className="text-lg font-display text-foreground mb-2">
             This brew has vanished
@@ -456,29 +471,24 @@ export default function BrewDetail() {
               </div>
             )}
 
-            {/* Acidity slider (read-only) */}
-            <Slider
-              label="Acidity"
-              min={1}
-              max={5}
-              value={b.tasting.acidityFeel}
-              onChange={() => {}}
-              minLabel="Smooth & mellow"
-              maxLabel="Bright & sharp"
-              className="pointer-events-none [&_input]:accent-data"
-            />
-
-            {/* Sweet/Bitter slider (read-only) */}
-            <Slider
-              label="Sweet / Bitter"
-              min={1}
-              max={5}
-              value={b.tasting.sweetBitter}
-              onChange={() => {}}
-              minLabel="Sweet"
-              maxLabel="Bitter"
-              className="pointer-events-none [&_input]:accent-data"
-            />
+            {/* Taste levels */}
+            {([
+              { label: "Sweetness", value: b.tasting.sweetness, direction: b.tasting.sweetnessDirection },
+              { label: "Sourness", value: b.tasting.sourness, direction: b.tasting.sournessDirection },
+              { label: "Bitterness", value: b.tasting.bitterness, direction: b.tasting.bitternessDirection },
+            ] as const).map((taste) => (
+              <div key={taste.label}>
+                <p className="text-sm font-display text-foreground mb-1.5">{taste.label}</p>
+                <span className="inline-flex items-center px-2.5 py-1 bg-muted text-secondary-foreground text-xs font-medium border border-input">
+                  {TASTE_LEVEL_LABELS[taste.value] ?? taste.value}
+                </span>
+                {taste.direction && (
+                  <span className="inline-flex ml-2 text-xs font-mono text-muted-foreground uppercase tracking-wide">
+                    {DIRECTION_LABELS[taste.direction]}
+                  </span>
+                )}
+              </div>
+            ))}
 
             {/* Body */}
             <div>
@@ -486,6 +496,11 @@ export default function BrewDetail() {
               <span className="inline-flex items-center px-2.5 py-1 bg-muted text-secondary-foreground text-xs font-medium border border-input">
                 {BODY_LABELS[b.tasting.body] ?? b.tasting.body}
               </span>
+              {b.tasting.bodyDirection && (
+                <span className="inline-flex ml-2 text-xs font-mono text-muted-foreground uppercase tracking-wide">
+                  {BODY_DIRECTION_LABELS[b.tasting.bodyDirection]}
+                </span>
+              )}
             </div>
 
             {/* Aftertaste */}
@@ -505,6 +520,26 @@ export default function BrewDetail() {
                 <span className="text-sm text-muted-foreground">None noticed</span>
               )}
             </div>
+
+            {/* Flavor tags */}
+            {b.tasting.flavorTags && (() => {
+              try {
+                const tags: string[] = JSON.parse(b.tasting.flavorTags);
+                if (tags.length === 0) return null;
+                return (
+                  <div>
+                    <p className="text-sm font-display text-foreground mb-1.5">
+                      Flavor Tags
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {tags.map((tag) => (
+                        <span key={tag} className="chip chip--active">{tag}</span>
+                      ))}
+                    </div>
+                  </div>
+                );
+              } catch { return null; }
+            })()}
 
             {/* Flavor notes */}
             {b.tasting.flavorNotes && (
@@ -542,17 +577,8 @@ export default function BrewDetail() {
         </Card>
       ) : (
         <Card className="flex flex-col items-center justify-center py-12 text-center animate-slide-up" style={{ animationDelay: '300ms' }}>
-          <div className="text-muted-foreground mb-4">
-            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-              {[1, 2, 3, 4, 5].map((i) => (
-                <path
-                  key={i}
-                  d={`M${4 + (i - 1) * 9.5} 24 l3.5 -7 3.5 7 7.5 1 -5.5 5.2 1.3 7.3 -6.8 -3.5 -6.8 3.5 1.3 -7.3 -5.5 -5.2 Z`}
-                  className={i <= 3 ? "opacity-20" : "opacity-10"}
-                  transform={`scale(0.5) translate(${(i - 1) * 2}, 10)`}
-                />
-              ))}
-            </svg>
+          <div className="mb-4">
+            <StarRating value={0} size="lg" />
           </div>
           <p className="text-muted-foreground mb-2 font-display text-lg">
             How was this cup?
