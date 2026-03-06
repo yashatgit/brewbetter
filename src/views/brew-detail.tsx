@@ -5,6 +5,7 @@ import { Badge } from "../components/ui/Badge";
 import { StarRating } from "../components/ui/StarRating";
 import { Button } from "../components/ui/Button";
 
+import ReactMarkdown, { type Components } from "react-markdown";
 import { Dialog } from "../components/ui/Dialog";
 import { TastingFlow } from "../components/tasting/TastingFlow";
 import { Card } from "../components/ui/Card";
@@ -78,6 +79,30 @@ const AFTERTASTE_VARIANTS: Record<string, "success" | "default" | "warning"> = {
   unpleasant: "warning",
 };
 
+const markdownComponents: Components = {
+  p: ({ children }) => (
+    <p className="text-sm text-secondary-foreground leading-relaxed mb-3">{children}</p>
+  ),
+  strong: ({ children }) => (
+    <strong className="font-semibold text-foreground">{children}</strong>
+  ),
+  ul: ({ children }) => (
+    <ul className="text-sm text-secondary-foreground list-disc pl-4 mb-3 space-y-1">{children}</ul>
+  ),
+  li: ({ children }) => (
+    <li className="text-sm text-secondary-foreground">{children}</li>
+  ),
+  h1: ({ children }) => (
+    <p className="text-sm font-semibold text-foreground mb-1">{children}</p>
+  ),
+  h2: ({ children }) => (
+    <p className="text-sm font-semibold text-foreground mb-1">{children}</p>
+  ),
+  h3: ({ children }) => (
+    <p className="text-sm font-semibold text-foreground mb-1">{children}</p>
+  ),
+};
+
 function AiCommentarySection({
   brewId,
   existingCommentary,
@@ -120,9 +145,7 @@ function AiCommentarySection({
       )}
       {hasContent && (
         <div className="prose prose-sm max-w-none">
-          <p className="text-sm text-secondary-foreground leading-relaxed whitespace-pre-wrap">
-            {text}
-          </p>
+          <ReactMarkdown components={markdownComponents}>{text}</ReactMarkdown>
           {isLoading && (
             <span className="inline-block w-1.5 h-4 bg-primary animate-pulse ml-0.5 align-text-bottom" />
           )}
