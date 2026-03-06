@@ -125,10 +125,10 @@ h3 { font-weight: 700; }
 /* Kicker — red monospace label above page/section titles (from Editorial) */
 .kicker {
   font-family: var(--font-mono);
-  font-size: 0.625rem;
+  font-size: 0.875rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.15em;
   color: var(--color-editorial);
 }
 
@@ -191,7 +191,7 @@ h3 { font-weight: 700; }
 }
 .chip--active {
   background: var(--color-editorial);
-  color: #FFFFFF;
+  color: var(--color-primary-foreground);
 }
 
 /* Divider — thick editorial divider */

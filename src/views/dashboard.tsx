@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useBrewLogs } from '../hooks/use-brew-logs'
@@ -56,10 +57,12 @@ export default function Dashboard() {
   const savedSetups = setups ?? []
   const hasBrews = allBrewsList.length > 0
 
-  const totalBrews = allBrewsList.length
-  const avgRating = getAverageRating(allBrewsList)
-  const mostUsedBean = getMostUsedBean(allBrewsList)
-  const brewsThisWeek = getBrewsThisWeek(allBrewsList)
+  const { totalBrews, avgRating, mostUsedBean, brewsThisWeek } = useMemo(() => ({
+    totalBrews: allBrewsList.length,
+    avgRating: getAverageRating(allBrewsList),
+    mostUsedBean: getMostUsedBean(allBrewsList),
+    brewsThisWeek: getBrewsThisWeek(allBrewsList),
+  }), [allBrewsList])
 
   if (brewsLoading) {
     return (
@@ -81,6 +84,7 @@ export default function Dashboard() {
         <div className="flex flex-col items-center text-center py-20 space-y-10">
           <div className="text-muted-foreground animate-float">
             <svg
+              aria-hidden="true"
               width="160"
               height="160"
               viewBox="0 0 120 120"
@@ -126,11 +130,11 @@ export default function Dashboard() {
     <div className="space-y-12 max-w-4xl animate-fade-in">
       {/* -- Hero Welcome -- */}
       <section className="space-y-6">
-        <div className="space-y-1">
+        <div className="space-y-1 text-center md:text-left">
           <p className="kicker">
             {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
           </p>
-          <h1 className="font-display text-6xl md:text-7xl text-foreground tracking-tight leading-[0.95]">
+          <h1 className="font-display text-4xl md:text-5xl text-foreground tracking-tight leading-[0.95]">
             {getGreeting()}
           </h1>
         </div>
@@ -176,18 +180,16 @@ export default function Dashboard() {
       <section>
         <div className="grid grid-cols-2 gap-px sm:grid-cols-4 bg-border border-2 border-border stagger-children">
           {[
-            { value: totalBrews, label: 'Brews', accent: 'border-l-editorial' },
-            { value: avgRating > 0 ? avgRating.toString() : '-', label: 'Avg Rating', accent: 'border-l-data' },
-            { value: mostUsedBean, label: 'Top Bean', accent: 'border-l-success', isText: true },
-            { value: brewsThisWeek, label: 'This Week', accent: 'border-l-muted-foreground' },
+            { value: totalBrews, label: 'Brews', accent: 'border-l-editorial', isText: false },
+            { value: avgRating > 0 ? avgRating.toString() : '-', label: 'Avg Rating', accent: 'border-l-data', isText: false },
+            { value: mostUsedBean, label: 'Top Bean', accent: 'border-l-editorial', isText: true },
+            { value: brewsThisWeek, label: 'This Week', accent: 'border-l-editorial', isText: false },
           ].map((stat) => (
             <div
               key={stat.label}
               className={`bg-background p-5 md:p-6 border-l-[3px] ${stat.accent}`}
             >
-              <p className={`font-display tracking-tight text-foreground leading-none ${
-                stat.isText ? 'text-xl md:text-2xl truncate pt-2 pb-1' : 'text-5xl md:text-6xl'
-              }`}>
+              <p className={`font-display tracking-tight text-foreground leading-none truncate ${stat.isText ? 'text-xl md:text-2xl' : 'text-3xl md:text-4xl'}`}>
                 {stat.value}
               </p>
               <p className="data-label mt-2.5">

@@ -129,9 +129,12 @@ export default function BrewHistory() {
   if (isLoading) {
     return (
       <div className="p-6 space-y-4 animate-fade-in">
-        <h1 className="text-4xl md:text-5xl font-display text-foreground tracking-tight leading-[0.95]">
-          Journal
-        </h1>
+        <div className="text-center md:text-left">
+          <p className="kicker">Journal</p>
+          <h1 className="text-4xl md:text-5xl font-display text-foreground tracking-tight leading-[0.95]">
+            Journal
+          </h1>
+        </div>
         <div className="flex items-center justify-center py-20">
           <div className="text-center space-y-4">
             <div className="animate-float">
@@ -147,12 +150,15 @@ export default function BrewHistory() {
   if (!brews || brews.length === 0) {
     return (
       <div className="p-6 space-y-4 animate-fade-in">
-        <h1 className="text-4xl md:text-5xl font-display text-foreground tracking-tight leading-[0.95]">
-          Journal
-        </h1>
+        <div className="text-center md:text-left">
+          <p className="kicker">Journal</p>
+          <h1 className="text-4xl md:text-5xl font-display text-foreground tracking-tight leading-[0.95]">
+            Journal
+          </h1>
+        </div>
         <Card className="flex flex-col items-center justify-center py-20 paper-texture">
           <div className="text-muted-foreground animate-float mb-6">
-            <svg width="120" height="100" viewBox="0 0 120 100" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+            <svg aria-hidden="true" width="120" height="100" viewBox="0 0 120 100" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
               {/* Open book */}
               <path d="M60 20 Q40 15 15 20 V80 Q40 75 60 80 Q80 75 105 80 V20 Q80 15 60 20 Z" className="fill-secondary/30" />
               <line x1="60" y1="20" x2="60" y2="80" />
@@ -184,27 +190,23 @@ export default function BrewHistory() {
 
   return (
     <div className="p-6 space-y-6 max-w-6xl mx-auto animate-fade-in">
-      {/* Header — flat panel with left accent border */}
-      <Card accent="data" className="relative overflow-hidden px-7 py-8 md:px-10 md:py-10">
-        <div className="relative flex items-end justify-between gap-4">
-          <div className="space-y-2">
-            <h1 className="text-4xl md:text-5xl font-display text-foreground tracking-tight leading-[0.95]">
-              Journal
-            </h1>
-            <p className="text-sm text-muted-foreground">
-              <span className="font-mono text-foreground text-3xl md:text-4xl">{brews.length}</span>{" "}
-              brew{brews.length !== 1 ? "s" : ""} logged
-            </p>
-          </div>
-          <Button
-            onClick={() => router.push("/brew/new")}
-            size="sm"
-            className="bg-primary hover:bg-primary/90 text-primary-foreground relative"
-          >
-            New Brew
-          </Button>
+      {/* Header */}
+      <div className="flex flex-col items-center md:flex-row md:items-end md:justify-between gap-4">
+        <div className="text-center md:text-left">
+          <p className="kicker">Journal</p>
+          <h1 className="text-4xl md:text-5xl font-display text-foreground tracking-tight leading-[0.95]">
+            Journal
+          </h1>
+          <p className="text-muted-foreground text-sm">{brews.length} brew{brews.length !== 1 ? "s" : ""} logged</p>
         </div>
-      </Card>
+        <Button
+          onClick={() => router.push("/brew/new")}
+          size="sm"
+          className="bg-primary hover:bg-primary/90 text-primary-foreground relative"
+        >
+          New Brew
+        </Button>
+      </div>
 
       {/* Time presets */}
       <div className="flex gap-2 flex-wrap">
@@ -232,24 +234,30 @@ export default function BrewHistory() {
       {/* Filters */}
       <Card compact>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <Select
-            label="Bean"
-            options={[{ value: "", label: "All beans" }, ...beanOptions]}
-            value={beanFilter}
-            onChange={handleFilterChange(setBeanFilter)}
-          />
-          <Input
-            label="From"
-            type="date"
-            value={dateFrom}
-            onChange={(e) => { setDateFrom(e.target.value); setActivePreset(""); setPage(1); }}
-          />
-          <Input
-            label="To"
-            type="date"
-            value={dateTo}
-            onChange={(e) => { setDateTo(e.target.value); setActivePreset(""); setPage(1); }}
-          />
+          <div className="hidden md:block">
+            <Select
+              label="Bean"
+              options={[{ value: "", label: "All beans" }, ...beanOptions]}
+              value={beanFilter}
+              onChange={handleFilterChange(setBeanFilter)}
+            />
+          </div>
+          <div className="hidden md:block">
+            <Input
+              label="From"
+              type="date"
+              value={dateFrom}
+              onChange={(e) => { setDateFrom(e.target.value); setActivePreset(""); setPage(1); }}
+            />
+          </div>
+          <div className="hidden md:block">
+            <Input
+              label="To"
+              type="date"
+              value={dateTo}
+              onChange={(e) => { setDateTo(e.target.value); setActivePreset(""); setPage(1); }}
+            />
+          </div>
           <Select
             label="Min Rating"
             options={ratingOptions}
@@ -301,6 +309,7 @@ export default function BrewHistory() {
           <div className="border-2 border-border bg-background overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
+                <caption className="sr-only">Brew history log</caption>
                 <thead>
                   <tr className="border-b border-border bg-muted">
                     <th className="text-left px-4 py-3 font-display text-xs text-muted-foreground uppercase tracking-wider">Date</th>
@@ -318,8 +327,13 @@ export default function BrewHistory() {
                   {paginatedBrews.map((brew) => (
                     <tr
                       key={brew.id}
+                      role="link"
+                      tabIndex={0}
                       onClick={() => router.push(`/brew/${brew.id}`)}
-                      className="hover:bg-muted cursor-pointer transition-all duration-200 border-l-[3px] border-l-transparent hover:border-l-data"
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') router.push(`/brew/${brew.id}`)
+                      }}
+                      className="hover:bg-muted cursor-pointer transition-all duration-200 border-l-[3px] border-l-transparent hover:border-l-data focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
                     >
                       <td className="px-4 py-3 text-secondary-foreground whitespace-nowrap font-mono">
                         {formatDate(brew.brewedAt)}
@@ -330,7 +344,7 @@ export default function BrewHistory() {
                       <td className="px-4 py-3 text-foreground font-medium truncate max-w-[200px]">
                         {brew.bean?.name ?? "Unknown"}
                       </td>
-                      <td className="px-4 py-3 text-muted-foreground whitespace-nowrap">
+                      <td className="px-4 py-3 text-secondary-foreground whitespace-nowrap">
                         {brew.brewDevice?.name ?? "-"}
                       </td>
                       <td className="px-4 py-3 text-secondary-foreground text-right whitespace-nowrap font-mono">

@@ -210,9 +210,10 @@ export default function BeansLibrary() {
       {/* Actions */}
       <div className="flex items-center justify-end gap-2">
         <Button
+          variant="secondary"
           onClick={() => fileInputRef.current?.click()}
           disabled={isScanning}
-          className="bg-muted hover:bg-secondary text-secondary-foreground border border-input inline-flex items-center gap-1.5"
+          className="gap-1.5"
         >
           <Camera size={16} />
           {isScanning ? "Scanning..." : "Scan Bag"}
@@ -322,16 +323,14 @@ export default function BeansLibrary() {
               {/* Top row: name + roaster (truncated) + status + actions */}
               <div className="flex items-start justify-between gap-2">
                 <div className="min-w-0 flex-1">
-                  <div className="flex items-baseline gap-2 min-w-0">
-                    <h3 className="font-display text-base text-foreground leading-snug tracking-tight truncate">
-                      {bean.name}
-                    </h3>
-                    {bean.roaster && (
-                      <span className="text-sm text-muted-foreground truncate shrink-0">
-                        {bean.roaster}
-                      </span>
-                    )}
-                  </div>
+                  <h3 className="font-display text-base text-foreground leading-snug tracking-tight truncate">
+                    {bean.name}
+                  </h3>
+                  {bean.roaster && (
+                    <p className="text-sm text-muted-foreground mt-1 font-body truncate">
+                      {bean.roaster}
+                    </p>
+                  )}
                 </div>
                 <div className="flex items-center gap-1.5 shrink-0">
                   <span

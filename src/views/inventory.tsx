@@ -1,38 +1,40 @@
+import { useState } from 'react'
 import BeansLibrary from './beans-library'
 import EquipmentPage from './equipment'
 
 export default function Inventory() {
+  const [activeTab, setActiveTab] = useState<'beans' | 'equipment'>('beans')
+
   return (
-    <div className="p-6 space-y-10 max-w-5xl mx-auto animate-fade-in">
+    <div className="p-6 space-y-8 max-w-5xl mx-auto animate-fade-in">
       {/* Header */}
-      <div className="space-y-1">
+      <div className="space-y-1 text-center md:text-left">
         <p className="kicker">Your Collection</p>
         <h1 className="text-4xl md:text-5xl font-display text-foreground tracking-tight leading-[0.95]">
           Inventory
         </h1>
       </div>
 
-      {/* Beans section */}
-      <section>
-        <div className="flex items-center gap-4 mb-5">
-          <h2 className="font-display text-2xl text-foreground tracking-tight shrink-0">
-            Beans
-          </h2>
-          <div className="flex-1 border-t border-input" />
-        </div>
-        <BeansLibrary />
-      </section>
+      {/* Tabs */}
+      <div className="flex gap-6 border-b-2 border-border">
+        {(['beans', 'equipment'] as const).map((tab) => (
+          <button
+            key={tab}
+            type="button"
+            onClick={() => setActiveTab(tab)}
+            className={`pb-3 text-sm font-bold uppercase tracking-widest transition-colors ${
+              activeTab === tab
+                ? 'text-editorial border-b-[3px] border-editorial -mb-[2px]'
+                : 'text-muted-foreground hover:text-foreground'
+            }`}
+          >
+            {tab}
+          </button>
+        ))}
+      </div>
 
-      {/* Equipment section */}
-      <section>
-        <div className="flex items-center gap-4 mb-5">
-          <h2 className="font-display text-2xl text-foreground tracking-tight shrink-0">
-            Equipment
-          </h2>
-          <div className="flex-1 border-t border-input" />
-        </div>
-        <EquipmentPage />
-      </section>
+      {/* Tab content */}
+      {activeTab === 'beans' ? <BeansLibrary /> : <EquipmentPage />}
     </div>
   )
 }

@@ -241,7 +241,7 @@ function StepIndicator({ currentStep }: { currentStep: number }) {
               {/* Dot / checkmark */}
               <span
                 className={cn(
-                  "flex items-center justify-center w-6 h-6 rounded-full transition-all duration-300",
+                  "flex items-center justify-center w-6 h-6 transition-all duration-300",
                   isActive && "bg-primary",
                   isComplete && "bg-primary",
                   !isActive && !isComplete && "bg-secondary border border-border"
@@ -250,7 +250,7 @@ function StepIndicator({ currentStep }: { currentStep: number }) {
                 {isComplete ? (
                   <Check size={12} strokeWidth={3} className="text-primary-foreground" />
                 ) : isActive ? (
-                  <span className="w-2 h-2 rounded-full bg-card" />
+                  <span className="w-2 h-2 bg-card" />
                 ) : null}
               </span>
               {/* Label */}
@@ -345,21 +345,19 @@ function StepSelectBean({
               type="button"
               onClick={() => onSelect(bean.id)}
               className={cn(
-                "relative text-left p-4 border-2 bg-card transition-all duration-200 ",
-                                isSelected
-                  ? "border-border bg-accent"
-                  : isLastUsed
-                    ? "border-border hover:bg-muted"
-                    : "border-border hover:bg-muted"
+                "relative text-left p-4 transition-all duration-200",
+                isSelected
+                  ? "select-card--active"
+                  : "select-card"
               )}
             >
               {isLastUsed && !isSelected && (
-                <span className="absolute top-3 right-3 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider bg-muted text-muted-foreground border border-border">
+                <span className="absolute top-3 right-3 inline-flex items-center px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider bg-muted text-muted-foreground border border-border">
                   Last used
                 </span>
               )}
               {isSelected && (
-                <span className="absolute top-3 right-3 flex items-center justify-center w-6 h-6 rounded-full bg-primary text-primary-foreground">
+                <span className="absolute top-3 right-3 flex items-center justify-center w-6 h-6 bg-primary text-primary-foreground">
                   <Check size={14} strokeWidth={3} />
                 </span>
               )}
@@ -369,7 +367,7 @@ function StepSelectBean({
               <p className="text-sm text-muted-foreground mt-1 font-body">
                 {bean.roaster}
               </p>
-              <span className="inline-block mt-2.5 px-2 py-0.5 rounded text-[11px] font-medium uppercase tracking-wider bg-muted text-secondary-foreground border border-border">
+              <span className="inline-block mt-2.5 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wider bg-muted text-secondary-foreground border border-border">
                 {bean.originCountry}
               </span>
             </button>
@@ -457,7 +455,7 @@ function EquipmentGroup({
                   </p>
                 </div>
                 {isSelected && (
-                  <span className="flex items-center justify-center w-5 h-5 rounded-full bg-primary text-primary-foreground shrink-0">
+                  <span className="flex items-center justify-center w-5 h-5 bg-primary text-primary-foreground shrink-0">
                     <Check size={12} strokeWidth={3} />
                   </span>
                 )}
@@ -466,7 +464,7 @@ function EquipmentGroup({
                 <p className="text-xs text-muted-foreground mt-0.5 font-body">{eq.brand}</p>
               )}
               {eq.isDefault && (
-                <span className="inline-block mt-1.5 px-1.5 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider bg-muted text-muted-foreground border border-border">
+                <span className="inline-block mt-1.5 px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wider bg-muted text-muted-foreground border border-border">
                   Default
                 </span>
               )}
@@ -485,6 +483,9 @@ function StepSelectEquipment({
   selectedSetupId,
   onSelectEquipment,
   onApplySetup,
+  brewMethods,
+  selectedBrewMethodId,
+  onSelectBrewMethod,
 }: {
   allEquipment: Equipment[];
   equipment: EquipmentSelections;
@@ -492,6 +493,9 @@ function StepSelectEquipment({
   selectedSetupId: string | null;
   onSelectEquipment: (field: keyof EquipmentSelections, id: string | null) => void;
   onApplySetup: (setup: SavedSetup) => void;
+  brewMethods: BrewMethod[];
+  selectedBrewMethodId: string | null;
+  onSelectBrewMethod: (id: string) => void;
 }) {
   const byType = useMemo(() => {
     const map: Record<EquipmentType, Equipment[]> = {
@@ -530,7 +534,7 @@ function StepSelectEquipment({
                 type="button"
                 onClick={() => onApplySetup(setup)}
                 className={cn(
-                  "px-4 py-2 rounded-full text-sm font-medium border-2 transition-all duration-200",
+                  "px-4 py-2 text-sm font-medium border-2 transition-all duration-200",
                   selectedSetupId === setup.id
                     ? "bg-primary text-primary-foreground border-primary"
                     : "border-border text-secondary-foreground hover:bg-muted hover:border-border"
@@ -543,19 +547,37 @@ function StepSelectEquipment({
         </div>
       )}
 
+      {/* Brew Method */}
+      {brewMethods.length > 0 && (
+        <div className="flex flex-col gap-2">
+          <label className="data-label">
+            Brew Method <span className="text-editorial">*</span>
+          </label>
+          <div className="flex flex-wrap gap-2">
+            {brewMethods.map((m) => (
+              <button
+                key={m.id}
+                type="button"
+                onClick={() => onSelectBrewMethod(m.id)}
+                className={cn(
+                  "px-4 py-2 text-sm font-medium border-2 transition-all duration-200",
+                  selectedBrewMethodId === m.id
+                    ? "bg-primary text-primary-foreground border-primary"
+                    : "border-border text-secondary-foreground hover:bg-muted hover:border-border"
+                )}
+              >
+                {m.name}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
       <EquipmentGroup
         label="Grinder"
         type="grinder"
         items={byType.grinder}
         selectedId={equipment.grinderId}
-        required
-        onSelect={onSelectEquipment}
-      />
-      <EquipmentGroup
-        label="Brew Device"
-        type="brew_device"
-        items={byType.brew_device}
-        selectedId={equipment.brewDeviceId}
         required
         onSelect={onSelectEquipment}
       />
@@ -622,7 +644,7 @@ function NumberStepper({
         <button
           type="button"
           onClick={decrement}
-          className="flex items-center justify-center w-9 h-9 rounded-full border-2 border-border text-muted-foreground hover:border-border hover:text-foreground hover:bg-muted transition-colors active:scale-95"
+          className="flex items-center justify-center w-9 h-9 border-2 border-border text-muted-foreground hover:border-border hover:text-foreground hover:bg-muted transition-colors active:scale-95"
         >
           <Minus size={16} strokeWidth={2.5} />
         </button>
@@ -646,7 +668,7 @@ function NumberStepper({
         <button
           type="button"
           onClick={increment}
-          className="flex items-center justify-center w-9 h-9 rounded-full border-2 border-border text-muted-foreground hover:border-border hover:text-foreground hover:bg-muted transition-colors active:scale-95"
+          className="flex items-center justify-center w-9 h-9 border-2 border-border text-muted-foreground hover:border-border hover:text-foreground hover:bg-muted transition-colors active:scale-95"
         >
           <Plus size={16} strokeWidth={2.5} />
         </button>
@@ -692,13 +714,13 @@ function ToggleSwitch({
         aria-checked={checked}
         onClick={() => onChange(!checked)}
         className={cn(
-          "relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200",
+          "relative inline-flex h-6 w-11 items-center transition-colors duration-200",
           checked ? "bg-primary" : "bg-secondary"
         )}
       >
         <span
           className={cn(
-            "inline-block h-4 w-4 rounded-full bg-card transition-transform duration-200",
+            "inline-block h-4 w-4 bg-card transition-transform duration-200",
             checked ? "translate-x-6" : "translate-x-1"
           )}
         />
@@ -715,7 +737,6 @@ function StepBrewParams({
   params,
   selectedBean,
   selectedGrinder,
-  brewMethods,
   brewTypeId,
   extraParams,
   onChange,
@@ -725,7 +746,6 @@ function StepBrewParams({
   params: BrewParams;
   selectedBean: Bean | null;
   selectedGrinder: Equipment | null;
-  brewMethods: BrewMethod[];
   brewTypeId: string | null;
   extraParams: Record<string, any>;
   onChange: (updates: Partial<BrewParams>) => void;
@@ -759,7 +779,7 @@ function StepBrewParams({
       {/* Days off roast info */}
       {roastDateDays != null && roastDateDays >= 0 && (
         <div className="flex items-center gap-3 px-5 py-3.5 bg-accent border-2 border-border">
-          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-accent">
+          <div className="flex items-center justify-center w-8 h-8 bg-accent">
             <Sun size={16} strokeWidth={2} className="text-editorial" />
           </div>
           <div>
@@ -809,32 +829,6 @@ function StepBrewParams({
           </div>
         </div>
       </div>
-
-      {/* Brew Method (existing, kept for backward compat) */}
-      {brewMethods.length > 0 && (
-        <div className="flex flex-col gap-2">
-          <label className="data-label">
-            Brew Method <span className="text-editorial">*</span>
-          </label>
-          <div className="flex flex-wrap gap-2">
-            {brewMethods.map((m) => (
-              <button
-                key={m.id}
-                type="button"
-                onClick={() => onChange({ brewMethodId: m.id })}
-                className={cn(
-                  "px-4 py-2 rounded-full text-sm font-medium border-2 transition-all duration-200",
-                  params.brewMethodId === m.id
-                    ? "bg-primary text-primary-foreground border-primary"
-                    : "border-border text-secondary-foreground hover:bg-muted hover:border-border"
-                )}
-              >
-                {m.name}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
 
       {/* B) Recipe Card */}
       <div className="space-y-4">
@@ -1114,7 +1108,7 @@ function StepReview({
         {/* Bean section */}
         <div className="border-b border-border">
           <div className="flex items-center gap-2 px-6 py-3 bg-muted">
-            <div className="w-1 h-4 rounded-full bg-primary" />
+            <div className="w-1 h-4 bg-primary" />
             <h3 className="data-label">
               Bean
             </h3>
@@ -1132,7 +1126,7 @@ function StepReview({
         {/* Equipment section */}
         <div className="border-b border-border">
           <div className="flex items-center gap-2 px-6 py-3 bg-muted">
-            <div className="w-1 h-4 rounded-full bg-success" />
+            <div className="w-1 h-4 bg-success" />
             <h3 className="data-label">
               Equipment
             </h3>
@@ -1149,7 +1143,7 @@ function StepReview({
         {/* Parameters section */}
         <div>
           <div className="flex items-center gap-2 px-6 py-3 bg-muted">
-            <div className="w-1 h-4 rounded-full bg-primary" />
+            <div className="w-1 h-4 bg-primary" />
             <h3 className="data-label">
               Parameters
             </h3>
@@ -1318,7 +1312,7 @@ export default function NewBrew() {
       case 2:
         return !!(
           state.equipment.grinderId &&
-          state.equipment.brewDeviceId &&
+          state.params.brewMethodId &&
           state.equipment.waterTypeId
         );
       case 3: {
@@ -1327,8 +1321,7 @@ export default function NewBrew() {
           state.params.totalWater &&
           state.params.waterTemp &&
           state.params.grindSetting &&
-          state.params.totalBrewTime &&
-          state.params.brewMethodId
+          state.params.totalBrewTime
         );
         // Check required extra fields from brew type
         const bt = getBrewType(state.brewTypeId);
@@ -1478,9 +1471,9 @@ export default function NewBrew() {
         <div className="text-center space-y-6">
           <div className="relative inline-flex items-center justify-center">
             {/* Expanding ring */}
-            <div className="absolute w-20 h-20 rounded-full border-2 border-editorial animate-success-ring" />
+            <div className="absolute w-20 h-20 border-2 border-editorial animate-success-ring" />
             {/* Check circle */}
-            <div className="w-20 h-20 rounded-full bg-success flex items-center justify-center animate-check-circle">
+            <div className="w-20 h-20 bg-success flex items-center justify-center animate-check-circle">
               <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-success-foreground">
                 <path d="M5 13l4 4L19 7" className="animate-check-draw" />
               </svg>
@@ -1498,11 +1491,12 @@ export default function NewBrew() {
     <div className="min-h-screen ">
       <div className="p-6 pb-12 max-w-3xl mx-auto">
         {/* Header */}
-        <div className="mb-8 text-center animate-fade-in">
-          <h1 className="font-display text-3xl text-foreground tracking-tight">
+        <div className="mb-8 animate-fade-in text-center md:text-left">
+          <p className="kicker">{isEditMode ? "EDIT BREW" : "LOG A BREW"}</p>
+          <h1 className="font-display text-4xl md:text-5xl text-foreground tracking-tight leading-[0.95] mt-1">
             {isEditMode ? "Edit Brew" : "New Brew"}
           </h1>
-          <p className="text-muted-foreground mt-2 text-sm font-body">
+          <p className="text-secondary-foreground mt-2 text-sm font-body">
             {isEditMode ? "Update the details of your brew." : "Log every detail of your pour."}
           </p>
         </div>
@@ -1532,6 +1526,9 @@ export default function NewBrew() {
               selectedSetupId={state.setupId}
               onSelectEquipment={handleSelectEquipment}
               onApplySetup={handleApplySetup}
+              brewMethods={brewMethods as BrewMethod[]}
+              selectedBrewMethodId={state.params.brewMethodId}
+              onSelectBrewMethod={(id) => handleParamsChange({ brewMethodId: id })}
             />
           )}
 
@@ -1540,7 +1537,6 @@ export default function NewBrew() {
               params={state.params}
               selectedBean={selectedBean}
               selectedGrinder={selectedGrinder}
-              brewMethods={brewMethods as BrewMethod[]}
               brewTypeId={state.brewTypeId}
               extraParams={state.extraParams}
               onChange={handleParamsChange}
@@ -1563,7 +1559,7 @@ export default function NewBrew() {
         </div>
 
         {/* Navigation buttons */}
-        <div className="flex items-center justify-between mt-10 pt-6 border-t border-border">
+        <div className="flex items-center justify-between mt-10 pt-6">
           <div>
             {state.step > 1 && (
               <button

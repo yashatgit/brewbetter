@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useBeanStats } from '../hooks/use-analytics'
 import { usePreferenceScores } from '../hooks/use-analytics'
 import { useBeans } from '../hooks/use-beans'
@@ -66,8 +66,9 @@ export default function Analytics() {
 
   const totalRated = (beanStats ?? []).reduce((sum, s) => sum + s.brewCount, 0)
 
-  const sortedBeanStats = [...(beanStats ?? [])].sort(
-    (a, b) => (b.avgEnjoyment ?? 0) - (a.avgEnjoyment ?? 0)
+  const sortedBeanStats = useMemo(
+    () => [...(beanStats ?? [])].sort((a, b) => (b.avgEnjoyment ?? 0) - (a.avgEnjoyment ?? 0)),
+    [beanStats]
   )
 
   const topBean = sortedBeanStats.length > 0 && (sortedBeanStats[0].avgEnjoyment ?? 0) > 0
@@ -76,13 +77,16 @@ export default function Analytics() {
   const restBeanStats = topBean ? sortedBeanStats.slice(1) : sortedBeanStats
 
   // Group preferences by category
-  const grouped = CATEGORY_ORDER.map((cat) => ({
-    category: cat,
-    label: CATEGORY_LABELS[cat],
-    items: (preferences ?? [])
-      .filter((p) => p.category === cat && (p.avgEnjoyment ?? 0) > 0)
-      .sort((a, b) => (b.avgEnjoyment ?? 0) - (a.avgEnjoyment ?? 0)),
-  }))
+  const grouped = useMemo(
+    () => CATEGORY_ORDER.map((cat) => ({
+      category: cat,
+      label: CATEGORY_LABELS[cat],
+      items: (preferences ?? [])
+        .filter((p) => p.category === cat && (p.avgEnjoyment ?? 0) > 0)
+        .sort((a, b) => (b.avgEnjoyment ?? 0) - (a.avgEnjoyment ?? 0)),
+    })),
+    [preferences]
+  )
 
   if (isLoading) {
     return (
@@ -90,7 +94,7 @@ export default function Analytics() {
         <div className="text-center space-y-4 animate-fade-in">
           <div className="relative mx-auto w-fit">
             <div className="animate-float">
-              <svg width="64" height="64" viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" className="text-muted-foreground">
+              <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" className="text-muted-foreground">
                 <path d="M22 24 Q24 16 22 8" className="animate-steam opacity-40" />
                 <path d="M32 22 Q34 12 32 4" className="animate-steam-delay-1 opacity-30" />
                 <path d="M42 24 Q40 16 42 8" className="animate-steam-delay-2 opacity-40" />
@@ -115,7 +119,7 @@ export default function Analytics() {
       <div className="max-w-xl mx-auto animate-fade-in">
         <div className="flex flex-col items-center text-center py-20 space-y-10">
           <div className="text-muted-foreground animate-float">
-            <svg width="160" height="140" viewBox="0 0 160 140" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+            <svg aria-hidden="true" width="160" height="140" viewBox="0 0 160 140" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
               <rect x="20" y="90" width="16" height="30" className="fill-secondary/50" />
               <rect x="46" y="70" width="16" height="50" className="fill-secondary/50" />
               <rect x="72" y="50" width="16" height="70" className="fill-secondary/60" />
@@ -149,16 +153,13 @@ export default function Analytics() {
   return (
     <div className="space-y-14 max-w-4xl animate-fade-in">
       {/* ── Hero Header ── */}
-      <Card accent="editorial" className="p-8">
-        <div>
-          <p className="font-body text-muted-foreground text-xs tracking-[0.2em] uppercase font-medium mb-3">
-            Your brewing patterns &amp; preferences
-          </p>
-          <h1 className="font-display text-6xl md:text-8xl text-foreground tracking-tight leading-[0.95]">
-            Analytics
-          </h1>
-        </div>
-      </Card>
+      <div className="text-center md:text-left">
+        <p className="kicker">Analytics</p>
+        <h1 className="font-display text-4xl md:text-5xl text-foreground tracking-tight leading-[0.95]">
+          Analytics
+        </h1>
+        <p className="text-muted-foreground text-sm">Your brewing patterns & preferences</p>
+      </div>
 
       {/* ── Quick Insights — asymmetric grid ── */}
       <section>
@@ -267,7 +268,7 @@ export default function Analytics() {
                     key={stat.beanId}
                     className="grid grid-cols-1 sm:grid-cols-[1fr_80px_120px_80px_80px_100px] gap-2 sm:gap-4 px-6 py-4 sm:items-center hover:bg-muted transition-colors"
                   >
-                    <span className="font-display text-lg sm:text-base text-foreground truncate tracking-tight flex items-center gap-2">
+                    <span className="font-display text-base text-foreground truncate tracking-tight flex items-center gap-2">
                       {isRunnerUp && <Medal size={16} strokeWidth={2} className="text-muted-foreground shrink-0" />}
                       {isThird && <Medal size={16} strokeWidth={2} className="text-data/50 shrink-0" />}
                       {beanNameMap.get(stat.beanId) ?? 'Unknown Bean'}
