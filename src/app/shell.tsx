@@ -298,7 +298,7 @@ export function Shell({ children }: { children: ReactNode }) {
       {/* -- Main content column -- */}
       <div className="flex flex-1 flex-col min-w-0">
         {/* Mobile header (dark inverted) */}
-        <header className="flex h-14 items-center border-b border-border bg-inverted px-5 md:hidden">
+        <header className="shrink-0 flex h-14 items-center border-b border-border bg-inverted px-5 md:hidden">
           <div className="flex items-center gap-2.5">
             <Bean size={16} strokeWidth={2} className="text-editorial" />
             <span className="font-display text-base font-bold tracking-tight text-inverted-foreground">
