@@ -38,6 +38,7 @@
     "eslint": "^9.39.1",
     "eslint-plugin-react-hooks": "^7.0.1",
     "globals": "^16.5.0",
+    "puppeteer": "^24.38.0",
     "react-grab": "^0.1.24",
     "tailwindcss": "^4.2.1",
     "tsx": "^4.21.0",

@@ -16,6 +16,25 @@ const CATEGORY_LABELS: Record<PreferenceScore['category'], string> = {
   brew_type: 'Brew Type',
 }
 
+const DISPLAY_LABELS: Record<string, string> = {
+  light: 'Light',
+  medium_light: 'Medium Light',
+  medium: 'Medium',
+  medium_dark: 'Medium Dark',
+  dark: 'Dark',
+  washed: 'Washed',
+  natural: 'Natural',
+  honey: 'Honey',
+  anaerobic: 'Anaerobic',
+  infused: 'Infused',
+  wet_hulled: 'Wet Hulled',
+  other: 'Other',
+}
+
+function displayLabel(value: string): string {
+  return DISPLAY_LABELS[value] ?? value
+}
+
 const CATEGORY_ORDER: PreferenceScore['category'][] = [
   'origin',
   'processing_method',
@@ -151,7 +170,7 @@ export default function Analytics() {
   }
 
   return (
-    <div className="space-y-14 max-w-4xl animate-fade-in">
+    <div className="space-y-8 max-w-4xl animate-fade-in">
       {/* ── Hero Header ── */}
       <div className="text-center md:text-left">
         <p className="kicker">Analytics</p>
@@ -178,7 +197,7 @@ export default function Analytics() {
             >
               <stat.icon size={14} strokeWidth={1.8} className="text-muted-foreground mb-3" />
               <p className="font-display text-xl md:text-2xl tracking-tight text-foreground leading-none truncate pt-1 pb-1">
-                {stat.value}
+                {displayLabel(stat.value)}
               </p>
               <p className="font-body text-[11px] text-muted-foreground mt-2.5 uppercase tracking-[0.15em] font-medium">
                 {stat.label}
@@ -333,7 +352,7 @@ export default function Analytics() {
                             <span className={`font-display tracking-tight ${
                               isLeader ? 'text-base text-foreground font-bold' : 'text-sm text-foreground'
                             }`}>
-                              {item.value}
+                              {displayLabel(item.value)}
                               {isLeader && (
                                 <span className="ml-2 inline-flex items-center bg-accent text-editorial border-2 border-border font-mono uppercase px-2 py-0.5 text-[10px] tracking-widest">
                                   top

@@ -323,7 +323,7 @@ export default function BeansLibrary() {
               {/* Top row: name + roaster (truncated) + status + actions */}
               <div className="flex items-start justify-between gap-2">
                 <div className="min-w-0 flex-1">
-                  <h3 className="font-display text-base text-foreground leading-snug tracking-tight truncate">
+                  <h3 className="font-display text-base text-foreground leading-snug tracking-tight">
                     {bean.name}
                   </h3>
                   {bean.roaster && (

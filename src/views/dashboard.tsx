@@ -187,7 +187,7 @@ export default function Dashboard() {
           ].map((stat) => (
             <div
               key={stat.label}
-              className={`bg-background p-5 md:p-6 border-l-[3px] ${stat.accent}`}
+              className={`bg-background px-5 py-6 md:p-6 border-l-[3px] ${stat.accent}`}
             >
               <p className={`font-display tracking-tight text-foreground leading-none truncate ${stat.isText ? 'text-xl md:text-2xl' : 'text-3xl md:text-4xl'}`}>
                 {stat.value}

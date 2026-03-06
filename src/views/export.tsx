@@ -55,8 +55,8 @@ export default function Export() {
   }
 
   return (
-    <div className="p-6 space-y-8 max-w-xl mx-auto animate-fade-in">
-      <div className="space-y-1">
+    <div className="p-6 space-y-8 max-w-2xl mx-auto animate-fade-in">
+      <div className="space-y-1 text-center md:text-left">
         <p className="kicker">Data Management</p>
         <h1 className="text-4xl md:text-5xl font-display text-foreground tracking-tight leading-[0.95]">
           Export Data
@@ -79,10 +79,8 @@ export default function Export() {
                 key={fmt}
                 type="button"
                 onClick={() => setFormat(fmt)}
-                className={`border-2 p-5 text-center transition-all duration-250 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
-                  format === fmt
-                    ? 'border-border bg-accent'
-                    : 'border-border bg-card hover:bg-muted'
+                className={`select-card p-5 text-center ${
+                  format === fmt ? 'select-card--active' : ''
                 }`}
               >
                 <span

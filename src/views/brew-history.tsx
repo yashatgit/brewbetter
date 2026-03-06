@@ -305,8 +305,45 @@ export default function BrewHistory() {
         </Card>
       ) : (
         <>
-          {/* Table */}
-          <div className="border-2 border-border bg-background overflow-hidden">
+          {/* Mobile card list */}
+          <div className="md:hidden space-y-px bg-border border-2 border-border">
+            {paginatedBrews.map((brew) => (
+              <div
+                key={brew.id}
+                role="link"
+                tabIndex={0}
+                onClick={() => router.push(`/brew/${brew.id}`)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') router.push(`/brew/${brew.id}`)
+                }}
+                className="bg-card p-4 border-l-[3px] border-l-transparent hover:border-l-data cursor-pointer transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
+              >
+                <div className="flex items-center justify-between gap-4">
+                  <div className="min-w-0 space-y-1.5">
+                    <h3 className="font-display text-base text-foreground truncate tracking-tight">
+                      {brew.bean?.name ?? "Unknown"}
+                    </h3>
+                    <p className="font-mono text-xs text-muted-foreground">
+                      {formatDate(brew.brewedAt)} &middot; {formatTime(brew.brewedAt)}
+                    </p>
+                    <p className="font-mono text-xs text-secondary-foreground">
+                      {brew.coffeeDose}g &middot; {brew.totalWater}g &middot; 1:{brew.ratio}
+                    </p>
+                  </div>
+                  <div className="shrink-0">
+                    {brew.tasting ? (
+                      <StarRating value={brew.tasting.overallEnjoyment} size="sm" />
+                    ) : (
+                      <span className="font-mono text-xs text-muted-foreground uppercase tracking-widest">Unrated</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Desktop table */}
+          <div className="hidden md:block border-2 border-border bg-background overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <caption className="sr-only">Brew history log</caption>
