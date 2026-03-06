@@ -54,7 +54,7 @@ export function Dialog({ open, onClose, title, children }: DialogProps) {
         if (e.target === dialogRef.current) onClose();
       }}
       onKeyDown={handleKeyDown}
-      className="m-auto max-w-lg w-full bg-card p-0 border-2 border-border backdrop:bg-[#000]/40 backdrop:backdrop-blur-sm"
+      className="m-auto max-w-lg w-[calc(100%-2rem)] bg-card p-0 border-2 border-border backdrop:bg-[#000]/40 backdrop:backdrop-blur-sm"
     >
       <div className={`p-8 md:p-10 ${open ? "animate-fade-in-scale" : ""}`}>
         {/* Decorative top accent — editorial red */}

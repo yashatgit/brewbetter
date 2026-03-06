@@ -131,8 +131,8 @@ function MobileNav() {
   )
 
   return (
-    <nav aria-label="Mobile navigation" className="fixed bottom-0 left-0 right-0 z-50 md:hidden">
-      <div className="relative bg-inverted border-t border-white/10">
+    <nav aria-label="Mobile navigation" className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-inverted" style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
+      <div className="relative border-t border-white/10">
         <div className="flex items-end justify-around px-1">
           <MobileTabItem href="/" label="Home" icon={Home} exact />
           <MobileTabItem href="/inventory" label="Inventory" icon={Package} />
@@ -212,9 +212,15 @@ function MobileNav() {
 
 export function Shell({ children }: { children: ReactNode }) {
   const pathname = usePathname()
+  const mainRef = useRef<HTMLElement>(null)
+
+  // Scroll to top on route change
+  useEffect(() => {
+    mainRef.current?.scrollTo(0, 0)
+  }, [pathname])
 
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="flex h-dvh bg-background overflow-hidden">
       {/* Skip to content link for keyboard users */}
       <a
         href="#main-content"
@@ -302,7 +308,7 @@ export function Shell({ children }: { children: ReactNode }) {
         </header>
 
         {/* Content area */}
-        <main id="main-content" className="flex-1 overflow-y-auto bg-background p-5 pb-28 md:p-10 md:pb-10">
+        <main ref={mainRef} id="main-content" className="flex-1 overflow-y-auto overscroll-contain bg-background p-5 pb-24 md:p-10 md:pb-10" style={{ paddingBottom: 'calc(5rem + env(safe-area-inset-bottom, 0px))', WebkitOverflowScrolling: 'touch' }}>
           {children}
         </main>
       </div>

@@ -1455,7 +1455,7 @@ export default function NewBrew() {
 
   if (isLoading) {
     return (
-      <div className="p-6  min-h-screen">
+      <div className="p-6">
         <div className="flex flex-col items-center justify-center py-24">
           <div className="w-8 h-8 border-2 border-input border-t-primary rounded-full animate-spin" />
           <p className="mt-4 text-muted-foreground text-sm font-body">Preparing your brew station...</p>
@@ -1467,7 +1467,7 @@ export default function NewBrew() {
   // Success celebration screen
   if (showSuccess) {
     return (
-      <div className="min-h-screen  flex items-center justify-center">
+      <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center space-y-6">
           <div className="relative inline-flex items-center justify-center">
             {/* Expanding ring */}
@@ -1488,8 +1488,8 @@ export default function NewBrew() {
   }
 
   return (
-    <div className="min-h-screen ">
-      <div className="p-6 pb-12 max-w-3xl mx-auto">
+    <div>
+      <div className="pb-6 max-w-3xl mx-auto">
         {/* Header */}
         <div className="mb-8 animate-fade-in text-center md:text-left">
           <p className="kicker">{isEditMode ? "EDIT BREW" : "LOG A BREW"}</p>
